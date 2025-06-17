@@ -54,7 +54,7 @@
                                     <li class="nav-item">
                                         <router-link class="nav-link" to="/report/profit">Report</router-link>
                                     </li>
-                                    <li class="nav-item d-none">
+                                    <li class="nav-item">
                                         <router-link class="nav-link" to="/report/due">Due</router-link>
                                     </li>
 

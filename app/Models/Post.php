@@ -91,14 +91,30 @@ class Post extends Authenticatable
   }
   public static function duereportMoney($data)
   {
+    //dd($data);
     $startDate =  date('Y-m-d', strtotime($data['frm_date']));
-    $endDate =  date('Y-m-d', strtotime($data['to_date']));
-    $result = DB::table('invoice_money_transfer')
-      ->select('invoice_money_transfer.mone_transfer_id', 'invoice_money_transfer.invoice_date', 'invoice_money_transfer.due_amount', 'customer.name as customer_name', 'users.name', 'phone')
+    $endDate   =  date('Y-m-d', strtotime($data['to_date']));
+    $customer_id = isset($data['customer_id']) ? (int)$data['customer_id'] : 0;
+
+    $query = DB::table('invoice_money_transfer')
+      ->select(
+        'invoice_money_transfer.mone_transfer_id',
+        'invoice_money_transfer.invoice_date',
+        'invoice_money_transfer.due_amount',
+        'customer.name as customer_name',
+        'users.name',
+        'phone'
+      )
       ->leftJoin('customer', 'customer.customer_id', '=', 'invoice_money_transfer.customer_id')
       ->leftJoin('users', 'users.id', '=', 'invoice_money_transfer.entry_by')
-      ->whereBetween('invoice_money_transfer.invoice_date', [$startDate, $endDate])
-      ->get();
+      ->whereBetween('invoice_money_transfer.invoice_date', [$startDate, $endDate]);
+
+    if ($customer_id > 0) {
+      $query->where('invoice_money_transfer.customer_id', $customer_id);
+    }
+
+    $result = $query->get();
+
     return $result;
   }
   public static function profitreport($data)

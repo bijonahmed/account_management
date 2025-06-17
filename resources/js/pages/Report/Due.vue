@@ -88,18 +88,24 @@
                 <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
                     <form @submit.prevent="SearchDataForMoney()" id="formrest" class="forms-sample" enctype="multipart/form-data">
                         <div class="row">
-                            <div class="col-md-4">
+                             <div class="col-md-3">
+                               <select class='form-control form-select customer_id' v-model="customer_id">
+                                        <option value=''>All Select Customer</option>
+                                        <option v-for='data in customers' :value='data.customer_id'>{{ data.name }}</option>
+                                    </select>
+                            </div>
+                            <div class="col-md-3">
                                 <div class="input-group mb-3">
                                     <input type="date" class="form-control frm_date" id="money_frm_date" placeholder="From Date">
                                 </div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <div class="input-group mb-3">
                                     <!-- <Datepicker class="form-control to_date" placeholder="To Date"></Datepicker>   -->
                                     <input type="date" class="form-control to_date" id="money_to_date" placeholder="To Date">
                                 </div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <div class="input-group mb-3">
                                     <!-- <Datepicker class="form-control to_date" placeholder="To Date"></Datepicker>   -->
                                     <button type="submit" class="btn btn-primary w-100">Submit</button>
@@ -136,21 +142,24 @@
                         </tbody>
                     </table>
                     <div class="row">
-                        <div class="col-8"></div>
+                        <div class="col-8">
+                            
+                        </div>
                         <div class="col-3">
-                            <center><span style="font-size: 25px; font-weight: bold;color:green;">Total Due: {{ money_total_due }}</span></center>
+                            <center><span style="font-size: 25px; font-weight: bold;color:green;">Total Due: {{ isNaN(parseFloat(money_total_due)) ? '0.00' : parseFloat(money_total_due).toFixed(2) }}</span></center>
                         </div>
                     </div>
                 </div>
                 <div class="tab-pane fade" id="pills-profile-1" role="tabpanel" aria-labelledby="pills-profile-tab-1">
                     <form @submit.prevent="SearchDataOthers()" id="formrest" class="forms-sample" enctype="multipart/form-data">
                         <div class="row">
-                            <div class="col-md-4">
+                            
+                            <div class="col-md-3">
                                 <div class="input-group mb-3">
                                     <input type="date" class="form-control frm_date" id="o_frm_date" placeholder="From Date">
                                 </div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <div class="input-group mb-3">
                                     <!-- <Datepicker class="form-control to_date" placeholder="To Date"></Datepicker>   -->
                                     <input type="date" class="form-control to_date" id="o_to_date" placeholder="To Date">
@@ -256,9 +265,10 @@ export default {
         };
     },
     mounted() {
-        //   this.customerlist();
+          this.customerlist();
         //   $('.frm_date,.to_date').datepicker();
     },
+    
     methods: {
         customerlist() {
             axios.get('/api/category/allCustomers').then(response => {
