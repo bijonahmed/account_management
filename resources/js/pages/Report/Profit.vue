@@ -265,8 +265,7 @@
                                         </td>
                                         <td class="text-end" style="color: green;"><b>{{
                                             totals.receiving_divided_by_rate.toFixed(2) }}</b></td>
-                                        <td class="text-end" style="color: deeppink;"><b>{{ totals.fees.toFixed(2)
-                                                }}</b></td>
+                                        <td class="text-end" style="color: deeppink;"><b>{{ totals.fees.toFixed(2) }}</b></td>
                                         <td class="text-end" style="color: goldenrod;"><b>{{
                                             totals.others_fees.toFixed(2) }}</b></td>
                                         <td class="text-end" style="color: purple;">
@@ -336,10 +335,13 @@
 
                                     <tr class="bgtrColor">
                                         <td colspan="3" class="text-end">Total Amount of (Sales)</td>
-                                        <td class="text-end"><b>{{ Number(totals?.receiving_amount || 0).toFixed(2) }} /
-                                                {{ Number(totals?.rate || 0).toFixed(2) }} =
-                                                {{ (Number(totals?.receiving_amount || 0) / Number(totals?.rate ||
-                                                    1)).toFixed(2) }}</b></td>
+                                        <td class="text-end"><b>
+                                            <!-- {{ Number(totals?.receiving_amount || 0).toFixed(2) }} /
+                                                {{ Number(totals?.rate || 0).toFixed(2) }} = -->
+
+                                                {{totals.receiving_divided_by_rate.toFixed(2)}}
+                                                    
+                                                </b></td>
                                         <td colspan="10"></td>
                                     </tr>
 
@@ -358,9 +360,11 @@
 
                                     <tr class="bgtrColor">
                                         <td colspan="3" class="text-end">Total Amount of (Total Sales)</td>
-                                        <td class="text-end"><b> {{ totals.receiving_divided_by_rate.toFixed(2) }} +
+                                        <td class="text-end"><b> 
+                                                <!-- {{ totals.receiving_divided_by_rate.toFixed(2) }} +
                                                 {{ totals.fees.toFixed(2) }} +
-                                                {{ totals.others_fees.toFixed(2) }} =
+                                                {{ totals.others_fees.toFixed(2) }} = -->
+
                                                 {{ (
                                                     totals.receiving_divided_by_rate +
                                                     totals.fees +
