@@ -447,7 +447,7 @@ export default {
         },
         findRowId() {
             this.axios
-                .get(`/api/user/getCompanySetting`)
+                .get(`/api/user/getCompanySettingForTravel`)
                 .then((response) => {
                     this.cdata.company_name = response.data.data.company_name;
                     this.cdata.address = response.data.data.address;

@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Http\Controllers\API;
+
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Auth;
@@ -10,6 +12,7 @@ use Illuminate\Support\Str;
 use App\Rules\MatchOldPassword;
 use Illuminate\Support\Facades\Hash;
 use DB;
+
 class ProfileController extends Controller
 {
     public function getcountryList()
@@ -38,12 +41,13 @@ class ProfileController extends Controller
         $user->password      = Hash::make($request->password);
         $user->show_password = $request->password;
         $user->save();
-       
+
         $response = "Password successfully changed!";
         return response()->json($response);
     }
 
-    public function updateUserPassword(Request $request){
+    public function updateUserPassword(Request $request)
+    {
 
         $validator = Validator::make($request->all(), [
             'password' => 'required|min:1|confirmed',
@@ -53,17 +57,15 @@ class ProfileController extends Controller
             return response()->json($validator->messages(), 400);
         }
 
-        $id= (int)$request->user_id;
+        $id = (int)$request->user_id;
         $user = User::find($id);
         //dd($currentuser->username);
         $user->password      = Hash::make($request->password);
         $user->show_password = $request->password;
         $user->save();
-       
+
         $response = "Password successfully changed!";
         return response()->json($response);
-
-
     }
 
 
@@ -195,6 +197,29 @@ class ProfileController extends Controller
     public function getCompanySetting()
     {
         $rows = Profile::companySetting();
+        $response = [
+            'data' => $rows,
+            'message' => 'success'
+        ];
+        return response()->json($response, 200);
+    }
+
+
+
+    public function getCompanySettingForTravel()
+    {
+        $rows = Profile::companyList();
+        $response = [
+            'data' => $rows,
+            'message' => 'success'
+        ];
+        return response()->json($response, 200);
+    }
+
+
+    public function getCompanySettingForConsular()
+    {
+        $rows = Profile::companyListConsular();
         $response = [
             'data' => $rows,
             'message' => 'success'

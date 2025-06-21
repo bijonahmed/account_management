@@ -83,7 +83,14 @@ const invoicelist = () => import("../pages/Invoice/Invoicelist.vue");
 const listmoneytransfer = () => import("../pages/Invoice/InvoicelistMoney.vue");
 const listothersInvoice = () =>
     import("../pages/Invoice/InvoicelistOthers.vue");
+
+const listConsularInvoice = () =>
+    import("../pages/Invoice/InvoicelistConsular.vue");
+
+
 const addnewinvoice = () => import("../pages/Invoice/CreateInvoice.vue");
+const addnewConsularinvoice = () => import("../pages/Invoice/AddnewConsular.vue");
+
 const addnewinvoiceRefund = () =>
     import("../pages/Invoice/CreateInvoiceReturn.vue"); //import('../pages/Invoice/CreateInvoiceReturn.vue')
 const addnewinvoiceMoney = () =>
@@ -255,6 +262,9 @@ const routes = [
         component: addNewSubCategory,
         meta: { requiresAuth: true },
     },
+
+
+
     {
         path: "/category/subcategory-list",
         name: "subcategory-list",
@@ -461,6 +471,12 @@ const routes = [
         component: listothersInvoice,
         meta: { requiresAuth: true },
     },
+      {
+        path: "/invoice/invoice-list-consular",
+        name: "invoice-list-consular",
+        component: listConsularInvoice,
+        meta: { requiresAuth: true },
+    },
     {
         path: "/invoice/addnewinvoice",
         name: "addnewinvoice",
@@ -479,6 +495,16 @@ const routes = [
         component: addnewinvoiceMoney,
         meta: { requiresAuth: true },
     },
+
+
+ {
+        path: "/invoice/addnewInvoiceConsular",
+        name: "addnewInvoiceConsular",
+        component: addnewConsularinvoice,
+        meta: { requiresAuth: true },
+    },
+
+
     {
         path: "/invoice/addnewOthersInv",
         name: "addnewOthersInv",

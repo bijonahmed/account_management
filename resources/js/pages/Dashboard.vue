@@ -1,68 +1,69 @@
 <template>
-<div id="dShow" v-show="elementVisible">
-    <div class="main-wrapper">
-        <div class="page-wrapper">
-            <Nav />
-            <div class="page-content">
-                <center>
-                    <div class="loader text-center" v-show="elementVisibleLoader"></div>
-                </center>
-                <div class="row">
-                    <div v-if="(authUser.role_id == 2)">
+    <div id="dShow" v-show="elementVisible">
+        <div class="main-wrapper">
+            <div class="page-wrapper">
+                <Nav />
+                <div class="page-content">
+                    <center>
+                        <div class="loader text-center" v-show="elementVisibleLoader"></div>
+                    </center>
+                    <div class="row">
+                        <div v-if="(authUser.role_id == 2)">
 
-                        <!-- <center><p>Welcome, {{ user.name }}!</p> -->
-                        <!-- <center><button @click="logout">Logout</button></center> -->
-                        <div class="col-12 col-xl-12 stretch-card">
-                            <div class="row flex-grow-1">
-                                <div class="col-md-3">
-                                    <div class="card text-white bg-primary">
-                                        <div class="card-body">
-                                            <div class="d-flex justify-content-between align-items-baseline">
-                                                <h6 class="card-title mb-0">Total Customer</h6>
-                                            </div>
-                                            <div class="row">
-                                                <p class="mb-2">{{ totalCustomer }}</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="card text-white bg-danger mb-3">
-                                        <div class="card-body">
-                                            <div class="d-flex justify-content-between align-items-baseline">
-                                                <h6 class="card-title mb-0">Total Due</h6>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-6 col-md-12 col-xl-5">
-                                                    <p class="mb-2">{{ totalDue }}</p>
+                            <!-- <center><p>Welcome, {{ user.name }}!</p> -->
+                            <!-- <center><button @click="logout">Logout</button></center> -->
+                            <div class="col-12 col-xl-12 stretch-card">
+                                <div class="row flex-grow-1">
+                                    <div class="col-md-3">
+                                        <div class="card text-white bg-primary">
+                                            <div class="card-body">
+                                                <div class="d-flex justify-content-between align-items-baseline">
+                                                    <h6 class="card-title mb-0">Total Customer</h6>
+                                                </div>
+                                                <div class="row">
+                                                    <p class="mb-2">{{ totalCustomer }}</p>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="col-md-3 stretch-card">
-                                    <div class="card text-dark bg-info mb-3">
-                                        <div class="card-body">
-                                            <div class="d-flex justify-content-between align-items-baseline">
-                                                <h6 class="card-title mb-0">Total Profit</h6>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-6 col-md-12 col-xl-5">
-                                                    <p class="mb-2">{{ totalProfit }}</p>
+                                    <div class="col-md-3">
+                                        <div class="card text-white bg-danger mb-3">
+                                            <div class="card-body">
+                                                <div class="d-flex justify-content-between align-items-baseline">
+                                                    <h6 class="card-title mb-0">Total Due</h6>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-6 col-md-12 col-xl-5">
+                                                        <p class="mb-2">{{ totalDue }}</p>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="col-md-3 stretch-card">
-                                    <div class="card text-light bg-dark mb-3">
-                                        <div class="card-body">
-                                            <div class="d-flex justify-content-between align-items-baseline">
-                                                <h6 class="card-title mb-0">Total Users</h6>
+                                    <div class="col-md-3 stretch-card">
+                                        <div class="card text-dark bg-info mb-3">
+                                            <div class="card-body">
+                                                <div class="d-flex justify-content-between align-items-baseline">
+                                                    <h6 class="card-title mb-0">Total Profit</h6>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-6 col-md-12 col-xl-5">
+                                                        <p class="mb-2">{{ totalProfit }}</p>
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <div class="row">
-                                                <div class="col-6 col-md-12 col-xl-5">
-                                                    <p class="mb-2">{{ totalusers }}</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3 stretch-card">
+                                        <div class="card text-light bg-dark mb-3">
+                                            <div class="card-body">
+                                                <div class="d-flex justify-content-between align-items-baseline">
+                                                    <h6 class="card-title mb-0">Total Users</h6>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-6 col-md-12 col-xl-5">
+                                                        <p class="mb-2">{{ totalusers }}</p>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -70,53 +71,66 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div v-if="(authUser.role_id == 3)">
-                        <div class="col-12 col-xl-12 stretch-card">
-                            <div class="row flex-grow-1">
-                                <div class="col-md-3" @click="addInvoice">
-                                    <div class="card text-white bg-primary">
-                                        <div class="card-body">
-                                            <div class="d-flex justify-content-between align-items-baseline">
-                                                <h1 class="card-title mb-0">Travel</h1>
-                                            </div>
+                        <div v-if="(authUser.role_id == 3)">
+                            <div class="col-12 col-xl-12 stretch-card">
+                                <div class="row flex-grow-1">
+                                    <div class="col-md-3" @click="addInvoice">
+                                        <div class="card text-white bg-primary">
+                                            <div class="card-body">
+                                                <div class="d-flex justify-content-between align-items-baseline">
+                                                    <h1 class="card-title mb-0">Travel</h1>
+                                                </div>
 
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="col-md-3" @click="addInvoiceMoney">
-                                    <div class="card text-white bg-success mb-3">
-                                        <div class="card-body">
-                                            <div class="d-flex justify-content-between align-items-baseline">
-                                                <h2 class="card-title mb-0">Money Transfer</h2>
-                                            </div>
+                                    <div class="col-md-3" @click="addInvoiceMoney">
+                                        <div class="card text-white bg-success mb-3">
+                                            <div class="card-body">
+                                                <div class="d-flex justify-content-between align-items-baseline">
+                                                    <h2 class="card-title mb-0">Money Transfer</h2>
+                                                </div>
 
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
 
-                                <div class="col-md-3" @click="addInvoiceOthers">
-                                    <div class="card text-white bg-info mb-3">
-                                        <div class="card-body">
-                                            <div class="d-flex justify-content-between align-items-baseline">
-                                                <h2 class="card-title mb-0">Other Invoice</h2>
+
+                                    <div class="col-md-3" @click="addInvoiceConsular">
+                                        <div class="card text-white bg-danger mb-3">
+                                            <div class="card-body">
+                                                <div class="d-flex justify-content-between align-items-baseline">
+                                                    <h2 class="card-title mb-0">Consular</h2>
+                                                </div>
+
                                             </div>
-
                                         </div>
                                     </div>
-                                </div>
 
+
+
+                                    <div class="col-md-3" @click="addInvoiceOthers">
+                                        <div class="card text-white bg-info mb-3">
+                                            <div class="card-body">
+                                                <div class="d-flex justify-content-between align-items-baseline">
+                                                    <h2 class="card-title mb-0">Other Invoice</h2>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
                             </div>
                         </div>
                     </div>
+                    <!-- row -->
                 </div>
-                <!-- row -->
+                <!-- Button trigger modal -->
+                <Footer />
             </div>
-            <!-- Button trigger modal -->
-            <Footer />
         </div>
     </div>
-</div>
 </template>
 
 <script>
@@ -212,6 +226,11 @@ export default {
         addInvoiceOthers() {
             this.$router.push('invoice/invoice-list-others');
         },
+
+        addInvoiceConsular() {
+            this.$router.push('invoice/invoice-list-consular');
+        },
+
     },
 }
 </script>

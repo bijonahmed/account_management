@@ -599,7 +599,53 @@ public function moneySuppliders()
         ];
         return response()->json($response);
     }
-    public function saveInvoiceOthers(Request $request)
+
+
+    public function saveInvoiceConsular(Request $request)
+    {
+        //dd($request->all());
+        $authId = (int) Auth::user()->id;
+        $validator = Validator::make($request->all(), [
+            'invoice_date'          => 'required',
+            'customer_id'           => 'required',
+            'purpose'               => 'required',
+            'net_amount'            => 'required',
+            'customer_amount'       => 'required',
+            'amount_paid'           => 'required',
+            'profit'                => 'required',
+            'due_amount'            => 'required',
+        ]);
+        if ($validator->fails()) {
+            $response = [
+                'success' => false,
+                'message' => $validator->errors()
+            ];
+            return response()->json($response, 400);
+        }
+        $data = array(
+            'invoice_date'              => !empty($request->invoice_date) ? date("d-m-Y", strtotime($request->invoice_date)) : "",
+            'customer_id'               => !empty($request->customer_id) ? $request->customer_id : "",
+            'purpose'                   => !empty($request->purpose) ? $request->purpose : "",
+            'net_amount'                => !empty($request->net_amount) ? $request->net_amount : "",
+            'customer_amount'           => !empty($request->customer_amount) ? $request->customer_amount : "",
+            'amount_paid'               => !empty($request->amount_paid) ? $request->amount_paid : "",
+            'profit'                    => !empty($request->profit) ? $request->profit : "",
+            'due_amount'                => !empty($request->due_amount) ? $request->due_amount : "",
+            'status'                    => 1,
+            'entry_by'                  => $authId,
+        );
+        if (empty($request->consular_inv_id)) {
+            DB::table('consular_invoice')->insertGetId($data);
+        } else {
+            DB::table('consular_invoice')->where('consular_inv_id', (int)$request->consular_inv_id)->update($data);
+        }
+        $response = [
+            'message' => 'Successfully Working',
+        ];
+        return response()->json($response);
+    }
+
+     public function saveInvoiceOthers(Request $request)
     {
         //dd($request->all());
         $authId = (int) Auth::user()->id;

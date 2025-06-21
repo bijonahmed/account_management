@@ -34,6 +34,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/savePayment', [App\Http\Controllers\API\CategoryController::class, 'savePayment']);
     Route::post('/saveInvoiceMoney', [App\Http\Controllers\API\CategoryController::class, 'saveInvoiceMoney']);
     Route::post('/saveInvoiceOthers', [App\Http\Controllers\API\CategoryController::class, 'saveInvoiceOthers']);
+     Route::post('/saveInvoiceConsular', [App\Http\Controllers\API\CategoryController::class, 'saveInvoiceConsular']);
     Route::post('/saveInvoice', [App\Http\Controllers\API\CategoryController::class, 'saveInvoice']);
     Route::post('/saveInvoiceReturn', [App\Http\Controllers\API\CategoryController::class, 'saveInvoiceReturn']);
     Route::post('/saveCategory', [App\Http\Controllers\API\CategoryController::class, 'saveCategory']);
@@ -140,6 +141,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/saveRole', [App\Http\Controllers\API\UserController::class, 'saveRole']);
     Route::get('/getcountryList', [App\Http\Controllers\API\ProfileController::class, 'getcountryList']);
     Route::get('/getCompanySetting', [App\Http\Controllers\API\ProfileController::class, 'getCompanySetting']);
+    Route::get('/getCompanySettingForTravel', [App\Http\Controllers\API\ProfileController::class, 'getCompanySettingForTravel']);
+     Route::get('/getCompanySettingForConsular', [App\Http\Controllers\API\ProfileController::class, 'getCompanySettingForConsular']);
     Route::post('/updateprofile', [App\Http\Controllers\API\ProfileController::class, 'updateprofile']);
     Route::post('/removeUser', [App\Http\Controllers\API\ProfileController::class, 'removeUser']);
     Route::post('/checkEmail', [App\Http\Controllers\API\ProfileController::class, 'checkEmail']);

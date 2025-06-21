@@ -23,5 +23,14 @@ class Profile extends Authenticatable
         $row = DB::table('company_setting')->first();
         return $row;
     }
-    
+    public static function companyList()
+    {
+        $row = DB::table('company_setting')->where('setting_id',2)->first();
+        return $row;
+    }
+    public static function companyListConsular()
+    {
+        $row = DB::table('company_setting')->where('setting_id',3)->first();
+        return $row;
+    }
 }
