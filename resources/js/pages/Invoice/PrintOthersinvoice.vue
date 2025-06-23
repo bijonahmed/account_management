@@ -5,7 +5,7 @@
 
         <div id="printableArea">
             <div class="page-content" style="background-color: white;">
-                <center>Monetry Transfer Invoice</center>
+                <center>Others Invoice</center>
                 <table width="100%" border="0" align="center">
                     <tr>
                         <td width="33%">

@@ -103,10 +103,18 @@ const edittravelinvoice = () =>
     import("../pages/Invoice/EditTravelInvoice.vue");
 const editOthresinvoice = () =>
     import("../pages/Invoice/EditOthresinvoice.vue");
+
+
+const editConsularinvoice = () =>
+    import("../pages/Invoice/EditConsularinvoice.vue");
+
 const Printmoneyinvoice = () =>
     import("../pages/Invoice/Printmoneyinvoice.vue");
 const PrintOthersinvoice = () =>
     import("../pages/Invoice/PrintOthersinvoice.vue");
+
+const PrintConsularInvoice = () =>
+    import("../pages/Invoice/PrintConsularinvoice.vue");
     
 // Report
 const profit = () => import("../pages/Report/Profit.vue");
@@ -535,6 +543,15 @@ const routes = [
         component: editOthresinvoice,
         meta: { requiresAuth: true },
     },
+
+
+ {
+        path: "/edit-consular-invoice/:id",
+        name: "edit-consular-invoice",
+        component: editConsularinvoice,
+        meta: { requiresAuth: true },
+    },
+
     {
         path: "/print-money-invoice/:id",
         name: "print-money-invoice",
@@ -545,6 +562,12 @@ const routes = [
         path: "/print-others-invoice/:id",
         name: "print-others-invoice",
         component: PrintOthersinvoice,
+        meta: { requiresAuth: true },
+    },
+     {
+        path: "/print-consular-invoice/:id",
+        name: "print-consular-invoice",
+        component: PrintConsularInvoice,
         meta: { requiresAuth: true },
     },
     {

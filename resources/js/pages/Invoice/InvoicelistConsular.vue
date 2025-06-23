@@ -44,7 +44,7 @@
                             </div>
                             <div class="modal-body">
                                 <center style="color: red; font-size: 15px; font-weight: bold;">Do you want to delete this category?</center>
-                                <input type="hidden" class="others_inv_id" v-model="others_inv_id" />
+                                <input type="hidden" class="consular_inv_id" v-model="consular_inv_id" />
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -56,7 +56,7 @@
                 <!-- END DELETE MODAL -->
                 <div class="col-md-12">
                     <div class="table-responsive w-100">
-                        <input type="hidden" class="others_inv_id" v-model="others_inv_id" />
+                        <input type="hidden" class="consular_inv_id" v-model="consular_inv_id" />
                         <button class="btn btn-primary w-100 edit-mode" @click="editMMode" style="display: none;">Edit Mode</button>
                         <button class="btn btn-primary w-100 print-mode" @click="printMode" style="display: none;">Print Mode</button>
                         <table id="datatable" class="table table-striped table-hover table-sm">
@@ -101,7 +101,7 @@
             return {
                 users: [],
                 customers: [],
-                others_inv_id: '',
+                consular_inv_id: '',
                 datatable: {},
             };
         },
@@ -119,7 +119,7 @@
                     'serverMethod': 'GET',
                     'searching': false,
                     'ajax': {
-                        'url': `/api/category/getInvoicesOtherslist`,
+                        'url': `/api/category/getInvoicesConsularlist`,
                         'data': function (data) {
                             let info = $('#datatable').DataTable().page.info();
                             data.page = info.page + 1;
@@ -160,17 +160,17 @@
                 let datatable = this.datatable;
                 $('body').on('click', '.edit', function () {
                     let id = $(this).attr('data-id');
-                    $(".others_inv_id").val(id);
+                    $(".consular_inv_id").val(id);
                     $(".edit-mode").click();
                 });
                 $('body').on('click', '.print', function () {
                     let id = $(this).attr('data-id');
-                    $(".others_inv_id").val(id);
+                    $(".consular_inv_id").val(id);
                     $(".print-mode").click();
                 });
                 $('body').on('click', '.del', function () {
                     let id = $(this).attr('data-id');
-                    $(".others_inv_id").val(id);
+                    $(".consular_inv_id").val(id);
                     $("#staticBackdropLabel").html("DELETE ID :" + id);
                     $(".edit-modal").click();
                 });
@@ -183,18 +183,18 @@
                 });
             },
             editMMode() {
-                let id = $(".others_inv_id").val();
+                let id = $(".consular_inv_id").val();
                 this.$router.push({
-                    name: "edit-others-invoice",
+                    name: "edit-consular-invoice",
                     params: {
                         id: id
                     }
                 })
             },
             printMode() {
-                let id = $(".others_inv_id").val();
+                let id = $(".consular_inv_id").val();
                 this.$router.push({
-                    name: "print-others-invoice",
+                    name: "print-consular-invoice",
                     params: {
                         id: id
                     }

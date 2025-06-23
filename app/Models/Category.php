@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -7,6 +8,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use AuthorizesRequests;
 use DB;
+
 class Category extends Authenticatable
 {
   use HasApiTokens, HasFactory, Notifiable;
@@ -117,12 +119,12 @@ class Category extends Authenticatable
   }
 
 
-public static function moneySuppliders()
+  public static function moneySuppliders()
   {
     $result = DB::table('supplier')->where('status', 1)->where('service', 2)->orderBy('sulipper_id', 'asc')->get();
     return $result;
   }
-  
+
   public static function checkSubCategoryRow($id)
   {
     $result =  DB::table('sub_category')->where('sub_cate_id', $id)->first();
@@ -157,6 +159,15 @@ public static function moneySuppliders()
       ->leftJoin('customer', 'customer.customer_id', '=', 'others_invoice.customer_id')
       ->where('others_invoice.others_inv_id', $id)->first();
   }
+
+  public static function checkInvoiceConsularRow($id)
+  {
+    return DB::table('consular_invoice')
+      ->select('consular_invoice.*', 'customer.name as customername', 'customer.addres', 'customer.phone')
+      ->leftJoin('customer', 'customer.customer_id', '=', 'consular_invoice.customer_id')
+      ->where('consular_invoice.consular_inv_id', $id)->first();
+  }
+
   public static function checkInvoiceTravelRow($id)
   {
     return DB::table('invoice')
@@ -209,7 +220,14 @@ public static function moneySuppliders()
     return $result;
   }
 
-
+  public static function invoiceForConsularData($id)
+  {
+    $result =  DB::table('consular_invoice')->where('consular_inv_id', $id)
+      ->select('consular_invoice.*', 'customer.type', 'customer.name', 'customer.addres', 'customer.phone')
+      ->leftJoin('customer', 'customer.customer_id', '=', 'consular_invoice.customer_id')
+      ->first();
+    return $result;
+  }
   public static function invoiceDataAll($id)
   {
     $result =  DB::table('invoice')->where('inv_id', $id)
@@ -546,6 +564,42 @@ public static function moneySuppliders()
     ];
     return $res;
   }
+
+  public static function filterInvoiceListConsular($data = array())
+  {
+    //dd($data);
+    $table = 'consular_invoice';
+    $cond = '';
+    if (!empty($data['purpose'])) {
+      $cond .= " AND $table.purpose='" . $data['purpose'] . "'";
+    }
+    $st = '0,1';
+    if (isset($data['status'])) {
+      $st = $data['status'];
+    }
+    $cond .= " AND $table.status IN({$st})";
+    $cond .= " ORDER BY {$table}.consular_inv_id DESC";
+    $limit = $data['length']; //10
+    if (!empty($data['page'])) {
+      $start = $limit * ($data['page'] - 1);
+    }
+    $sqld = "SELECT * FROM `{$table}` LEFT JOIN customer ON (customer.customer_id=consular_invoice.customer_id) WHERE 1 " . $cond;
+    $sqld .= " LIMIT $start,$limit";
+    //echo $sqld;exit; 
+    $results = DB::select($sqld);
+    $sqlt = "SELECT count(*)total FROM $table  WHERE 1 {$cond}";
+    $total = DB::select($sqlt)[0]->total;
+    $res = [
+      "draw" => $data['draw'],
+      "recordsTotal" => $total,
+      "recordsFiltered" => $total,
+      "data" => $results,
+      'get' => $data
+    ];
+    return $res;
+  }
+
+
   public static function filterInvoiceListOthers($data = array())
   {
     //dd($data);

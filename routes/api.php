@@ -48,7 +48,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/editInSubCategoryId/{id}', [App\Http\Controllers\API\CategoryController::class, 'editInSubCategoryId']);
     Route::get('/editCategoryId/{id}', [App\Http\Controllers\API\CategoryController::class, 'editCategoryId']);
     Route::get('/editInvoiceMoneyId/{id}', [App\Http\Controllers\API\CategoryController::class, 'editInvoiceMoneyId']);
-    Route::get('/editInvoiceOthersInvId/{id}', [App\Http\Controllers\API\CategoryController::class, 'editInvoiceOthresId']);
+    Route::get('/editInvoiceConsularId/{id}', [App\Http\Controllers\API\CategoryController::class, 'editInvoiceConsularId']);
     Route::get('/editInvoiceTravelId/{id}', [App\Http\Controllers\API\CategoryController::class, 'editInvoiceTravelId']);
     Route::get('/editCustomerId/{id}', [App\Http\Controllers\API\CategoryController::class, 'editCustomerId']);
     Route::get('/editSupplierId/{id}', [App\Http\Controllers\API\CategoryController::class, 'editSupplierId']);
@@ -58,6 +58,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/getInvoiceMoneyData/{id}', [App\Http\Controllers\API\CategoryController::class, 'getInvoiceMoneyData']);
 
     Route::get('/getInvoiceOthersData/{id}', [App\Http\Controllers\API\CategoryController::class, 'getInvoiceOthersData']);
+    Route::get('/getInvoiceConsularData/{id}', [App\Http\Controllers\API\CategoryController::class, 'getInvoiceConsularData']);
 
     Route::get('/getInvoiceDataChk/{id}', [App\Http\Controllers\API\CategoryController::class, 'getInvoiceDataChk']);
     Route::get('/getInvoiceslist', [App\Http\Controllers\API\CategoryController::class, 'getInvoiceslist']);
@@ -65,7 +66,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/getInvoicesmoneylist', [App\Http\Controllers\API\CategoryController::class, 'getInvoicesmoneylist']);
 
     Route::get('/getInvoicesOtherslist', [App\Http\Controllers\API\CategoryController::class, 'getInvoicesOtherslist']);
-
+    Route::get('/getInvoicesConsularlist', [App\Http\Controllers\API\CategoryController::class, 'getInvoicesConsularlist']);
 
 
     Route::get('/editHashTagId/{id}', [App\Http\Controllers\API\CategoryController::class, 'editHashTagId']);

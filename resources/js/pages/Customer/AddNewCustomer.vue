@@ -44,7 +44,7 @@
                                     </div>
 
 
-                                    <div class="row mb-3">
+                                    <div class="row mb-3 d-none">
                                         <label for="exampleInputUsername2"
                                             class="col-sm-3 col-form-label">Category</label>
                                         <div class="col-sm-9">

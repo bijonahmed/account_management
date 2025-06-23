@@ -7,7 +7,7 @@
                     <div class="row">
                         <div class="col-md-10">Consular Invoice</div>
                         <div class="col-md-2">
-                            <router-link to="/invoice/invoice-list-others"><span
+                            <router-link to="/invoice/invoice-list-consular"><span
                                     stye="text-align:center;">Back</span></router-link>
                         </div>
                     </div>
@@ -85,7 +85,7 @@
                                         <label for="exampleInputUsername2" class="col-sm-3 col-form-label">Type</label>
                                         <div class="col-sm-9">
                                             <select name="status" v-model="newcus_data.type" class="form-select">
-                                                <option value="3">Others</option>
+                                                <option value="3">Consular</option>
                                             </select>
                                         </div>
                                     </div>
@@ -298,6 +298,7 @@ export default {
             const formData = new FormData();
 
             formData.append('customer_id', this.newcus_data.customer_id);
+             formData.append('company_id', 3);
             formData.append('name', this.newcus_data.name);
             formData.append('phone', this.newcus_data.phone);
             formData.append('addres', this.newcus_data.addres);
