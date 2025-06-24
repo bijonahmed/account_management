@@ -52,15 +52,34 @@
                                         <div class="row mb-1">
                                             <label for="exampleInputUsername2" class="col-sm-4 col-form-label">Purpose</label>
                                             <div class="col-sm-8">
-                                                <select name="purpose" v-model="insertData.purpose" class="form-select purpose">
-                                                    <option value="">Select</option>
-                                                    <option value="NRV">NRV</option>
-                                                    <option value="MRP">MRP</option>
-                                                    <option value="Other">Other</option>
+                                              <select name="purpose" v-model="insertData.purpose" class="form-select purpose">
+                                                        <option value="">Select</option>
+                                                        <option value="NRV">NRV</option>
+                                                        <option value="MRP/E-passport Reissue">MRP/E-passport Reissue
+                                                        </option>
+                                                        <option value="NID">NID</option>
+                                                        <option value="Birth Certicate">Birth Certicate</option>
+                                                        <option value="Payment with date">Payment with date</option>
+                                                        <option value="Power of attorny">Power of attorny</option>
+                                                        <option value="Other">Other</option>
 
-                                                </select>
+                                                    </select>
                                             </div>
                                         </div>
+
+
+                                          <div class="row mb-1">
+                                                <label for="exampleInputUsername2"
+                                                    class="col-sm-4 col-form-label">Supplier</label>
+                                                <div class="col-sm-8">
+                                                    <select name="sulipper_id" v-model="insertData.sulipper_id"
+                                                        class="form-select sulipper_id">
+                                                        <option value="">Select</option>
+                                                        <option v-for='data in supplierlist' :value='data.sulipper_id'>
+                                                            {{ data.name }}</option>
+                                                    </select>
+                                                </div>
+                                            </div>
 
                                     </div>
                                     <div class="col-md-6">
@@ -138,6 +157,7 @@ export default {
                 customerphone: '',
             },
             insertData: {
+                sulipper_id:'',
                 invoice_date:'',
                 customer_id: '',
                 consular_inv_id: '',
@@ -167,6 +187,7 @@ export default {
             formData.append('consular_inv_id', this.insertData.consular_inv_id);
             formData.append('purpose', this.insertData.purpose);
             formData.append('net_amount', this.insertData.net_amount);
+            formData.append('sulipper_id', this.insertData.sulipper_id);
             formData.append('customer_id', cus_id);
             formData.append('customer_amount', this.insertData.customer_amount);
             formData.append('amount_paid', this.insertData.amount_paid);
@@ -193,7 +214,7 @@ export default {
             });
         },
         allSuppliers() {
-            axios.get('/api/category/allsuppliders').then(response => {
+            axios.get('/api/category/consularSupplier').then(response => {
                 this.supplierlist = response.data.data;
             }).catch(error => {
                 //  console.log(error);
@@ -213,8 +234,10 @@ export default {
             this.axios
                 .get(`/api/category/editInvoiceConsularId/${this.$route.params.id}`)
                 .then((response) => {
+                    console.log("sulipper_id: " + response.data.data.sulipper_id);
                     this.insertData.customer_id = response.data.data.customer_id;
                     this.insertData.consular_inv_id = response.data.data.consular_inv_id;
+                    this.insertData.sulipper_id = response.data.data.sulipper_id;
                     this.insertData.purpose = response.data.data.purpose;
                     this.insertData.net_amount = response.data.data.net_amount;
                     this.insertData.customer_amount = response.data.data.customer_amount;
@@ -222,6 +245,8 @@ export default {
                     this.insertData.profit = response.data.data.profit;
                     this.insertData.due_amount = response.data.data.due_amount;
                     this.insertData.invoice_date = response.data.data.invoice_date;
+                  //  $(".sulipper_id").val(response.data.data.sulipper_id);
+                    $(".purpose").val(response.data.data.purpose);
                     $(".customer_id").val(response.data.data.customer_id);
                     //header
                     this.customerInfo.customername = response.data.data.customername;
@@ -235,7 +260,7 @@ export default {
             this.insertData.p_type = payment_type;
         },
         getCustomerlist() {
-            axios.get(`/api/category/allCustomerOthers`).then(response => {
+            axios.get(`/api/category/allCustomerConsular`).then(response => {
                 this.customerlist = response.data.data;
             }).catch(error => {
                 //  console.log(error);

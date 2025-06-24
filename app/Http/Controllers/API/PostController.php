@@ -487,8 +487,12 @@ class PostController extends Controller
         ];
         return response()->json($response, 200);
     }
+
+
     public function profitReportMoney(Request $request)
     {
+       // dd($request->all());
+
         $data = Post::profitreportMoney($request->all());
         //dd($data);
         $sum = 0;
@@ -522,6 +526,24 @@ class PostController extends Controller
 
         return response()->json($response, 200);
     }
+
+ public function profitReportConsular(Request $request)
+    {
+        $data = Post::profitReportConsular($request->all());
+        // dd($data);
+        $sum = 0;
+        foreach ($data as $v) {
+            $sum += $v->profit;
+        }
+        // dd($data);
+        $response = [
+            'data' => $data,
+            'total_sum' => $sum,
+            'message' => 'success'
+        ];
+        return response()->json($response, 200);
+    }
+    
     public function profitReportOthers(Request $request)
     {
         $data = Post::profitReportOther($request->all());

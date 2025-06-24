@@ -148,9 +148,9 @@ class Post extends Authenticatable
       ->whereBetween('invoice.invoice_date', [$startDate, $endDate]);
 
     // Apply company_id filter only if provided
-    if (!empty($company_id)) {
-      $query->where('customer.company_id', $company_id);
-    }
+    // if (!empty($company_id)) {
+    //   $query->where('customer.company_id', $company_id);
+    // }
 
     // Execute the query and get the results
     $results = $query->get();
@@ -170,13 +170,35 @@ class Post extends Authenticatable
       ->leftJoin('supplier', 'supplier.sulipper_id', '=', 'invoice_money_transfer.sulipper_id')
       ->whereBetween('invoice_money_transfer.invoice_date', [$startDate, $endDate]);
     // Apply company_id filter only if provided
-    if (!empty($company_id)) {
-      $query->where('customer.company_id', $company_id);
-    }
+    // if (!empty($company_id)) {
+    //   $query->where('customer.company_id', $company_id);
+    // }
 
     $results = $query->get();
     return $results;
   }
+
+   public static function profitReportConsular($data)
+  {
+    $startDate =  date('Y-m-d', strtotime($data['frm_date']));
+    $endDate =  date('Y-m-d', strtotime($data['to_date']));
+    $company_id =  $data['company_id'];
+
+    $query = DB::table('consular_invoice')
+      ->select('consular_invoice.consular_inv_id', 'consular_invoice.invoice_date', 'consular_invoice.profit', 'customer.name as customer_name', 'users.name', 'purpose', 'net_amount', 'customer_amount', 'amount_paid', 'profit', 'due_amount', 'create_date')
+      ->leftJoin('customer', 'customer.customer_id', '=', 'consular_invoice.customer_id')
+      ->leftJoin('users', 'users.id', '=', 'consular_invoice.entry_by')
+      ->whereBetween('consular_invoice.invoice_date', [$startDate, $endDate]);
+    // Apply company_id filter only if provided
+    // if (!empty($company_id)) {
+    //   $query->where('customer.company_id', $company_id);
+    // }
+
+    $results = $query->get();
+    return $results;
+  }
+
+
   public static function profitReportOther($data)
   {
     $startDate =  date('Y-m-d', strtotime($data['frm_date']));

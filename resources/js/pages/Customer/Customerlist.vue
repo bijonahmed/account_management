@@ -38,7 +38,8 @@
                                 <option value="">All</option>
                                 <option value="1" selected>Travel</option>
                                 <option value="2">Money Transfer</option>
-                                <option value="3">Others</option>
+                                <option value="3">Consular</option>
+                                <option value="4">Others</option>
                             </select>
                         </div>
                     </div>

@@ -153,6 +153,20 @@
                                             </div>
 
 
+                                            <div class="row mb-1">
+                                                <label for="exampleInputUsername2"
+                                                    class="col-sm-4 col-form-label">Supplier</label>
+                                                <div class="col-sm-8">
+                                                    <select name="sulipper_id" v-model="insertData.sulipper_id"
+                                                        class="form-select sulipper_id">
+                                                        <option value="">Select</option>
+                                                        <option v-for='data in supplierlist' :value='data.sulipper_id'>
+                                                            {{ data.name }}</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+
                                             <input type="hidden" class="form-control customer_id" name="customer_id"
                                                 id="customer_id">
 
@@ -260,6 +274,7 @@ export default {
                 tel: '',
             },
             insertData: {
+                sulipper_id: '',
                 invoice_date: '',
                 customer_id: '',
                 consular_inv_id: '',
@@ -298,7 +313,7 @@ export default {
             const formData = new FormData();
 
             formData.append('customer_id', this.newcus_data.customer_id);
-             formData.append('company_id', 3);
+            formData.append('company_id', 3);
             formData.append('name', this.newcus_data.name);
             formData.append('phone', this.newcus_data.phone);
             formData.append('addres', this.newcus_data.addres);
@@ -334,6 +349,7 @@ export default {
                     const formData = new FormData();
                     var cus_id = $('.customer_id').val();
                     formData.append('invoice_date', this.insertData.invoice_date);
+                    formData.append('sulipper_id', this.insertData.sulipper_id);
                     formData.append('consular_inv_id', this.insertData.consular_inv_id);
                     formData.append('purpose', this.insertData.purpose);
                     formData.append('net_amount', this.insertData.net_amount);
@@ -366,7 +382,7 @@ export default {
             })
         },
         allSuppliers() {
-            axios.get('/api/category/allsuppliders').then(response => {
+            axios.get('/api/category/consularSupplier').then(response => {
                 this.supplierlist = response.data.data;
             }).catch(error => {
                 //  console.log(error);
@@ -392,7 +408,7 @@ export default {
             this.insertData.p_type = payment_type;
         },
         getCustomerlist() {
-            axios.get(`/api/category/allCustomerMoney`).then(response => {
+            axios.get(`/api/category/allCustomerConsular`).then(response => {
                 this.customerlist = response.data.data;
             }).catch(error => {
                 //  console.log(error);

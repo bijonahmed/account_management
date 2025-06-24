@@ -63,12 +63,11 @@
                             <thead>
                                 <tr>
                                     <th>Customer Name</th>
-                                    <th>Purpose</th>
-                                    <th>Net Amount</th>
-                                    <th>Cus. Amount</th>
+                                    <th>Amount</th>
+                                    <th>Total Amount</th>
                                     <th>Amount Paid</th>
-                                    <th>Profit</th>
-                                    <th>Due Amount</th>
+                                    <th>Charge/Fee</th>
+                                    <th>Reamining Amount</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
@@ -136,21 +135,18 @@
                             data:'customer_name',
                         },
                         {
-                            data: 'purpose'
+                            data: 'amount'
                         }, {
-                            data: 'net_amount'
-                        },
-                        {
-                            data: 'customer_amount'
+                            data: 'total_amount'
                         },
                         {
                             data: 'amount_paid'
                         },
                         {
-                            data: 'profit'
+                            data: 'charge_fee'
                         },
                         {
-                            data: 'profit'
+                            data: 'amount_remaining'
                         },
                         {
                             data: 'actions',

@@ -205,7 +205,7 @@ class BankController extends Controller
     public function getcountryList()
     {
 
-        $data =   DB::table('company_list')->get();
+        $data =   DB::table('company_list')->where('status',1)->get();
         $response = [
             'data' => $data,
             'message' => 'success'

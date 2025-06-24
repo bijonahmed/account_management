@@ -226,4 +226,14 @@ class ProfileController extends Controller
         ];
         return response()->json($response, 200);
     }
+
+    public function getCompanySettingForCorporate()
+    {
+        $rows = Profile::companyListCorporate();
+        $response = [
+            'data' => $rows,
+            'message' => 'success'
+        ];
+        return response()->json($response, 200);
+    }
 }

@@ -16,8 +16,10 @@ Route::group(['prefix' => 'public'], function () {
 Route::middleware('auth:sanctum')->group(function () {
   Route::group(['prefix' => 'category'], function () {
     Route::get('/allCustomers', [App\Http\Controllers\API\CategoryController::class, 'allCustomers']);
+
     Route::get('/allCustomerslist', [App\Http\Controllers\API\CategoryController::class, 'allCustomerslist']);
     Route::get('/allCustomerMoney', [App\Http\Controllers\API\CategoryController::class, 'allCustomerMoney']);
+    Route::get('/allCustomerConsular', [App\Http\Controllers\API\CategoryController::class, 'allCustomerConsular']);
     Route::get('/allCustomerOthers', [App\Http\Controllers\API\CategoryController::class, 'allCustomerOthers']);
 
     Route::get('/getCustomerData', [App\Http\Controllers\API\CategoryController::class, 'getCustomerData']);
@@ -26,7 +28,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/getPaymentAmountlist', [App\Http\Controllers\API\CategoryController::class, 'getPaymentAmountlist']);
     Route::get('/getCategoryList', [App\Http\Controllers\API\CategoryController::class, 'getCategoryList']);
     Route::get('/gamesCategory', [App\Http\Controllers\API\CategoryController::class, 'gamesCategory']);
+
     Route::get('/allsuppliders', [App\Http\Controllers\API\CategoryController::class, 'allsuppliders']);
+    Route::get('/othersSupplier', [App\Http\Controllers\API\CategoryController::class, 'othersSupplier']);
+    Route::get('/consularSupplier', [App\Http\Controllers\API\CategoryController::class, 'consularSupplier']);
     Route::get('/moneySuppliders', [App\Http\Controllers\API\CategoryController::class, 'moneySuppliders']);
     Route::post('/saveCustomer', [App\Http\Controllers\API\CategoryController::class, 'saveCustomer']);
     Route::post('/saveSupplier', [App\Http\Controllers\API\CategoryController::class, 'saveSupplier']);
@@ -50,6 +55,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/editInvoiceMoneyId/{id}', [App\Http\Controllers\API\CategoryController::class, 'editInvoiceMoneyId']);
     Route::get('/editInvoiceConsularId/{id}', [App\Http\Controllers\API\CategoryController::class, 'editInvoiceConsularId']);
     Route::get('/editInvoiceTravelId/{id}', [App\Http\Controllers\API\CategoryController::class, 'editInvoiceTravelId']);
+    Route::get('/editInvoiceOthersInvId/{id}', [App\Http\Controllers\API\CategoryController::class, 'editInvoiceOthersInvId']);
     Route::get('/editCustomerId/{id}', [App\Http\Controllers\API\CategoryController::class, 'editCustomerId']);
     Route::get('/editSupplierId/{id}', [App\Http\Controllers\API\CategoryController::class, 'editSupplierId']);
     Route::get('/editDueAmtId/{id}', [App\Http\Controllers\API\CategoryController::class, 'editDueAmtId']);
@@ -58,6 +64,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/getInvoiceMoneyData/{id}', [App\Http\Controllers\API\CategoryController::class, 'getInvoiceMoneyData']);
 
     Route::get('/getInvoiceOthersData/{id}', [App\Http\Controllers\API\CategoryController::class, 'getInvoiceOthersData']);
+      Route::get('/geteditInvoiceOthersData/{id}', [App\Http\Controllers\API\CategoryController::class, 'geteditInvoiceOthersData']);
     Route::get('/getInvoiceConsularData/{id}', [App\Http\Controllers\API\CategoryController::class, 'getInvoiceConsularData']);
 
     Route::get('/getInvoiceDataChk/{id}', [App\Http\Controllers\API\CategoryController::class, 'getInvoiceDataChk']);
@@ -143,7 +150,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/getcountryList', [App\Http\Controllers\API\ProfileController::class, 'getcountryList']);
     Route::get('/getCompanySetting', [App\Http\Controllers\API\ProfileController::class, 'getCompanySetting']);
     Route::get('/getCompanySettingForTravel', [App\Http\Controllers\API\ProfileController::class, 'getCompanySettingForTravel']);
-     Route::get('/getCompanySettingForConsular', [App\Http\Controllers\API\ProfileController::class, 'getCompanySettingForConsular']);
+    Route::get('/getCompanySettingForConsular', [App\Http\Controllers\API\ProfileController::class, 'getCompanySettingForConsular']);
+    Route::get('/getCompanySettingForCorporate', [App\Http\Controllers\API\ProfileController::class, 'getCompanySettingForCorporate']);
+
     Route::post('/updateprofile', [App\Http\Controllers\API\ProfileController::class, 'updateprofile']);
     Route::post('/removeUser', [App\Http\Controllers\API\ProfileController::class, 'removeUser']);
     Route::post('/checkEmail', [App\Http\Controllers\API\ProfileController::class, 'checkEmail']);
@@ -173,9 +182,12 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/findMultipleThumnail/{id}', [App\Http\Controllers\API\PostController::class, 'findMultipleThumnail']);
     Route::post('/dueReport', [App\Http\Controllers\API\PostController::class, 'dueReport']);
     Route::post('/dueReportMoney', [App\Http\Controllers\API\PostController::class, 'dueReportMoney']);
-    Route::post('/profitReport', [App\Http\Controllers\API\PostController::class, 'profitReport']);
+    Route::post('/travelProfitReport', [App\Http\Controllers\API\PostController::class, 'profitReport']);
 
-    Route::post('/profitReportMoney', [App\Http\Controllers\API\PostController::class, 'profitReportMoney']);
+    Route::post('/moneyProfitReport', [App\Http\Controllers\API\PostController::class, 'profitReportMoney']);
+
+
+     Route::post('/profitReportConsular', [App\Http\Controllers\API\PostController::class, 'profitReportConsular']);
     Route::post('/profitReportOthers', [App\Http\Controllers\API\PostController::class, 'profitReportOthers']);
     Route::post('/deReportOthers', [App\Http\Controllers\API\PostController::class, 'deReportOthers']);
 

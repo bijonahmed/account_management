@@ -119,11 +119,33 @@ class Category extends Authenticatable
   }
 
 
+  public static function othersSupplier()
+  {
+    $result = DB::table('supplier')->where('status', 1)->where('service', 3)->orderBy('sulipper_id', 'asc')->get();
+    return $result;
+  }
+
+
+  
+  public static function consularSupplier()
+  {
+    $result = DB::table('supplier')->where('status', 1)->where('service', 4)->orderBy('sulipper_id', 'asc')->get();
+    return $result;
+  }
+
+
   public static function moneySuppliders()
   {
     $result = DB::table('supplier')->where('status', 1)->where('service', 2)->orderBy('sulipper_id', 'asc')->get();
     return $result;
   }
+
+   public static function checkSupplier($id)
+  {
+    $result =  DB::table('supplier')->where('sulipper_id', $id)->first();
+    return $result;
+  }
+
 
   public static function checkSubCategoryRow($id)
   {
@@ -140,6 +162,7 @@ class Category extends Authenticatable
     $result =  DB::table('supplier_payment')->where('sulipper_id', $id)->sum('amount');
     return $result;
   }
+
   public static function checkCategoryRow($id)
   {
     $result =  DB::table('category')->where('category_id', $id)->first();
@@ -175,6 +198,10 @@ class Category extends Authenticatable
       ->leftJoin('customer', 'customer.customer_id', '=', 'invoice.customer_id')
       ->where('invoice.invoice_id', $id)->first();
   }
+
+
+
+
   public static function checkCustomerRow($id)
   {
     $result =  DB::table('customer')->where('customer_id', $id)->first();
@@ -252,9 +279,17 @@ class Category extends Authenticatable
     $result =  DB::table('customer')->where('type', 2)->where('status', 1)->get();
     return $result;
   }
-  public static function AllCustomersOthers()
+
+
+ public static function AllCustomersConsular()
   {
     $result =  DB::table('customer')->where('type', 3)->where('status', 1)->get();
+    return $result;
+  }
+  
+  public static function AllCustomersOthers()
+  {
+    $result =  DB::table('customer')->where('type', 4)->where('status', 1)->get();
     return $result;
   }
   public static function checkHashTagRow($id)

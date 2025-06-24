@@ -8,512 +8,386 @@
                         <div class="col-md-8">Report</div>
                     </div>
                 </div>
-                <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill"
-                            data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home"
-                            aria-selected="true">Travel</button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill"
-                            data-bs-target="#pills-profile" type="button" role="tab" aria-controls="pills-profile"
-                            aria-selected="false">Money Transfer</button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="pills-profile-1-tab" data-bs-toggle="pill"
-                            data-bs-target="#pills-profile-1" type="button" role="tab" aria-controls="pills-profile-1"
-                            aria-selected="false">Othres Invoice</button>
-                    </li>
-                </ul>
-                <div class="tab-content" id="pills-tabContent">
-                    <div class="tab-pane fade show active" id="pills-home" role="tabpanel"
-                        aria-labelledby="pills-home-tab">
-                        <form @submit.prevent="SearchData()" id="formrest" class="forms-sample"
-                            enctype="multipart/form-data">
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <div class="input-group mb-3">
-                                        <select class="form-select company_id">
-                                            <option value="">Select a Company...</option>
-                                            <option v-for="(data, index) in companyList" :key="index" :value="data.id">
-                                                {{ data.company_name }}
-                                            </option>
-                                        </select>
-                                    </div>
-                                </div>
-
-
-
-                                <div class="col-md-3">
-                                    <div class="input-group mb-3">
-                                        <input type="date" class="form-control frm_date" v-model="frm_date"
-                                            placeholder="From Date">
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="input-group mb-3">
-                                        <!-- <Datepicker class="form-control to_date" placeholder="To Date"></Datepicker>   -->
-                                        <input type="date" class="form-control to_date" placeholder="To Date"
-                                            v-model="to_date">
-                                    </div>
-                                </div>
-                                <div class="col-md-6 d-none">
-                                    <div class="input-group mb-3">
-                                        <select class='form-control form-select customer_id' v-model="customer_id">
-                                            <option value=''>Select Customer</option>
-                                            <option v-for='data in customers' :value='data.customer_id' :key="data.id">
-                                                {{ data.name }}</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-md-2">
-                                    <button type="submit" class="btn btn-primary w-100">Submit</button>
-                                </div>
-                            </div>
-                        </form>
-                        <div class="d-flex justify-content-center">
-                            <div class="spinner-border loadingvideo" role="status" style="display:none">
-                                <span class="visually-hidden">Loading...</span>
+                <!-- Filter Area -->
+                <form @submit.prevent="filterReport()" id="formrest" class="forms-sample" enctype="multipart/form-data">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="input-group mb-3">
+                                <select class="form-select company_id">
+                                    <option value="">All Company...</option>
+                                    <option v-for="(data, index) in companyList" :key="index" :value="data.id">
+                                        {{ data.company_name }}
+                                    </option>
+                                </select>
                             </div>
                         </div>
-                        <hr>
-
-                        <!-- start  -->
-                        <div class="table-responsive">
-                            <table border="2" cellpadding="1" cellspacing="2" width="100%" class="table">
-                                <td height="17" width="107">
-                                    <div align="center" class="style8">Transaction Date&nbsp;</div>
-                                </td>
-                                <td width="110">
-                                    <div align="center" class="style8">PNR&nbsp;</div>
-                                </td>
-                                <td width="110">
-                                    <div align="center" class="style8">Passesnger Name&nbsp;</div>
-                                </td>
-                                <td width="116">
-                                    <div align="center" class="style8">Route</div>
-                                </td>
-                                <td width="123">
-                                    <div align="center" class="style8">Net Amount/Supplier Amount</div>
-                                </td>
-                                <td width="98">
-                                    <div align="center" class="style8">Customer Amount&nbsp;</div>
-                                </td>
-                                <td width="58">
-                                    <div align="center" class="style8">Profit</div>
-                                </td>
-                                <td width="66">
-                                    <div align="center" class="style8">Amount Paid</div>
-                                </td>
-                                <td width="56">
-                                    <div align="center" class="style8">Due</div>
-                                </td>
-                                <td width="99">
-                                    <div align="center" class="style8">Suppliers</div>
-                                </td>
-                                <td width="123">
-                                    <div align="center" class="style8">Payment type&nbsp;</div>
-                                </td>
-
-                                <tr height="17" v-for="data in report" :key="data.inv_id">
-                                    <td height="17" class="style8"><span class="style21">{{ data.created_at }}</span>
-                                    </td>
-                                    <td class="style8">{{ data.vendorpnr }}</td>
-                                    <td class="style8"><span class="style21">{{ data.customer_name }}</span></td>
-                                    <td class="style8"><span class="style21">{{ data.depart_to }}</span></td>
-                                    <td class="style8"><span class="style21 text-center">
-                                            <center>{{ data.net_amount }}</center>
-                                        </span></td>
-                                    <td class="style8"><span class="style21">
-                                            <center>{{ data.customer_amount }}</center>
-                                        </span></td>
-                                    <td class="style8"><span class="style21">
-                                            <center>{{ data.profit }}</center>
-                                        </span></td>
-                                    <td class="style8"><span class="style21">
-                                            <center>{{ data.customer_deposit }}</center>
-                                        </span></td>
-                                    <td class="style8"><span class="style21">
-                                            <center>{{ data.due_amount }}</center>
-                                        </span></td>
-                                    <td class="style8"><span class="style21">{{ data.supplier_name }}</span></td>
-                                    <td class="style8"><span class="style21">
-                                            <p v-if="data.status === 1">Bank</p>
-                                            <p v-else-if="data.status === 2">Bank Transfer</p>
-                                            <p v-else-if="data.status === 3">Cash</p>
-                                            <p v-else>Unknown Status</p>
-                                        </span></td>
-                                </tr>
-
-                            </table>
+                        <div class="col-md-3">
+                            <div class="input-group mb-3">
+                                <input type="date" class="form-control frm_date" id="money_frm_date"
+                                    placeholder="From Date" v-model="frm_date">
+                            </div>
                         </div>
+                        <div class="col-md-3">
+                            <div class="input-group mb-3">
 
-                        <!-- end -->
-
+                                <input type="date" class="form-control to_date" id="money_to_date" placeholder="To Date"
+                                    v-model="to_date">
+                            </div>
+                        </div>
+                        <div class="col-md-3 d-none">
+                            <div class="input-group mb-3">
+                                <select class='form-control form-select customer_id' v-model="customer_id">
+                                    <option value=''>Select Customer</option>
+                                    <option v-for='data in customers' :value='data.customer_id' :key="data.customer_id">
+                                        {{ data.name }}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <button type="submit" class="btn btn-primary w-100">Submit</button>
+                        </div>
                     </div>
-
-                    <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
-                        <form @submit.prevent="SearchDataMoney()" id="formrest" class="forms-sample"
-                            enctype="multipart/form-data">
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <div class="input-group mb-3">
-                                        <select class="form-select company_id">
-                                            <option value="">Select a Company...</option>
-                                            <option v-for="(data, index) in companyList" :key="index" :value="data.id">
-                                                {{ data.company_name }}
-                                            </option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="input-group mb-3">
-                                        <input type="date" class="form-control frm_date" id="money_frm_date"
-                                            placeholder="From Date">
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="input-group mb-3">
-                                        <!-- <Datepicker class="form-control to_date" placeholder="To Date"></Datepicker>   -->
-                                        <input type="date" class="form-control to_date" id="money_to_date"
-                                            placeholder="To Date">
-                                    </div>
-                                </div>
-                                <div class="col-md-3 d-none">
-                                    <div class="input-group mb-3">
-                                        <select class='form-control form-select customer_id' v-model="customer_id">
-                                            <option value=''>Select Customer</option>
-                                            <option v-for='data in customers' :value='data.customer_id'
-                                                :key="data.customer_id">{{ data.name }}</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <button type="submit" class="btn btn-primary w-100">Submit</button>
-                                </div>
-                            </div>
-                        </form>
-                        <div class="d-flex justify-content-center">
-                            <div class="spinner-border loadingvideo" role="status" style="display:none">
-                                <span class="visually-hidden">Loading...</span>
-                            </div>
-                        </div>
-                        <hr>
-                        <center>
-                            <div style="display: inline-flex; gap: 10px;">
-                                <button @click="downloadExcel" class="btn btn-success">
-                                    <i class="fas fa-file-excel"></i> Download XLSX
-                                </button>
-                                <button @click="printReport" class="btn btn-primary">
-                                    <i class="fas fa-print"></i> Print
-                                </button>
-                            </div>
-                        </center>
-                        <br />
-                        <!-- start money  -->
-                        <div id="report-table">
-                            <table class="report-table" style="border-collapse: collapse; width: 100%;">
-                                <thead>
-                                    <tr>
-                                        <th class="text-end">Tran. Date</th>
-                                        <th>Beneficiary Name</th>
-                                        <th>Sender Name</th>
-                                        <th class="text-end">Sending Amount</th>
-                                        <th class="text-end">Rate</th>
-                                        <th class="text-end">Sale</th>
-                                        <th class="text-end">Charge</th>
-                                        <th class="text-end">Others Charge</th>
-                                        <th class="text-end">Total Sale</th>
-                                        <th class="text-end">Profit</th>
-                                        <th class="text-end">Customer Paid</th>
-                                        <th class="text-end">Payment Type</th>
-                                        <th class="text-end">Due</th>
-                                        <th class="text-end">Supplier</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr v-for="data in money_report" :key="data.mone_transfer_id">
-                                        <td class="text-end">{{ data.invoice_date }}</td>
-                                        <td class="text-start">{{ data.beneficiary_name }}</td>
-                                        <td class="text-start">{{ data.customer_name }}</td>
-                                        <td class="text-end">{{ parseFloat(data.receiving_amount).toFixed(2) }}</td>
-                                        <td class="text-end">{{ parseFloat(data.rate).toFixed(2) }}</td>
-                                        <td class="text-end">{{ (data.receiving_amount / data.rate).toFixed(2) }}</td>
-                                        <td class="text-end">{{ parseFloat(data.fees).toFixed(2) }}</td>
-                                        <td class="text-end">{{ parseFloat(data.others_fees).toFixed(2) }}</td>
-                                        <td class="text-end"><b>{{ formattedTotal(data) }}</b>
-                                        </td>
-                                        <td class="text-end">{{ parseFloat(data.profit).toFixed(2) }}</td>
-                                        <td class="text-end">{{ parseFloat(data.customer_deposit).toFixed(2) }}</td>
-                                        <td class="text-end">
-                                            <span v-if="data.status === 1">Bank</span>
-                                            <span v-else-if="data.status === 2">Bank Transfer</span>
-                                            <span v-else-if="data.status === 3">Cash</span>
-                                            <span v-else>Unknown</span>
-                                        </td>
-                                        <td class="text-end">{{ parseFloat(data.due_amount).toFixed(2) }}</td>
-                                        <td><small>{{ data.supplier_name }}</small></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="text-end" style="color: gray;"></td>
-                                        <td class="text-end" style="color: gray;"></td>
-                                        <td class="text-end" style="color: gray;"></td>
-
-                                        <td class="text-end" style="color: blue;"><b>{{
-                                            totals.receiving_amount.toFixed(2) }}</b></td>
-                                        <td class="text-end" style="color: indigo;"><b>{{ totals.rate.toFixed(2) }}</b>
-                                        </td>
-                                        <td class="text-end" style="color: green;"><b>{{
-                                            totals.receiving_divided_by_rate.toFixed(2) }}</b></td>
-                                        <td class="text-end" style="color: deeppink;"><b>{{ totals.fees.toFixed(2) }}</b></td>
-                                        <td class="text-end" style="color: goldenrod;"><b>{{
-                                            totals.others_fees.toFixed(2) }}</b></td>
-                                        <td class="text-end" style="color: purple;">
-                                            <b>{{ totals.total_calculated.toFixed(2) }}</b>
-
-                                        </td>
-                                        <td class="text-end" style="color: red;"><b>{{ totals.profit.toFixed(2) }}</b>
-                                        </td>
-                                        <td class="text-end" style="color: teal;"><b>{{
-                                            totals.customer_deposit.toFixed(2) }}</b></td>
-
-                                        <td></td>
-
-                                        <td class="text-end" style="color: orange;"><b>{{ totals.due_amount.toFixed(2)
-                                                }}</b></td>
-                                        <td></td>
-                                    </tr>
-                                    <tr class="bgtrColor">
-                                        <td class="txttrcolor">
-                                            <center>-</center>
-                                        </td>
-                                        <td class="txttrcolor">
-                                            <center>-</center>
-                                        </td>
-                                        <td class="txttrcolor">
-                                            <center>-</center>
-                                        </td>
-                                        <td class="txttrcolor">
-                                            <center>-</center>
-                                        </td>
-                                        <td class="txttrcolor">
-                                            <center>-</center>
-                                        </td>
-                                        <td class="txttrcolor">
-                                            <center>-</center>
-                                        </td>
-                                        <td class="txttrcolor">
-                                            <center>-</center>
-                                        </td>
-                                        <td class="txttrcolor">
-                                            <center>-</center>
-                                        </td>
-                                        <td class="txttrcolor">
-                                            <center>-</center>
-                                        </td>
-                                        <td class="txttrcolor">
-                                            <center>-</center>
-                                        </td>
-                                        <td class="txttrcolor">
-                                            <center>-</center>
-                                        </td>
-                                        <td class="txttrcolor">
-                                            <center>-</center>
-                                        </td>
-                                        <td class="txttrcolor">
-                                            <center>-</center>
-                                        </td>
-                                        <td class="txttrcolor">
-                                            <center>-</center>
-                                        </td>
-                                    </tr>
-                                    <tr class="bgtrColor">
-                                        <td colspan="3" class="text-end">Total No of transaction</td>
-                                        <td class="text-end"><b>{{ totalTransaction }}</b></td>
-                                        <td colspan="10"></td>
-                                    </tr>
-
-                                    <tr class="bgtrColor">
-                                        <td colspan="3" class="text-end">Total Amount of (Sales)</td>
-                                        <td class="text-end"><b>
-                                            <!-- {{ Number(totals?.receiving_amount || 0).toFixed(2) }} /
-                                                {{ Number(totals?.rate || 0).toFixed(2) }} = -->
-
-                                                {{totals.receiving_divided_by_rate.toFixed(2)}}
-                                                    
-                                                </b></td>
-                                        <td colspan="10"></td>
-                                    </tr>
+                </form>
+                <!-- END Filter Area -->
 
 
-                                    <tr class="bgtrColor">
-                                        <td colspan="3" class="text-end">Total Amount of Charges</td>
-                                        <td class="text-end"><b>{{ totals.fees.toFixed(2) }}</b></td>
-                                        <td colspan="10"></td>
-                                    </tr>
 
-                                    <tr class="bgtrColor">
-                                        <td colspan="3" class="text-end">Total Amount of Other Charges</td>
-                                        <td class="text-end"><b>{{ totals.others_fees.toFixed(2) }}</b></td>
-                                        <td colspan="10"></td>
-                                    </tr>
-
-                                    <tr class="bgtrColor">
-                                        <td colspan="3" class="text-end">Total Amount of (Total Sales)</td>
-                                        <td class="text-end"><b> 
-                                                <!-- {{ totals.receiving_divided_by_rate.toFixed(2) }} +
-                                                {{ totals.fees.toFixed(2) }} +
-                                                {{ totals.others_fees.toFixed(2) }} = -->
-
-                                                {{ (
-                                                    totals.receiving_divided_by_rate +
-                                                    totals.fees +
-                                                    totals.others_fees
-                                                ).toFixed(2) }}</b>
-                                        </td>
-                                        <td colspan="10"></td>
-                                    </tr>
-                                    <tr class="bgtrColor">
-                                        <td colspan="3" class="text-end">Total Profit</td>
-                                        <td class="text-end"><b>{{ money_total_profit }}</b></td>
-                                        <td colspan="10"></td>
-                                    </tr>
-
-                                    <tr class="bgtrColor">
-                                        <td colspan="3" class="text-end">Total Outstanding / Due</td>
-                                        <td class="text-end"><b>{{ total_due }}</b></td>
-                                        <td colspan="10"></td>
-                                    </tr>
-
-                                </tbody>
-                            </table>
-                            <table class="report-table" style="border-collapse: collapse; width: 100%; display: none;">
-                                <tr>
-                                    <td width="24%">Total Number of Transaction </td>
-                                    <td width="1%">&nbsp;:</td>
-                                    <td width="75%"><strong>&nbsp;<b>{{ totalTransaction }}</b></strong></td>
-                                </tr>
-                                <tr>
-                                    <td>Transaction Balance</td>
-                                    <td>&nbsp;:</td>
-                                    <td><strong>&nbsp;<b>{{ total_fees }}</b></strong></td>
-                                </tr>
-                                <tr>
-                                    <td>Total Profit </td>
-                                    <td>&nbsp;:</td>
-                                    <td><strong>&nbsp;<b>{{ money_total_profit }}</b></strong></td>
-                                </tr>
-                                <tr>
-                                    <td>Total Due /Outstanding </td>
-                                    <td>&nbsp;:</td>
-                                    <td><strong>&nbsp;<b>{{ total_due }}</b></strong></td>
-                                </tr>
-                            </table>
-
-                            <!-- end money -->
-                            <div class="row">
-                                <br>
-
-                                <center><span style="font-size: 25px; font-weight: bold;color:green;">Total
-                                        Profit:&nbsp;{{ money_total_profit }}</span></center>
-
-                            </div>
-
-                        </div>
-
+                <div class="d-flex justify-content-center">
+                    <div class="spinner-border loadingvideo" role="status" style="display:none">
+                        <span class="visually-hidden">Loading...</span>
                     </div>
-
-                    <div class="tab-pane fade" id="pills-profile-1" role="tabpanel" aria-labelledby="pills-profile-tab">
-                        <form @submit.prevent="SearchDataOthers()" id="formrest" class="forms-sample"
-                            enctype="multipart/form-data">
-                            <div class="row">
-
-                                <div class="col-md-3">
-                                    <div class="input-group mb-3">
-                                        <select class="form-select company_id">
-                                            <option value="">Select a Company...</option>
-                                            <option v-for="(data, index) in companyList" :key="index" :value="data.id">
-                                                {{ data.company_name }}
-                                            </option>
-                                        </select>
-                                    </div>
-                                </div>
+                </div>
 
 
-                                <div class="col-md-3">
-                                    <div class="input-group mb-3">
-                                        <input type="date" class="form-control frm_date" id="o_frm_date"
-                                            placeholder="From Date">
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="input-group mb-3">
-                                        <!-- <Datepicker class="form-control to_date" placeholder="To Date"></Datepicker>   -->
-                                        <input type="date" class="form-control to_date" id="o_to_date"
-                                            placeholder="To Date">
-                                    </div>
-                                </div>
-                                <div class="col-md-3 d-none">
-                                    <div class="input-group mb-3">
-                                        <select class='form-control form-select customer_id' v-model="customer_id">
-                                            <option value=''>Select Customer</option>
-                                            <option v-for='data in customers' :value='data.customer_id'
-                                                :key="data.customer_id">{{ data.name }}
-                                            </option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-md-2">
-                                    <button type="submit" class="btn btn-primary w-100">Submit</button>
-                                </div>
-                            </div>
-                        </form>
-                        <div class="d-flex justify-content-center">
-                            <div class="spinner-border loadingvideo" role="status" style="display:none">
-                                <span class="visually-hidden">Loading...</span>
-                            </div>
-                        </div>
-                        <hr>
-                        <table id="datatable" class="table table-striped table-hover table-sm">
+
+
+                <!-- For Travel -->
+
+                <div class="for_travel">
+                    <span style="font-size: 20px; color:green; font-weight: bold;"><u>Travel Report: Hamadan
+                            International Limited </u></span>
+
+                    <div class="table-responsive">
+                        <table class="report-table" style="border-collapse: collapse; width: 100%;">
                             <thead>
                                 <tr>
-                                    <!-- <th>Invoice ID </th> -->
-                                    <th>Datetime</th>
-                                    <th>Customer Name</th>
-                                    <th>Purpose</th>
-                                    <th>Net Amount</th>
-                                    <th>Customer Amount</th>
-                                    <th>Amount Paid</th>
-                                    <!-- <th>Amount Due</th> -->
-                                    <th>Create By</th>
-                                    <th>Profit Amount</th>
+                                    <th class="text-center">Transaction Date</th>
+                                    <th class="text-center">PNR</th>
+                                    <th class="text-center">Passenger Name</th>
+                                    <th class="text-center">Route</th>
+                                    <th class="text-center">Net Amount / Supplier Amount</th>
+                                    <th class="text-center">Customer Amount</th>
+                                    <th class="text-center">Profit</th>
+                                    <th class="text-center">Amount Paid</th>
+                                    <th class="text-center">Due</th>
+                                    <th class="text-center">Suppliers</th>
+                                    <th class="text-center">Payment Type</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for='data in others_report'>
-                                    <!-- <td>{{ data.others_inv_id  }}</td> -->
-                                    <td>{{ data.create_date }}</td>
-                                    <td>{{ data.customer_name }}</td>
-                                    <td>{{ data.purpose }}</td>
-                                    <td>{{ data.net_amount }}</td>
-                                    <td>{{ data.customer_amount }}</td>
-                                    <td>{{ data.amount_paid }}</td>
-                                    <!-- <td>{{ data.due_amount }}</td> -->
-                                    <td>{{ data.name }}</td>
-                                    <td>{{ data.profit }}</td>
+                                <tr v-for="data in report" :key="data.inv_id">
+                                    <td class="text-center">{{ data.created_at }}</td>
+                                    <td class="text-center">{{ data.vendorpnr }}</td>
+                                    <td class="text-end">{{ data.customer_name }}</td>
+                                    <td class="text-center">{{ data.depart_to }}</td>
+                                    <td class="text-end">{{ data.net_amount }}</td>
+                                    <td class="text-end">{{ data.customer_amount }}</td>
+                                    <td class="text-end">{{ data.profit }}</td>
+                                    <td class="text-end">{{ data.customer_deposit }}</td>
+                                    <td class="text-end">{{ data.due_amount }}</td>
+                                    <td class="text-center">{{ data.supplier_name }}</td>
+                                    <td class="text-center">
+                                        <span v-if="data.status === 1">Bank</span>
+                                        <span v-else-if="data.status === 2">Bank Transfer</span>
+                                        <span v-else-if="data.status === 3">Cash</span>
+                                        <span v-else>Unknown Status</span>
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
-                        <div class="row">
-                            <div class="col-8"></div>
-                            <div class="col-3">
-                                <center><span style="font-size: 25px; font-weight: bold;color:green;">Total Profit: {{
-                                    others_total_profit }}</span></center>
-                            </div>
+
+                    </div>
+                    <div class="row text-end">
+                        <span style="font-weight: bold;color:green;">Total Profit: {{ totalProfit }}</span>
+                    </div>
+                    <hr />
+                </div>
+                <!-- END Travel -->
+
+
+                <!-- Money Transfer -->
+
+                <div class="for_moneytransfer">
+                    <span style="font-size: 20px; color:green; font-weight: bold;"><u>Money Transfer Report: Hamadan
+                            Express Limited </u></span>
+                    <!-- <center>
+                        <div style="display: inline-flex; gap: 10px;">
+                            <button @click="downloadExcel" class="btn btn-success">
+                                <i class="fas fa-file-excel"></i> Download XLSX
+                            </button>
+                            <button @click="printReport" class="btn btn-primary">
+                                <i class="fas fa-print"></i> Print
+                            </button>
                         </div>
+                    </center> -->
+                    <br />
+                    <div id="report-table">
+                        <table class="report-table" style="border-collapse: collapse; width: 100%;">
+                            <thead>
+                                <tr>
+                                    <th class="text-end">Tran. Date</th>
+                                    <th>Beneficiary Name</th>
+                                    <th>Sender Name</th>
+                                    <th class="text-end">Sending Amount</th>
+                                    <th class="text-end">Rate</th>
+                                    <th class="text-end">Sale</th>
+                                    <th class="text-end">Charge</th>
+                                    <th class="text-end">Others Charge</th>
+                                    <th class="text-end">Total Sale</th>
+                                    <th class="text-end">Profit</th>
+                                    <th class="text-end">Customer Paid</th>
+                                    <th class="text-end">Payment Type</th>
+                                    <th class="text-end">Due</th>
+                                    <th class="text-end">Supplier</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="data in money_report" :key="data.mone_transfer_id">
+                                    <td class="text-end">{{ data.invoice_date }}</td>
+                                    <td class="text-start">{{ data.beneficiary_name }}</td>
+                                    <td class="text-start">{{ data.customer_name }}</td>
+                                    <td class="text-end">{{ parseFloat(data.receiving_amount).toFixed(2) }}</td>
+                                    <td class="text-end">{{ parseFloat(data.rate).toFixed(2) }}</td>
+                                    <td class="text-end">{{ (data.receiving_amount / data.rate).toFixed(2) }}</td>
+                                    <td class="text-end">{{ parseFloat(data.fees).toFixed(2) }}</td>
+                                    <td class="text-end">{{ parseFloat(data.others_fees).toFixed(2) }}</td>
+                                    <td class="text-end"><b>{{ formattedTotal(data) }}</b>
+                                    </td>
+                                    <td class="text-end">{{ parseFloat(data.profit).toFixed(2) }}</td>
+                                    <td class="text-end">{{ parseFloat(data.customer_deposit).toFixed(2) }}</td>
+                                    <td class="text-end">
+                                        <span v-if="data.status === 1">Bank</span>
+                                        <span v-else-if="data.status === 2">Bank Transfer</span>
+                                        <span v-else-if="data.status === 3">Cash</span>
+                                        <span v-else>Unknown</span>
+                                    </td>
+                                    <td class="text-end">{{ parseFloat(data.due_amount).toFixed(2) }}</td>
+                                    <td><small>{{ data.supplier_name }}</small></td>
+                                </tr>
+                                <tr>
+                                    <td class="text-end" style="color: gray;"></td>
+                                    <td class="text-end" style="color: gray;"></td>
+                                    <td class="text-end" style="color: gray;"></td>
+
+                                    <td class="text-end" style="color: blue;"><b>{{
+                                        totals.receiving_amount.toFixed(2) }}</b></td>
+                                    <td class="text-end" style="color: indigo;"><b>{{ totals.rate.toFixed(2) }}</b>
+                                    </td>
+                                    <td class="text-end" style="color: green;"><b>{{
+                                        totals.receiving_divided_by_rate.toFixed(2) }}</b></td>
+                                    <td class="text-end" style="color: deeppink;"><b>{{ totals.fees.toFixed(2)
+                                            }}</b></td>
+                                    <td class="text-end" style="color: goldenrod;"><b>{{
+                                        totals.others_fees.toFixed(2) }}</b></td>
+                                    <td class="text-end" style="color: purple;">
+                                        <b>{{ totals.total_calculated.toFixed(2) }}</b>
+
+                                    </td>
+                                    <td class="text-end" style="color: red;"><b>{{ totals.profit.toFixed(2) }}</b>
+                                    </td>
+                                    <td class="text-end" style="color: teal;"><b>{{
+                                        totals.customer_deposit.toFixed(2) }}</b></td>
+
+                                    <td></td>
+
+                                    <td class="text-end" style="color: orange;"><b>{{ totals.due_amount.toFixed(2)
+                                            }}</b></td>
+                                    <td></td>
+                                </tr>
+                                <tr class="bgtrColor">
+                                    <td class="txttrcolor">
+                                        <center>-</center>
+                                    </td>
+                                    <td class="txttrcolor">
+                                        <center>-</center>
+                                    </td>
+                                    <td class="txttrcolor">
+                                        <center>-</center>
+                                    </td>
+                                    <td class="txttrcolor">
+                                        <center>-</center>
+                                    </td>
+                                    <td class="txttrcolor">
+                                        <center>-</center>
+                                    </td>
+                                    <td class="txttrcolor">
+                                        <center>-</center>
+                                    </td>
+                                    <td class="txttrcolor">
+                                        <center>-</center>
+                                    </td>
+                                    <td class="txttrcolor">
+                                        <center>-</center>
+                                    </td>
+                                    <td class="txttrcolor">
+                                        <center>-</center>
+                                    </td>
+                                    <td class="txttrcolor">
+                                        <center>-</center>
+                                    </td>
+                                    <td class="txttrcolor">
+                                        <center>-</center>
+                                    </td>
+                                    <td class="txttrcolor">
+                                        <center>-</center>
+                                    </td>
+                                    <td class="txttrcolor">
+                                        <center>-</center>
+                                    </td>
+                                    <td class="txttrcolor">
+                                        <center>-</center>
+                                    </td>
+                                </tr>
+                                <tr class="bgtrColor">
+                                    <td colspan="3" class="text-end">Total No of transaction</td>
+                                    <td class="text-end"><b>{{ totalTransaction }}</b></td>
+                                    <td colspan="10"></td>
+                                </tr>
+
+                                <tr class="bgtrColor">
+                                    <td colspan="3" class="text-end">Total Amount of (Sales)</td>
+                                    <td class="text-end"><b>
+                                            <!-- {{ Number(totals?.receiving_amount || 0).toFixed(2) }} /
+                                                {{ Number(totals?.rate || 0).toFixed(2) }} = -->
+
+                                            {{ totals.receiving_divided_by_rate.toFixed(2) }}
+
+                                        </b></td>
+                                    <td colspan="10"></td>
+                                </tr>
+
+
+                                <tr class="bgtrColor">
+                                    <td colspan="3" class="text-end">Total Amount of Charges</td>
+                                    <td class="text-end"><b>{{ totals.fees.toFixed(2) }}</b></td>
+                                    <td colspan="10"></td>
+                                </tr>
+
+                                <tr class="bgtrColor">
+                                    <td colspan="3" class="text-end">Total Amount of Other Charges</td>
+                                    <td class="text-end"><b>{{ totals.others_fees.toFixed(2) }}</b></td>
+                                    <td colspan="10"></td>
+                                </tr>
+
+                                <tr class="bgtrColor">
+                                    <td colspan="3" class="text-end">Total Amount of (Total Sales)</td>
+                                    <td class="text-end"><b>
+                                            <!-- {{ totals.receiving_divided_by_rate.toFixed(2) }} +
+                                                {{ totals.fees.toFixed(2) }} +
+                                                {{ totals.others_fees.toFixed(2) }} = -->
+
+                                            {{ (
+                                                totals.receiving_divided_by_rate +
+                                                totals.fees +
+                                                totals.others_fees
+                                            ).toFixed(2) }}</b>
+                                    </td>
+                                    <td colspan="10"></td>
+                                </tr>
+                                <tr class="bgtrColor">
+                                    <td colspan="3" class="text-end">Total Profit</td>
+                                    <td class="text-end"><b>{{ money_total_profit }}</b></td>
+                                    <td colspan="10"></td>
+                                </tr>
+
+                                <tr class="bgtrColor">
+                                    <td colspan="3" class="text-end">Total Outstanding / Due</td>
+                                    <td class="text-end"><b>{{ total_due }}</b></td>
+                                    <td colspan="10"></td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                        <table class="report-table" style="border-collapse: collapse; width: 100%; display: none;">
+                            <tr>
+                                <td width="24%">Total Number of Transaction </td>
+                                <td width="1%">&nbsp;:</td>
+                                <td width="75%"><strong>&nbsp;<b>{{ totalTransaction }}</b></strong></td>
+                            </tr>
+                            <tr>
+                                <td>Transaction Balance</td>
+                                <td>&nbsp;:</td>
+                                <td><strong>&nbsp;<b>{{ total_fees }}</b></strong></td>
+                            </tr>
+                            <tr>
+                                <td>Total Profit </td>
+                                <td>&nbsp;:</td>
+                                <td><strong>&nbsp;<b>{{ money_total_profit }}</b></strong></td>
+                            </tr>
+                            <tr>
+                                <td>Total Due /Outstanding </td>
+                                <td>&nbsp;:</td>
+                                <td><strong>&nbsp;<b>{{ total_due }}</b></strong></td>
+                            </tr>
+                        </table>
+
+                        <!-- end money -->
+                        <div class="row text-end">
+                            <br>
+
+                            <span style="font-weight: bold;color:green;">Total
+                                Profit:&nbsp;{{ money_total_profit }}</span>
+
+                        </div>
+
                     </div>
 
+                    <hr />
                 </div>
+                <!-- END Money Transfer -->
+
+                <!-- Consular Report -->
+                <div class="for_consular">
+                    <span style="font-size: 20px; color:green; font-weight: bold;"><u>Consular Report: Hamadan Consular
+                            Services </u></span>
+
+                    <div class="table-responsive">
+                        <table class="report-table" style="border-collapse: collapse; width: 100%;">
+                            <thead>
+                                <tr>
+                                    <!-- <th>Invoice ID</th> -->
+                                    <th>Datetime</th>
+                                    <th>Customer Name</th>
+                                    <th>Purpose</th>
+                                    <th class="text-center">Net Amount</th>
+                                    <th class="text-center">Customer Amount</th>
+                                    <th class="text-center">Amount Paid</th>
+                                    <!-- <th>Amount Due</th> -->
+                                    <th>Create By</th>
+                                    <th class="text-center">Profit Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="data in others_report" :key="data.others_inv_id">
+                                    <!-- <td>{{ data.others_inv_id }}</td> -->
+                                    <td>{{ data.create_date }}</td>
+                                    <td>{{ data.customer_name }}</td>
+                                    <td>{{ data.purpose }}</td>
+                                    <td class="text-end">{{ data.net_amount }}</td>
+                                    <td class="text-end">{{ data.customer_amount }}</td>
+                                    <td class="text-end">{{ data.amount_paid }}</td>
+                                    <!-- <td>{{ data.due_amount }}</td> -->
+                                    <td>{{ data.name }}</td>
+                                    <td class="text-end">{{ data.profit }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="row text-end">
+                        <span style="font-weight: bold;color:green;">Total Profit: {{ others_total_profit }}</span>
+                    </div>
+                </div>
+                <!-- END Consular -->
                 <!-- row -->
             </div>
             <!-- Button trigger modal -->
@@ -541,8 +415,8 @@ export default {
         return {
             videoList: [],
             customers: [],
-            frm_date: '06-01-2024',
-            to_date: '06-30-2024',
+            frm_date: null,
+            to_date: null,
             total_fees: 0,
             total_profit: 0,
             totalTransaction: 0,
@@ -557,6 +431,10 @@ export default {
         };
     },
     computed: {
+        totalProfit() {
+            const sum = this.report.reduce((acc, item) => acc + Number(item.profit || 0), 0)
+            return sum.toFixed(2)
+        },
         totals() {
             return this.money_report.reduce((acc, data) => {
                 const receivingAmount = parseFloat(data.receiving_amount) || 0;
@@ -597,11 +475,33 @@ export default {
     },
 
     mounted() {
+        // Ensure values are formatted as yyyy-mm-dd
         this.getCompanyList();
-        //   this.customerlist();
-        //  $('.frm_date,.to_date').datepicker();
+        this.filterReport();
     },
     methods: {
+        filterReport() {
+            let company_id = $(".company_id").val();
+            // First, hide all sections
+            $(".for_travel, .for_moneytransfer, .for_consular").hide();
+            if (company_id == 1) {
+                this.SearchTravelData();
+                $(".for_travel").show();
+            } else if (company_id == 2) {
+                this.SearchDataMoney();
+                $(".for_moneytransfer").show();
+            } else if (company_id == 3) {
+                this.SearchDataConsular();
+                $(".for_consular").show();
+            } else {
+                // Show all if company_id is empty or unmatched
+                this.SearchTravelData();
+                this.SearchDataMoney();
+                this.SearchDataConsular();
+                $(".for_travel, .for_moneytransfer, .for_consular").show();
+            }
+
+        },
         formattedTotal(data) {
             const receivingAmount = parseFloat(data.receiving_amount) || 0;
             const rate = parseFloat(data.rate) || 1; // Avoid divide by zero
@@ -723,8 +623,7 @@ export default {
                 this.customers = response.data.data;
             });
         },
-        SearchData() {
-
+        SearchTravelData() {
             $(".loadingvideo").show();
             const formData = new FormData();
             let frm_date = $(".frm_date").val();
@@ -739,7 +638,7 @@ export default {
             const headers = {
                 'Content-Type': 'multipart/form-data'
             };
-            axios.post('/api/post/profitReport',
+            axios.post('/api/post/travelProfitReport',
                 formData, {
                 headers
             }).then((res) => {
@@ -759,8 +658,8 @@ export default {
         SearchDataMoney() {
             $(".loadingvideo").show();
             const formData = new FormData();
-            let frm_date = $("#money_frm_date").val();
-            let to_date = $("#money_to_date").val();
+            let frm_date = $(".frm_date").val();
+            let to_date = $(".to_date").val();
             let customer_id = $(".customer_id").val();
             let company_id = $(".company_id").val();
             formData.append('frm_date', frm_date);
@@ -770,7 +669,7 @@ export default {
             const headers = {
                 'Content-Type': 'multipart/form-data'
             };
-            axios.post('/api/post/profitReportMoney',
+            axios.post('/api/post/moneyProfitReport',
                 formData, {
                 headers
             }).then((res) => {
@@ -789,11 +688,11 @@ export default {
                 this.notifmsg = e.response.data
             });
         },
-        SearchDataOthers() {
+        SearchDataConsular() {
             $(".loadingvideo").show();
             const formData = new FormData();
-            let frm_date = $("#o_frm_date").val();
-            let to_date = $("#o_to_date").val();
+            let frm_date = $(".frm_date").val();
+            let to_date = $(".to_date").val();
             let customer_id = $(".customer_id").val();
             let company_id = $(".company_id").val();
 
@@ -804,14 +703,14 @@ export default {
             const headers = {
                 'Content-Type': 'multipart/form-data'
             };
-            axios.post('/api/post/profitReportOthers',
+            axios.post('/api/post/profitReportConsular',
                 formData, {
                 headers
             }).then((res) => {
                 $(".loadingvideo").hide();
                 //    console.log(res.data.data);
                 this.others_report = res.data.data;
-                this.others_total_profit = res.data.total_sum;
+                this.others_total_profit = res.data.total_sum.toFixed(2);
                 console.log(res.data.total_sum);
                 this.frm_date = frm_date;
                 this.to_date = to_date;
@@ -824,7 +723,6 @@ export default {
             const receivingAmount = parseFloat(this.money_report.receiving_amount) || 0;
             const fees = parseFloat(this.money_report.fees) || 0;
             const othersFees = parseFloat(this.money_report.others_fees) || 0;
-
             return (receivingAmount + fees + othersFees);
         }
     }
@@ -832,6 +730,10 @@ export default {
 </script>
 
 <style>
+table {
+    border-collapse: collapse;
+}
+
 .report-table {
     width: 100%;
     border-collapse: collapse;

@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Http\Controllers\API;
+
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Auth;
@@ -12,6 +14,7 @@ use Illuminate\Support\Str;
 use App\Rules\MatchOldPassword;
 use Illuminate\Support\Facades\Hash;
 use DB;
+
 class CategoryController extends Controller
 {
     public function inSaveSubCategory(Request $request)
@@ -115,7 +118,7 @@ class CategoryController extends Controller
         return response()->json($response, 200);
     }
 
-      public function editInvoiceConsularId($id)
+    public function editInvoiceConsularId($id)
     {
         $data = Category::checkInvoiceConsularRow($id);
         $response = [
@@ -134,6 +137,19 @@ class CategoryController extends Controller
         ];
         return response()->json($response, 200);
     }
+
+    public function editInvoiceOthersInvId($id)
+    {
+        $data = Category::checkInvoiceOthersRow($id);
+        $response = [
+            'data' => $data,
+            'message' => 'success'
+        ];
+        return response()->json($response, 200);
+    }
+
+
+
     public function allCustomers()
     {
         $data = Category::AllCustomers();
@@ -152,6 +168,17 @@ class CategoryController extends Controller
         ];
         return response()->json($response, 200);
     }
+
+ public function allCustomerConsular()
+    {
+        $data = Category::AllCustomersConsular();
+        $response = [
+            'data' => $data,
+            'message' => 'success'
+        ];
+        return response()->json($response, 200);
+    }
+
     public function allCustomerMoney()
     {
         $data = Category::AllCustomersMoney();
@@ -161,6 +188,9 @@ class CategoryController extends Controller
         ];
         return response()->json($response, 200);
     }
+
+
+    
     public function allCustomerOthers()
     {
         $data = Category::AllCustomersOthers();
@@ -245,13 +275,14 @@ class CategoryController extends Controller
 
 
 
- public function getInvoiceOthersData($id)
+    public function getInvoiceOthersData($id)
     {
         $data           = Category::invoiceForOthersData($id);
         //dd($data);
         $crdate         =  $data->create_date;
         $create_date    = date('d-m-Y', strtotime($crdate));
         $entryBy        = user::checkUserRow($data->entry_by);
+
         $response = [
             'data'          => $data,
             'create_date'   => $create_date,
@@ -263,7 +294,29 @@ class CategoryController extends Controller
 
 
 
- public function getInvoiceConsularData($id)
+    public function geteditInvoiceOthersData($id)
+    {
+        $data           = Category::invoiceForOthersData($id);
+        //dd($data);
+        $crdate         =  $data->create_date;
+        $create_date    = date('d-m-Y', strtotime($crdate));
+        $entryBy        = user::checkUserRow($data->entry_by);
+        $supplierBy     = Category::checkSupplier($data->sulipper_id);
+
+        $response = [
+            'data'          => $data,
+            'create_date'   => $create_date,
+            'entry_by'      => !empty($entryBy->name) ? $entryBy->name : "",
+            'suplierName'   => $supplierBy->name,
+            'message'       => 'success'
+        ];
+        return response()->json($response, 200);
+    }
+
+
+
+
+    public function getInvoiceConsularData($id)
     {
         $data           = Category::invoiceForConsularData($id);
         //dd($data);
@@ -279,7 +332,7 @@ class CategoryController extends Controller
         return response()->json($response, 200);
     }
 
-    
+
     public function getInvoiceDataChk($id)
     {
         $data = Category::invoiceDataAll($id);
@@ -336,7 +389,35 @@ class CategoryController extends Controller
         return response()->json($response, 200);
     }
 
-public function moneySuppliders()
+
+
+    public function othersSupplier()
+    {
+        $data = Category::othersSupplier();
+        // dd($data);
+        $response = [
+            'data' => $data,
+            'message' => 'success'
+        ];
+        return response()->json($response, 200);
+    }
+
+
+    public function consularSupplier()
+    {
+        $data = Category::consularSupplier();
+        // dd($data);
+        $response = [
+            'data' => $data,
+            'message' => 'success'
+        ];
+        return response()->json($response, 200);
+    }
+
+
+
+
+    public function moneySuppliders()
     {
         $data = Category::moneySuppliders();
         // dd($data);
@@ -348,7 +429,7 @@ public function moneySuppliders()
     }
 
 
-    
+
     public function chkCategoryId(Request $request)
     {
         $data = Category::chkSubCategory($request->categoryid);
@@ -437,6 +518,8 @@ public function moneySuppliders()
             } elseif ($v->type == 2) {
                 $sdata['type'] = '<span class="badge bg-success">Money Transfer</span></span>';
             } elseif ($v->type == 3) {
+                $sdata['type'] = '<span class="badge bg-success">Consular</span></span>';
+            } elseif ($v->type == 4) {
                 $sdata['type'] = '<span class="badge bg-success">Others</span></span>';
             }
             if ($v->status == 0) {
@@ -498,16 +581,20 @@ public function moneySuppliders()
         foreach ($users['data'] as $key => $v) {
             if ($v->service == 1) {
                 $sdata['service'] = '<span class="badge bg-primary">Travel</span></span>';
-            } 
-            
-            if($v->service == 2) {
+            }
+
+            if ($v->service == 2) {
                 $sdata['service'] = '<span class="badge bg-success">Money Transfer</span></span>';
             }
-            
-            if($v->service == 3) {
-            $sdata['service'] = '<span class="badge bg-success">Others</span></span>';
+
+            if ($v->service == 3) {
+                $sdata['service'] = '<span class="badge bg-success">Consular</span></span>';
             }
-        
+
+            if ($v->service == 4) {
+                $sdata['service'] = '<span class="badge bg-success">Others</span></span>';
+            }
+
             if ($v->status == 0) {
                 $sdata['status'] = '<span class="badge bg-danger">Inactive</span></span>';
             } elseif ($v->status == 1) {
@@ -588,7 +675,7 @@ public function moneySuppliders()
         }
         //dd($request->invoice_date);
         $data = array(
-            'invoice_date'              => !empty($request->invoice_date) ? date("Y-m-d",strtotime($request->invoice_date)) : "",
+            'invoice_date'              => !empty($request->invoice_date) ? date("Y-m-d", strtotime($request->invoice_date)) : "",
             'beneficiary_name'          => !empty($request->beneficiary_name) ? $request->beneficiary_name : "",
             'beneficiary_city'          => !empty($request->beneficiary_city) ? $request->beneficiary_city : "",
             'beneficiary_country'       => !empty($request->beneficiary_country) ? $request->beneficiary_country : "",
@@ -614,7 +701,7 @@ public function moneySuppliders()
             'status'                    => 1,
             'entry_by'                  => $authId,
         );
-       // dd($data);
+        // dd($data);
         if (empty($request->mone_transfer_id)) {
             DB::table('invoice_money_transfer')->insertGetId($data);
         } else {
@@ -629,12 +716,13 @@ public function moneySuppliders()
 
     public function saveInvoiceConsular(Request $request)
     {
-       // echo $request->consular_inv_id;
-       // dd($request->all());
+        // echo $request->consular_inv_id;
+        // dd($request->all());
         $authId = (int) Auth::user()->id;
         $validator = Validator::make($request->all(), [
             'invoice_date'          => 'required',
             'customer_id'           => 'required',
+            'sulipper_id'           => 'required',
             'purpose'               => 'required',
             'net_amount'            => 'required',
             'customer_amount'       => 'required',
@@ -650,7 +738,7 @@ public function moneySuppliders()
             return response()->json($response, 400);
         }
         $data = array(
-            'invoice_date'              => $request->invoice_date,//!empty($request->invoice_date) ? date("d-m-Y", strtotime($request->invoice_date)) : "",
+            'invoice_date'              => $request->invoice_date, //!empty($request->invoice_date) ? date("d-m-Y", strtotime($request->invoice_date)) : "",
             'customer_id'               => !empty($request->customer_id) ? $request->customer_id : "",
             'purpose'                   => !empty($request->purpose) ? $request->purpose : "",
             'net_amount'                => !empty($request->net_amount) ? $request->net_amount : "",
@@ -658,6 +746,7 @@ public function moneySuppliders()
             'amount_paid'               => !empty($request->amount_paid) ? $request->amount_paid : "",
             'profit'                    => !empty($request->profit) ? $request->profit : "",
             'due_amount'                => !empty($request->due_amount) ? $request->due_amount : "",
+            'sulipper_id'               => !empty($request->sulipper_id) ? $request->sulipper_id : "",
             'status'                    => 1,
             'entry_by'                  => $authId,
         );
@@ -665,7 +754,7 @@ public function moneySuppliders()
         if (empty($request->consular_inv_id)) {
             DB::table('consular_invoice')->insertGetId($data);
         } else {
-           // dd($data);
+            // dd($data);
             DB::table('consular_invoice')->where('consular_inv_id', (int)$request->consular_inv_id)->update($data);
         }
         $response = [
@@ -674,20 +763,34 @@ public function moneySuppliders()
         return response()->json($response);
     }
 
-     public function saveInvoiceOthers(Request $request)
+    public function saveInvoiceOthers(Request $request)
     {
         //dd($request->all());
         $authId = (int) Auth::user()->id;
         $validator = Validator::make($request->all(), [
-            'invoice_date'          => 'required',
-            'customer_id'           => 'required',
-            'purpose'               => 'required',
-            'net_amount'            => 'required',
-            'customer_amount'       => 'required',
-            'amount_paid'           => 'required',
-            'profit'                => 'required',
-            'due_amount'            => 'required',
+            'invoice_no'           => 'required',
+            'sulipper_id'          => 'required',
+            'customer_id'          => 'required',
+            'beneficiary_name'     => 'required',
+            'invoice_date'         => 'required',
+            'amount'               => 'required',
+            'charge_fee'           => 'required',
+            'total_amount'         => 'required',
+            'amount_paid'          => 'required',
+            'amount_remaining'     => 'required',
+        ], [
+            'invoice_no.required'       => 'Invoice number is required.',
+            'sulipper_id.required'      => 'Supplier is required.',
+            'customer_id.required'      => 'Customer is required.',
+            'beneficiary_name.required' => 'Beneficiary name is required.',
+            'invoice_date.required'     => 'Invoice date is required.',
+            'amount.required'           => 'Amount is required.',
+            'charge_fee.required'       => 'Charge fee is required.',
+            'total_amount.required'     => 'Total amount is required.',
+            'amount_paid.required'      => 'Amount paid is required.',
+            'amount_remaining.required' => 'Amount remaining is required.',
         ]);
+
         if ($validator->fails()) {
             $response = [
                 'success' => false,
@@ -696,14 +799,18 @@ public function moneySuppliders()
             return response()->json($response, 400);
         }
         $data = array(
-            'invoice_date'              => !empty($request->invoice_date) ? date("d-m-Y", strtotime($request->invoice_date)) : "",
-            'customer_id'               => !empty($request->customer_id) ? $request->customer_id : "",
-            'purpose'                   => !empty($request->purpose) ? $request->purpose : "",
-            'net_amount'                => !empty($request->net_amount) ? $request->net_amount : "",
-            'customer_amount'           => !empty($request->customer_amount) ? $request->customer_amount : "",
-            'amount_paid'               => !empty($request->amount_paid) ? $request->amount_paid : "",
-            'profit'                    => !empty($request->profit) ? $request->profit : "",
-            'due_amount'                => !empty($request->due_amount) ? $request->due_amount : "",
+            'invoice_no'                => $request->invoice_no,
+            'invoice_date'              => $request->invoice_date,
+            'sulipper_id'               => $request->sulipper_id,
+            'customer_id'               => $request->customer_id,
+            'beneficiary_name'          => $request->beneficiary_name,
+            'reason'                    => $request->reason,
+            'amount'                    => $request->amount,
+            'charge_fee'                => $request->charge_fee,
+            'total_amount'              => $request->total_amount,
+            'amount_paid'               => $request->amount_paid,
+            'amount_remaining'          => $request->amount_remaining,
+            'additional_notes'          => $request->additional_notes,
             'status'                    => 1,
             'entry_by'                  => $authId,
         );
@@ -834,7 +941,7 @@ public function moneySuppliders()
         $validator = Validator::make($request->all(), [
 
             'company_id' => 'required',
-        //    'category_id' => 'required',
+            //    'category_id' => 'required',
             'name' => 'required',
             'phone' => 'required',
             'type' => 'required',
@@ -1091,7 +1198,7 @@ public function moneySuppliders()
             $sdata['amount_paid']       = !empty($v->amount_paid) ? number_format($v->amount_paid, 2) : '0.00';
             $sdata['profit']            = !empty($v->profit) ? number_format($v->profit, 2) : '0.00';
             $sdata['due_amount']        = !empty($v->due_amount) ? number_format($v->due_amount, 2) : '0.00';
-           $sdata['actions'] = Helper::sprint('<button class="edit" data-id="{consular_inv_id}"><i class="fas fa-edit"></i></button> <button class="print" data-id="{consular_inv_id}"><i class="fas fa-print"></i></button>', $v);
+            $sdata['actions'] = Helper::sprint('<button class="edit" data-id="{consular_inv_id}"><i class="fas fa-edit"></i></button> <button class="print" data-id="{consular_inv_id}"><i class="fas fa-print"></i></button>', $v);
             //$sdata['actions'] = Helper::sprint('<button class="edit" data-id="{others_inv_id}"><i class="fas fa-edit"></i></button>', $v);
             $data[] = $sdata;
         }
@@ -1109,13 +1216,12 @@ public function moneySuppliders()
         foreach ($inv['data'] as $key => $v) {
             $sdata['others_inv_id']     = $v->others_inv_id;
             $sdata['customer_name']     = $v->name;
-            $sdata['purpose']           = $v->purpose;
-            $sdata['customer_amount']   = !empty($v->customer_amount) ? number_format($v->customer_amount, 2) : '0.00';
-            $sdata['net_amount']        = !empty($v->net_amount) ? number_format($v->net_amount, 2) : '0.00';
+            $sdata['amount']            = !empty($v->amount) ? number_format($v->amount, 2) : '0.00';
+            $sdata['total_amount']      = !empty($v->total_amount) ? number_format($v->total_amount, 2) : '0.00';
             $sdata['amount_paid']       = !empty($v->amount_paid) ? number_format($v->amount_paid, 2) : '0.00';
-            $sdata['profit']            = !empty($v->profit) ? number_format($v->profit, 2) : '0.00';
-            $sdata['due_amount']        = !empty($v->due_amount) ? number_format($v->due_amount, 2) : '0.00';
-           $sdata['actions'] = Helper::sprint('<button class="edit" data-id="{others_inv_id}"><i class="fas fa-edit"></i></button> <button class="print" data-id="{others_inv_id}"><i class="fas fa-print"></i></button>', $v);
+            $sdata['charge_fee']        = !empty($v->charge_fee) ? number_format($v->charge_fee, 2) : '0.00';
+            $sdata['amount_remaining']  = !empty($v->amount_remaining) ? number_format($v->amount_remaining, 2) : '0.00';
+            $sdata['actions'] = Helper::sprint('<button class="edit" data-id="{others_inv_id}"><i class="fas fa-edit"></i></button> <button class="print" data-id="{others_inv_id}"><i class="fas fa-print"></i></button>', $v);
             //$sdata['actions'] = Helper::sprint('<button class="edit" data-id="{others_inv_id}"><i class="fas fa-edit"></i></button>', $v);
             $data[] = $sdata;
         }

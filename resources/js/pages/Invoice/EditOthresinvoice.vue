@@ -1,118 +1,193 @@
 <template>
-<div class="main-wrapper">
-    <div class="page-wrapper">
-        <Nav />
-        <div class="page-content">
-            <div class="alert-primary" role="alert">
+    <div class="main-wrapper">
+        <div class="page-wrapper">
+            <Nav />
+            <div class="page-content">
+                <div class="alert-primary" role="alert">
+                    <div class="row">
+                        <div class="col-md-10">Edit</div>
+                        <div class="col-md-2">
+                            <router-link to="/invoice/invoice-list-others"><span
+                                    stye="text-align:center;">Back</span></router-link>
+                        </div>
+                    </div>
+                </div><br>
                 <div class="row">
-                    <div class="col-md-10">Edit</div>
-                    <div class="col-md-2">
-                        <router-link to="/invoice/invoice-list-others"><span stye="text-align:center;">Back</span></router-link>
+                    <div class="col-12">
+                        <select name="customer_id" v-model="insertData.customer_id" class="form-select">
+                            <option value="">Select</option>
+                            <option v-for='data in customerlist' :value='data.customer_id'>{{ data.name }}</option>
+                        </select>
                     </div>
                 </div>
-            </div><br>
-            <div class="row">
-                <div class="col-12">
-                    <select name="customer_id" v-model="insertData.customer_id" class="form-select">
-                        <option value="">Select</option>
-                        <option v-for='data in customerlist' :value='data.customer_id'>{{data.name }}</option>
-                    </select>
+                <br>
+                <div class="alert-primary" role="alert">
+                    <div class="col-md-6">
+                        Customer Information:<br>
+                        Name : {{ customerInfo.customername }}, Phone :{{ customerInfo.customerphone }}<br>Address : {{
+                            customerInfo.customeraddres }}
+                    </div>
                 </div>
-            </div>
-            <br>
-            <div class="alert-primary" role="alert">
-                <div class="col-md-6">
-                    Customer Information:<br>
-                    Name : {{ customerInfo.customername }}, Phone :{{ customerInfo.customerphone }}<br>Address : {{ customerInfo.customeraddres }}
-                </div>
-            </div>
-            <br>
-            <div class="row">
-                <div class="col-md-12 grid-margin stretch-card">
-                    <div class="card">
-                        <div class="card-body">
-                            <div v-for="(errorArray, idx) in notifmsg" :key="idx">
-                                <div v-for="(allErrors, idx) in errorArray" :key="idx">
-                                    <span class="text-danger">{{ allErrors}} </span>
+                <br>
+                <div class="row">
+                    <div class="col-md-12 grid-margin stretch-card">
+                        <div class="card">
+                            <div class="card-body">
+                                <div v-for="(errorArray, idx) in notifmsg" :key="idx">
+                                    <div v-for="(allErrors, idx) in errorArray" :key="idx">
+                                        <span class="text-danger">{{ allErrors }} </span>
+                                    </div>
                                 </div>
+
+                                <form @submit.prevent="addItem()" id="formrest" class="forms-sample"
+                                    enctype="multipart/form-data">
+
+                                    <input type="hidden" class="form-control others_inv_id"
+                                        v-model="insertData.others_inv_id" id="others_inv_id" autocomplete="off">
+                                    <input type="hidden" class="form-control customer_id" name="customer_id"
+                                        id="customer_id">
+
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="row mb-1">
+                                                <label for="exampleInputUsername2"
+                                                    class="col-sm-4 col-form-label">Invoice NO</label>
+                                                <div class="col-sm-8">
+                                                    <input type="text" class="form-control invoice_no"
+                                                        v-model="insertData.invoice_no" id="invoice_no"
+                                                        autocomplete="off">
+                                                </div>
+                                            </div>
+
+
+                                            <div class="row mb-1">
+
+                                                <label for="exampleInputUsername2"
+                                                    class="col-sm-4 col-form-label">Invoice Date</label>
+                                                <div class="col-sm-8">
+                                                    <input type="date" class="form-control invoice_date"
+                                                        v-model="insertData.invoice_date" id="invoice_date"
+                                                        placeholder="Invoice Date" autocomplete="off">
+                                                </div>
+                                            </div>
+                                            <div class="row mb-1">
+                                                <label for="exampleInputUsername2"
+                                                    class="col-sm-4 col-form-label">Supplier</label>
+                                                <div class="col-sm-8">
+                                                    <select name="sulipper_id" v-model="insertData.sulipper_id"
+                                                        class="form-select sulipper_id">
+                                                        <option value="">Select</option>
+                                                        <option v-for='data in supplierlist' :value='data.sulipper_id'>
+                                                            {{ data.name }}</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+
+                                            <div class="row mb-1">
+                                                <label for="exampleInputUsername2"
+                                                    class="col-sm-4 col-form-label">Beneficiary name</label>
+                                                <div class="col-sm-8">
+                                                    <input type="text" class="form-control beneficiary_name"
+                                                        v-model="insertData.beneficiary_name" id="beneficiary_name"
+                                                        autocomplete="off">
+                                                </div>
+                                            </div>
+
+
+
+                                            <div class="row mb-1">
+                                                <label for="exampleInputUsername2"
+                                                    class="col-sm-4 col-form-label">Reason</label>
+                                                <div class="col-sm-8">
+                                                    <input type="text" class="form-control reason"
+                                                        v-model="insertData.reason" id="reason" autocomplete="off">
+                                                </div>
+                                            </div>
+
+                                            <input type="hidden" class="form-control customer_id" name="customer_id"
+                                                id="customer_id">
+
+                                        </div>
+                                        <div class="col-md-6">
+
+                                            <div class="row mb-1">
+                                                <label for="exampleInputUsername2"
+                                                    class="col-sm-5 col-form-label">Amount</label>
+                                                <div class="col-sm-7">
+                                                    <input type="text" autocomplete="off"
+                                                        class="form-control amount onlyNumbersInput"
+                                                        v-model="insertData.amount" id="amount" placeholder="0.00">
+                                                </div>
+                                            </div>
+
+                                            <div class="row mb-1">
+                                                <label for="exampleInputUsername2"
+                                                    class="col-sm-5 col-form-label">Charge/Fee</label>
+                                                <div class="col-sm-7">
+                                                    <input type="text" class="form-control charge_fee onlyNumbersInput"
+                                                        v-model="insertData.charge_fee" id="charge_fee"
+                                                        autocomplete="off" placeholder="0.00">
+                                                </div>
+                                            </div>
+
+                                            <div class="row mb-1">
+                                                <label for="exampleInputUsername2" class="col-sm-5 col-form-label">Total
+                                                    Amount</label>
+                                                <div class="col-sm-7">
+                                                    <input type="text"
+                                                        class="form-control total_amount onlyNumbersInput"
+                                                        v-model="insertData.total_amount" id="total_amount"
+                                                        autocomplete="off" placeholder="0.00">
+                                                </div>
+                                            </div>
+
+                                            <div class="row mb-1">
+                                                <label for="exampleInputUsername2"
+                                                    class="col-sm-5 col-form-label">Amount Paid</label>
+                                                <div class="col-sm-7">
+                                                    <input type="text" class="form-control amount_paid onlyNumbersInput"
+                                                        v-model="insertData.amount_paid" id="amount_paid"
+                                                        placeholder="0.00" autocomplete="off">
+                                                </div>
+                                            </div>
+
+                                            <div class="row mb-1">
+                                                <label for="exampleInputUsername2"
+                                                    class="col-sm-5 col-form-label">Amount Remaining </label>
+                                                <div class="col-sm-7">
+                                                    <input type="text"
+                                                        class="form-control amount_remaining onlyNumbersInput"
+                                                        v-model="insertData.amount_remaining" id="amount_remaining"
+                                                        placeholder="0.00" autocomplete="off">
+                                                </div>
+                                            </div>
+
+
+                                            <div class="row mb-1">
+                                                <label for="exampleInputUsername2"
+                                                    class="col-sm-5 col-form-label">Additional Notes</label>
+                                                <div class="col-sm-7">
+                                                    <input type="text" class="form-control additional_notes"
+                                                        v-model="insertData.additional_notes" id="additional_notes"
+                                                        placeholder="Additional Notes" autocomplete="off">
+                                                </div>
+                                            </div>
+
+                                            <button type="submit"
+                                                class="btn btn-primary me-2 w-100 submit_btn">Submit</button>
+                                        </div>
+                                    </div>
+
+                                </form>
                             </div>
-
-                            <form @submit.prevent="addItem()" id="formrest" class="forms-sample" enctype="multipart/form-data">
-                                <div class="row">
-                                    <input type="hidden" class="form-control others_inv_id" v-model="insertData.others_inv_id" id="others_inv_id" autocomplete="off">
-                                    <input type="hidden" class="form-control customer_id" name="customer_id" id="customer_id">
-                                    <div class="col-md-6">
-                                        <div class="row mb-1">
-
-                                            <label for="exampleInputUsername2" class="col-sm-4 col-form-label">Invoice Date</label>
-                                            <div class="col-sm-8">
-                                                <input type="date" class="form-control invoice_date" v-model="insertData.invoice_date" id="invoice_date" placeholder="Invoice Date" autocomplete="off">
-                                            </div>
-                                        </div>
-                                        <div class="row mb-1">
-                                            <label for="exampleInputUsername2" class="col-sm-4 col-form-label">Purpose</label>
-                                            <div class="col-sm-8">
-                                                <select name="purpose" v-model="insertData.purpose" class="form-select purpose">
-                                                    <option value="">Select</option>
-                                                    <option value="NRV">NRV</option>
-                                                    <option value="MRP">MRP</option>
-                                                    <option value="Other">Other</option>
-
-                                                </select>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                    <div class="col-md-6">
-
-                                        <div class="row mb-1">
-                                            <label for="exampleInputUsername2" class="col-sm-5 col-form-label">Customer Amount</label>
-                                            <div class="col-sm-7">
-                                                <input type="text" autocomplete="off" class="form-control customer_amount onlyNumbersInput" v-model="insertData.customer_amount" id="customer_amount" placeholder="0.00">
-                                            </div>
-                                        </div>
-
-                                        <div class="row mb-1">
-                                            <label for="exampleInputUsername2" class="col-sm-5 col-form-label">Net Amount</label>
-                                            <div class="col-sm-7">
-                                                <input type="text" class="form-control net_amount onlyNumbersInput" v-model="insertData.net_amount" id="net_amount" autocomplete="off" placeholder="0.00" @keyup="getProfit">
-                                            </div>
-                                        </div>
-
-                                        <div class="row mb-1">
-                                            <label for="exampleInputUsername2" class="col-sm-5 col-form-label">Amount Paid</label>
-                                            <div class="col-sm-7">
-                                                <input type="text" class="form-control amount_paid onlyNumbersInput" v-model="insertData.amount_paid" id="amount_paid" autocomplete="off" placeholder="0.00" @keyup=dueAmount>
-                                            </div>
-                                        </div>
-
-                                        <div class="row mb-1">
-                                            <label for="exampleInputUsername2" class="col-sm-5 col-form-label">Profit</label>
-                                            <div class="col-sm-7">
-                                                <input type="text" class="form-control profit onlyNumbersInput" v-model="insertData.profit" id="profit" placeholder="0.00" autocomplete="off">
-                                            </div>
-                                        </div>
-
-                                        <div class="row mb-1">
-                                            <label for="exampleInputUsername2" class="col-sm-5 col-form-label">Due</label>
-                                            <div class="col-sm-7">
-                                                <input type="text" class="form-control due_amount onlyNumbersInput" v-model="insertData.due_amount" id="due_amount" placeholder="0.00" autocomplete="off">
-                                            </div>
-                                        </div>
-
-                                        <button type="submit" class="btn btn-primary me-2 w-100 submit_btn">Submit</button>
-                                    </div>
-                                </div>
-
-                            </form>
                         </div>
                     </div>
                 </div>
             </div>
+            <Footer />
         </div>
-        <Footer />
     </div>
-</div>
 </template>
 
 <script>
@@ -137,8 +212,9 @@ export default {
                 customeraddres: '',
                 customerphone: '',
             },
+            /*
             insertData: {
-                invoice_date:'',
+                invoice_date: '',
                 customer_id: '',
                 others_inv_id: '',
                 purpose: '',
@@ -148,6 +224,24 @@ export default {
                 profit: '',
                 due_amount: '',
             },
+            */
+            insertData: {
+                invoice_date: '',
+                customer_id: '',
+                invoice_no: '',
+                sulipper_id: '',
+                others_inv_id: '',
+                beneficiary_name: '',
+                reason: '',
+                purpose: '',
+                charge_fee: '',
+                amount: '',
+                total_amount: '',
+                amount_paid: '',
+                amount_remaining: '',
+                additional_notes: ''
+            },
+
             notifmsg: '',
             customerlist: [],
             supplierlist: [],
@@ -158,27 +252,32 @@ export default {
         this.getCustomerlist();
         this.selectCompany();
         this.allSuppliers();
+        this.allSuppliers();
     },
     methods: {
         addItem() {
             const formData = new FormData();
             var cus_id = $('.customer_id').val();
+            formData.append('sulipper_id', this.insertData.sulipper_id);
+            formData.append('beneficiary_name', this.insertData.beneficiary_name);
+            formData.append('invoice_no', this.insertData.invoice_no);
             formData.append('invoice_date', this.insertData.invoice_date);
             formData.append('others_inv_id', this.insertData.others_inv_id);
-            formData.append('purpose', this.insertData.purpose);
-            formData.append('net_amount', this.insertData.net_amount);
+            formData.append('reason', this.insertData.reason);
             formData.append('customer_id', cus_id);
-            formData.append('customer_amount', this.insertData.customer_amount);
+            formData.append('amount', this.insertData.amount);
+            formData.append('charge_fee', this.insertData.charge_fee);
+            formData.append('total_amount', this.insertData.total_amount);
             formData.append('amount_paid', this.insertData.amount_paid);
-            formData.append('profit', this.insertData.profit);
-            formData.append('due_amount', this.insertData.due_amount);
+            formData.append('amount_remaining', this.insertData.amount_remaining);
+            formData.append('additional_notes', this.insertData.additional_notes);
             const headers = {
                 'Content-Type': 'multipart/form-data'
             };
             axios.post('/api/category/saveInvoiceOthers',
                 formData, {
-                    headers
-                }).then((res) => {
+                headers
+            }).then((res) => {
                 $('#formrest')[0].reset();
                 Swal.fire({
                     position: 'top-end',
@@ -213,16 +312,24 @@ export default {
             this.axios
                 .get(`/api/category/editInvoiceOthersInvId/${this.$route.params.id}`)
                 .then((response) => {
+                    this.insertData.invoice_no = response.data.data.invoice_no;
+                    this.insertData.sulipper_id = response.data.data.sulipper_id;
                     this.insertData.customer_id = response.data.data.customer_id;
                     this.insertData.others_inv_id = response.data.data.others_inv_id;
-                    this.insertData.purpose = response.data.data.purpose;
-                    this.insertData.net_amount = response.data.data.net_amount;
-                    this.insertData.customer_amount = response.data.data.customer_amount;
-                    this.insertData.amount_paid = response.data.data.amount_paid;
-                    this.insertData.profit = response.data.data.profit;
-                    this.insertData.due_amount = response.data.data.due_amount;
+                    this.insertData.beneficiary_name = response.data.data.beneficiary_name;
+                    this.insertData.reason = response.data.data.reason;
+                    this.insertData.additional_notes = response.data.data.additional_notes;
+
                     this.insertData.invoice_date = response.data.data.invoice_date;
                     $(".customer_id").val(response.data.data.customer_id);
+
+
+                    this.insertData.amount = response.data.data.amount;
+                    this.insertData.total_amount = response.data.data.total_amount;
+                    this.insertData.amount_paid = response.data.data.amount_paid;
+                    this.insertData.charge_fee = response.data.data.charge_fee;
+                    this.insertData.amount_remaining = response.data.data.amount_remaining;
+                    
                     //header
                     this.customerInfo.customername = response.data.data.customername;
                     this.customerInfo.customeraddres = response.data.data.addres;
@@ -241,28 +348,22 @@ export default {
                 //  console.log(error);
             });
         },
+
+  allSuppliers() {
+            axios.get('/api/category/othersSupplier').then(response => {
+                this.supplierlist = response.data.data;
+            }).catch(error => {
+                //  console.log(error);
+            });
+        },
+
         calculated() {
             let result = parseFloat(this.insertData.receiving_amount) / parseFloat(this.insertData.rate) + parseFloat(this.insertData.fees) + parseFloat(this.insertData.others_fees);
             console.log(result.toFixed(2));
             this.insertData.total_amount = result.toFixed(2);
             this.profitCalculate();
         },
-        getProfit() {
-            let result = parseFloat(this.insertData.customer_amount) - parseFloat(this.insertData.net_amount);
-            console.log(result.toFixed(2));
-            if (typeof result == "number" && result >= 0) {
-                this.insertData.profit = result.toFixed(2);
-            }
-        },
-        dueAmount() {
-            let result = parseFloat(this.insertData.customer_amount) - parseFloat(this.insertData.amount_paid);
-            console.log(result.toFixed(2));
-
-            if (typeof result == "number" && result >= 0) {
-                this.insertData.due_amount = result.toFixed(2);
-            }
-
-        }
+       
 
     }
 }
