@@ -70,7 +70,7 @@
                 <!-- For Travel -->
 
                 <div class="for_travel">
-                    <span style="font-size: 20px; color:green; font-weight: bold;"><u>Travel Report: {{ firstCompanyName
+                    <span><u>Travel Report: {{ firstCompanyName
                             }} </u></span>
                     <!-- Travel-Hamadan International Limited -->
                     <div class="table-responsive">
@@ -116,15 +116,14 @@
                     <div class="row text-end">
                         <span style="font-weight: bold;color:green;">Total Profit: {{ totalProfit }}</span>
                     </div>
-                    <hr />
+
                 </div>
                 <!-- END Travel -->
-
 
                 <!-- Money Transfer -->
 
                 <div class="for_moneytransfer">
-                    <span style="font-size: 20px; color:green; font-weight: bold;"><u>Money Transfer Report: {{
+                    <span><u>Money Transfer Report: {{
                         secondCompanyName }} </u></span>
                     <!-- Hamadan Express Limited -->
                     <!-- <center>
@@ -213,55 +212,55 @@
                                 </tr>
                                 <tr class="bgtrColor">
                                     <td class="txttrcolor">
-                                        <center>-</center>
+                                        <center></center>
                                     </td>
                                     <td class="txttrcolor">
-                                        <center>-</center>
+                                        <center></center>
                                     </td>
                                     <td class="txttrcolor">
-                                        <center>-</center>
+                                        <center></center>
                                     </td>
                                     <td class="txttrcolor">
-                                        <center>-</center>
+                                        <center></center>
                                     </td>
                                     <td class="txttrcolor">
-                                        <center>-</center>
+                                        <center></center>
                                     </td>
                                     <td class="txttrcolor">
-                                        <center>-</center>
+                                        <center></center>
                                     </td>
                                     <td class="txttrcolor">
-                                        <center>-</center>
+                                        <center></center>
                                     </td>
                                     <td class="txttrcolor">
-                                        <center>-</center>
+                                        <center></center>
                                     </td>
                                     <td class="txttrcolor">
-                                        <center>-</center>
+                                        <center></center>
                                     </td>
                                     <td class="txttrcolor">
-                                        <center>-</center>
+                                        <center></center>
                                     </td>
                                     <td class="txttrcolor">
-                                        <center>-</center>
+                                        <center></center>
                                     </td>
                                     <td class="txttrcolor">
-                                        <center>-</center>
+                                        <center></center>
                                     </td>
                                     <td class="txttrcolor">
-                                        <center>-</center>
+                                        <center></center>
                                     </td>
                                     <td class="txttrcolor">
-                                        <center>-</center>
+                                        <center></center>
                                     </td>
                                 </tr>
-                                <tr class="bgtrColor">
+                                <tr class="bgtrColor d-none">
                                     <td colspan="3" class="text-end">Total No of transaction</td>
                                     <td class="text-end"><b>{{ totalTransaction }}</b></td>
                                     <td colspan="10"></td>
                                 </tr>
 
-                                <tr class="bgtrColor">
+                                <tr class="bgtrColor d-none">
                                     <td colspan="3" class="text-end">Total Amount of (Sales)</td>
                                     <td class="text-end"><b>
                                             <!-- {{ Number(totals?.receiving_amount || 0).toFixed(2) }} /
@@ -274,19 +273,19 @@
                                 </tr>
 
 
-                                <tr class="bgtrColor">
+                                <tr class="bgtrColor d-none">
                                     <td colspan="3" class="text-end">Total Amount of Charges</td>
                                     <td class="text-end"><b>{{ totals.fees.toFixed(2) }}</b></td>
                                     <td colspan="10"></td>
                                 </tr>
 
-                                <tr class="bgtrColor">
+                                <tr class="bgtrColor d-none">
                                     <td colspan="3" class="text-end">Total Amount of Other Charges</td>
                                     <td class="text-end"><b>{{ totals.others_fees.toFixed(2) }}</b></td>
                                     <td colspan="10"></td>
                                 </tr>
 
-                                <tr class="bgtrColor">
+                                <tr class="bgtrColor d-none">
                                     <td colspan="3" class="text-end">Total Amount of (Total Sales)</td>
                                     <td class="text-end"><b>
                                             <!-- {{ totals.receiving_divided_by_rate.toFixed(2) }} +
@@ -301,13 +300,13 @@
                                     </td>
                                     <td colspan="10"></td>
                                 </tr>
-                                <tr class="bgtrColor">
+                                <tr class="bgtrColor d-none">
                                     <td colspan="3" class="text-end">Total Profit</td>
                                     <td class="text-end"><b>{{ money_total_profit }}</b></td>
                                     <td colspan="10"></td>
                                 </tr>
 
-                                <tr class="bgtrColor">
+                                <tr class="bgtrColor d-none">
                                     <td colspan="3" class="text-end">Total Outstanding / Due</td>
                                     <td class="text-end"><b>{{ total_due }}</b></td>
                                     <td colspan="10"></td>
@@ -349,13 +348,12 @@
 
                     </div>
 
-                    <hr />
                 </div>
                 <!-- END Money Transfer -->
 
                 <!-- Consular Report -->
                 <div class="for_consular">
-                    <span style="font-size: 20px; color:green; font-weight: bold;"><u>Consular Report: {{
+                    <span><u>Consular Report: {{
                         thirdCompanyName }}</u></span>
                     <!-- Hamadan Consular Services  -->
                     <div class="table-responsive">
@@ -369,8 +367,7 @@
                                     <th class="text-center">Net Amount</th>
                                     <th class="text-center">Customer Amount</th>
                                     <th class="text-center">Amount Paid</th>
-                                    <!-- <th>Amount Due</th> -->
-                                    <th>Create By</th>
+                                    <th class="text-end">Amount Due</th>
                                     <th class="text-center">Profit Amount</th>
                                 </tr>
                             </thead>
@@ -383,22 +380,22 @@
                                     <td class="text-end">{{ data.net_amount }}</td>
                                     <td class="text-end">{{ data.customer_amount }}</td>
                                     <td class="text-end">{{ data.amount_paid }}</td>
-                                    <!-- <td>{{ data.due_amount }}</td> -->
-                                    <td>{{ data.name }}</td>
+                                    <td class="text-end">{{ data.due_amount }}</td>
+
                                     <td class="text-end">{{ data.profit }}</td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
                     <div class="row text-end">
-                        <span style="font-weight: bold;color:green;">Total Profit: {{ others_total_profit }}</span>
+                        <span style="font-weight: bold;color:green;">Total Profit: {{ consular_total_profit }}</span>
                     </div>
                 </div>
                 <!-- END Consular -->
 
                 <!-- Others Report -->
                 <div class="for_others">
-                    <span style="font-size: 20px; color:green; font-weight: bold;"><u>Others Report: {{
+                    <span><u>Others Report: {{
                         fourthCompanyName }}</u></span>
                     <!-- Hamadan Consular Services  -->
                     <div class="table-responsive">
@@ -413,7 +410,7 @@
                                     <th class="text-center">Total Amount</th>
                                     <th class="text-center">Amount Paid</th>
                                     <th class="text-center">Charge/Fee</th>
-                                    <th class="text-center">Amount Remaining</th>
+                                    <th class="text-center">Amount Remaining/Due</th>
                                     <!-- <th>Create By</th> -->
                                 </tr>
                             </thead>
@@ -439,6 +436,19 @@
                 </div>
                 <!-- END Consular -->
                 <!-- row -->
+
+                <div v-if="!selectedCompany">
+                    Total Profit: {{ totalProfitSum.toFixed(2) }}<br />
+                    <hr/>
+                    Total Due: {{ formatAmount(totalDueAmountSumCalculated) }}<br />
+                    <hr />
+                    Due Brakedown<br />
+                    Travel Total Due Amt : {{ travel_total_due_amt }}
+                    Money Transfer Total Due Amt: {{ total_due }}
+                    Consular Total Due Amt: : {{ consular_total_due_amt }}
+                    Others Total Due Amt: {{ others_total_due_amt }}
+                </div>
+
             </div>
             <!-- Button trigger modal -->
             <Footer />
@@ -477,9 +487,13 @@ export default {
             total_profit: 0,
             others_amt_paid: 0,
             totalTransaction: 0,
+            moneytransferDueAmt: 0,
             total_due: 0,
             money_total_profit: 0,
-            others_total_profit: 0,
+            consular_total_due_amt: 0,
+            others_total_due_amt: 0,
+            consular_total_profit: 0,
+            travel_total_due_amt: 0,
             customer_id: '',
             report: [],
             money_report: [],
@@ -488,6 +502,22 @@ export default {
         };
     },
     computed: {
+        totalProfitSum() {
+            return (
+                parseFloat(this.totalProfit || 0) +
+                parseFloat(this.money_total_profit || 0) +
+                parseFloat(this.consular_total_profit || 0) +
+                parseFloat(this.others_amt_paid || 0)
+            );
+        },
+        totalDueAmountSumCalculated() {
+            return (
+                parseFloat(this.travel_total_due_amt || 0) +
+                parseFloat(this.moneytransferDueAmt || 0) +
+                parseFloat(this.consular_total_due_amt || 0) +
+                parseFloat(this.others_total_due_amt || 0)
+            );
+        },
         totalProfit() {
             const sum = this.report.reduce((acc, item) => acc + Number(item.profit || 0), 0)
             return sum.toFixed(2)
@@ -539,6 +569,12 @@ export default {
 
     },
     methods: {
+        formatAmount(amount) {
+      return Number(amount).toLocaleString('en-US', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      });
+    },
         filterReport() {
             let company_id = $(".company_id").val();
             // First, hide all sections
@@ -661,7 +697,7 @@ export default {
             saveAs(blob, "money-report.xlsx");
         },
         calculateTotal(data) {
-            console.log("Data:" + data);
+            //console.log("Data:" + data);
             const receivingAmount = parseFloat(data.receiving_amount) || 0;
             const rate = parseFloat(data.rate) || 1; // prevent division by zero
             const fees = parseFloat(data.fees) || 0;
@@ -758,7 +794,8 @@ export default {
 
                 this.others_report = res.data.data;
                 this.others_amt_paid = res.data.total_sum;
-                console.log(res.data.total_sum);
+                this.others_total_due_amt = res.data.total_due_amt.toFixed(2);
+                // console.log(res.data.total_sum);
                 this.frm_date = frm_date;
                 this.to_date = to_date;
                 this.company_id = company_id;
@@ -794,7 +831,8 @@ export default {
 
                 this.report = res.data.data;
                 this.total_profit = res.data.total_sum;
-                console.log(res.data.total_sum);
+                this.travel_total_due_amt = res.data.total_due_amt;
+                // console.log(res.data.total_sum);
                 this.frm_date = frm_date;
                 this.to_date = to_date;
                 this.company_id = company_id;
@@ -828,6 +866,7 @@ export default {
                 //    console.log(res.data.data);
                 this.money_report = res.data.data;
                 this.money_total_profit = res.data.total_sum;
+                 this.moneytransferDueAmt = res.data.moneytransferDueAmt.toFixed(2);
                 this.total_fees = res.data.total_fees;
                 // console.log(res.data.total_sum);
                 this.total_due = res.data.total_due;
@@ -863,8 +902,9 @@ export default {
                 $(".loadingvideo").hide();
                 //    console.log(res.data.data);
                 this.consular_report = res.data.data;
-                this.others_total_profit = res.data.total_sum.toFixed(2);
-                console.log(res.data.total_sum);
+                this.consular_total_profit = res.data.total_sum.toFixed(2);
+                this.consular_total_due_amt = res.data.total_due_amt.toFixed(2);
+                // console.log(res.data.total_sum);
                 this.frm_date = frm_date;
                 this.to_date = to_date;
                 this.company_id = company_id;

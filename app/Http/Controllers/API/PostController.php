@@ -478,14 +478,13 @@ class PostController extends Controller
     public function profitReport(Request $request)
     {
         $data = Post::profitreport($request->all());
-        $sum = 0;
-        foreach ($data as $v) {
-            $sum += $v->profit;
-        }
+        $sumprofit = $data->sum('profit');
+        $dueAmtsum = $data->sum('due_amount');
         // dd($data);
         $response = [
             'data' => $data,
-            'total_sum' => $sum,
+            'total_sum' => $sumprofit,
+            'total_due_amt' => $dueAmtsum,
             'message' => 'success'
         ];
         return response()->json($response, 200);
@@ -495,14 +494,13 @@ class PostController extends Controller
     public function othersProfitReport(Request $request)
     {
         $data = Post::othersReport($request->all());
-        $sum = 0;
-        foreach ($data as $v) {
-            $sum += $v->amount_paid;
-        }
+        $sumprofit = $data->sum('amount_paid');
+        $dueAmtsum = $data->sum('amount_remaining');
         // dd($data);
         $response = [
             'data' => $data,
-            'total_sum' => $sum,
+            'total_sum' => $sumprofit,
+            'total_due_amt' => $dueAmtsum,
             'message' => 'success'
         ];
         return response()->json($response, 200);
@@ -541,6 +539,7 @@ class PostController extends Controller
             'total_fees' => number_format($fees, 2),
             'total_sum' => number_format($sum, 2),
             'total_due' => number_format($tdue, 2),
+            'moneytransferDueAmt' => $tdue,
             'totalTransaction' => count($data),
             'message' => 'success'
         ];
@@ -553,15 +552,14 @@ class PostController extends Controller
     {
         $data = Post::profitReportConsular($request->all());
         // dd($data);
-        $sum = 0;
-        foreach ($data as $v) {
-            $sum += $v->profit;
-        }
+        $sumprofit = $data->sum('profit');
+        $dueAmtsum = $data->sum('due_amount');
         // dd($data);
         $response = [
-            'data' => $data,
-            'total_sum' => $sum,
-            'message' => 'success'
+            'data'          => $data,
+            'total_sum'     => $sumprofit,
+            'total_due_amt' => $dueAmtsum,
+            'message'       => 'success'
         ];
         return response()->json($response, 200);
     }

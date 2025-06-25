@@ -886,14 +886,14 @@ class CategoryController extends Controller
     {
         $authId = (int) Auth::user()->id;
         $validator = Validator::make($request->all(), [
-            'invoice_date' => 'required',
-            'customer_id' => 'required',
-            'sulipper_id' => 'required',
-            'customer_amount' => 'required',
-            'profit' => 'required',
-            'customer_deposit' => 'required',
-            'due_amount' => 'required',
-            'payment_type' => 'required',
+            'invoice_date'      => 'required',
+            'customer_id'       => 'required',
+            'sulipper_id'       => 'required',
+            'customer_amount'   => 'required',
+            'profit'            => 'required',
+            'customer_deposit'  => 'required',
+            'due_amount'        => 'required',
+            'payment_type'      => 'required',
         ]);
         if ($validator->fails()) {
             $response = [
@@ -903,7 +903,7 @@ class CategoryController extends Controller
             return response()->json($response, 400);
         }
         $data = array(
-            'invoice_date'              => !empty($request->invoice_date) ? date("d-m-Y", strtotime($request->invoice_date)) : "",
+            'invoice_date'              => $request->invoice_date,//!empty($request->invoice_date) ? date("d-m-Y", strtotime($request->invoice_date)) : "",
             'customer_id'               => !empty($request->customer_id) ? (int) $request->customer_id : "",
             'sulipper_id'               => !empty($request->sulipper_id) ? (int) $request->sulipper_id : "",
             'net_amount'                => !empty($request->net_amount) ? $request->net_amount : "",
