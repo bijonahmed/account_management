@@ -117,12 +117,54 @@ class Post extends Authenticatable
 
     return $result;
   }
+
+
+
+  public static function othersReport($data)
+  {
+
+    $startDate  =  date('Y-m-d', strtotime($data['frm_date']));
+    $endDate    =  date('Y-m-d', strtotime($data['to_date']));
+    $company_id =  $data['company_id'];
+    $suppler_id =  !empty($data['suppler_id']) ? $data['suppler_id'] : "";
+    // Start building the query
+    $query = DB::table('others_invoice')
+      ->select(
+        'others_invoice.*',
+        'supplier.name as supplier_name',
+        'customer.name as customer_name',
+        'users.name as entry_by_name', // Alias for clarity
+      )
+      ->leftJoin('customer', 'customer.customer_id', '=', 'others_invoice.customer_id')
+      ->leftJoin('supplier', 'supplier.sulipper_id', '=', 'others_invoice.sulipper_id')
+      ->leftJoin('users', 'users.id', '=', 'others_invoice.entry_by')
+      ->whereBetween('others_invoice.invoice_date', [$startDate, $endDate]);
+
+    // Apply company_id filter only if provided
+    // if (!empty($company_id)) {
+    //   $query->where('customer.company_id', $company_id);
+    // }
+ if (!empty($suppler_id)) {
+      $query->where('others_invoice.sulipper_id', $suppler_id);
+    }
+    // Execute the query and get the results
+    $results = $query->get();
+
+    // Return the results
+    return $results;
+  }
+
+
+
+
+
   public static function profitreport($data)
   {
 
     $startDate  =  date('Y-m-d', strtotime($data['frm_date']));
     $endDate    =  date('Y-m-d', strtotime($data['to_date']));
     $company_id =  $data['company_id'];
+    $suppler_id =  !empty($data['suppler_id']) ? $data['suppler_id'] : "";
 
     // Start building the query
     $query = DB::table('invoice')
@@ -152,6 +194,9 @@ class Post extends Authenticatable
     //   $query->where('customer.company_id', $company_id);
     // }
 
+    if (!empty($suppler_id)) {
+      $query->where('invoice.sulipper_id', $suppler_id);
+    }
     // Execute the query and get the results
     $results = $query->get();
 
@@ -163,6 +208,7 @@ class Post extends Authenticatable
     $startDate  =  date('Y-m-d', strtotime($data['frm_date']));
     $endDate    =  date('Y-m-d', strtotime($data['to_date']));
     $company_id =  $data['company_id'];
+    $suppler_id =  !empty($data['suppler_id']) ? $data['suppler_id'] : "";
     $query      = DB::table('invoice_money_transfer')
       ->select('invoice_money_transfer.fees', 'invoice_money_transfer.others_fees', 'invoice_money_transfer.receiving_amount', 'invoice_money_transfer.due_amount', 'invoice_money_transfer.status', 'supplier.name as supplier_name', 'invoice_money_transfer.customer_deposit', 'invoice_money_transfer.profit', 'invoice_money_transfer.rate', 'invoice_money_transfer.beneficiary_name', 'invoice_money_transfer.invoice_date', 'invoice_money_transfer.mone_transfer_id', 'invoice_money_transfer.create_date', 'invoice_money_transfer.profit', 'customer.name as customer_name', 'users.name', 'total_amount', 'net_amount', 'customer_deposit', 'create_date')
       ->leftJoin('customer', 'customer.customer_id', '=', 'invoice_money_transfer.customer_id')
@@ -174,15 +220,20 @@ class Post extends Authenticatable
     //   $query->where('customer.company_id', $company_id);
     // }
 
+    if (!empty($suppler_id)) {
+      $query->where('invoice_money_transfer.sulipper_id', $suppler_id);
+    }
+
     $results = $query->get();
     return $results;
   }
 
-   public static function profitReportConsular($data)
+  public static function profitReportConsular($data)
   {
     $startDate =  date('Y-m-d', strtotime($data['frm_date']));
     $endDate =  date('Y-m-d', strtotime($data['to_date']));
     $company_id =  $data['company_id'];
+    $suppler_id =  !empty($data['suppler_id']) ? $data['suppler_id'] : "";
 
     $query = DB::table('consular_invoice')
       ->select('consular_invoice.consular_inv_id', 'consular_invoice.invoice_date', 'consular_invoice.profit', 'customer.name as customer_name', 'users.name', 'purpose', 'net_amount', 'customer_amount', 'amount_paid', 'profit', 'due_amount', 'create_date')
@@ -193,6 +244,10 @@ class Post extends Authenticatable
     // if (!empty($company_id)) {
     //   $query->where('customer.company_id', $company_id);
     // }
+    if (!empty($suppler_id)) {
+      $query->where('consular_invoice.sulipper_id', $suppler_id);
+    }
+
 
     $results = $query->get();
     return $results;

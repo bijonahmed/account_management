@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Http\Controllers\API;
+
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Auth;
@@ -16,6 +18,7 @@ use DB;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Illuminate\Console\Command;
+
 class PostController extends Controller
 {
     protected $frontend_url;
@@ -489,9 +492,28 @@ class PostController extends Controller
     }
 
 
+    public function othersProfitReport(Request $request)
+    {
+        $data = Post::othersReport($request->all());
+        $sum = 0;
+        foreach ($data as $v) {
+            $sum += $v->amount_paid;
+        }
+        // dd($data);
+        $response = [
+            'data' => $data,
+            'total_sum' => $sum,
+            'message' => 'success'
+        ];
+        return response()->json($response, 200);
+    }
+
+
+
+
     public function profitReportMoney(Request $request)
     {
-       // dd($request->all());
+        // dd($request->all());
 
         $data = Post::profitreportMoney($request->all());
         //dd($data);
@@ -512,13 +534,13 @@ class PostController extends Controller
             $tdue += $v->due_amount;
         }
 
-       // dd($tdue);
+        // dd($tdue);
         // dd($data);
         $response = [
             'data' => $data,
-            'total_fees' => number_format($fees,2),
-            'total_sum' => number_format($sum,2),
-            'total_due' => number_format($tdue,2),
+            'total_fees' => number_format($fees, 2),
+            'total_sum' => number_format($sum, 2),
+            'total_due' => number_format($tdue, 2),
             'totalTransaction' => count($data),
             'message' => 'success'
         ];
@@ -527,7 +549,7 @@ class PostController extends Controller
         return response()->json($response, 200);
     }
 
- public function profitReportConsular(Request $request)
+    public function profitReportConsular(Request $request)
     {
         $data = Post::profitReportConsular($request->all());
         // dd($data);
@@ -543,7 +565,7 @@ class PostController extends Controller
         ];
         return response()->json($response, 200);
     }
-    
+
     public function profitReportOthers(Request $request)
     {
         $data = Post::profitReportOther($request->all());

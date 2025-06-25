@@ -169,7 +169,7 @@ class CategoryController extends Controller
         return response()->json($response, 200);
     }
 
- public function allCustomerConsular()
+    public function allCustomerConsular()
     {
         $data = Category::AllCustomersConsular();
         $response = [
@@ -190,7 +190,7 @@ class CategoryController extends Controller
     }
 
 
-    
+
     public function allCustomerOthers()
     {
         $data = Category::AllCustomersOthers();
@@ -200,6 +200,20 @@ class CategoryController extends Controller
         ];
         return response()->json($response, 200);
     }
+
+
+    public function getSuplierConditionWise(Request $request)
+    {
+        //   dd($request->all());
+        $company_id = $request->company_id;
+        $data = Category::conditionWiseSupplier($company_id);
+        $response = [
+            'data' => $data,
+            'message' => 'success'
+        ];
+        return response()->json($response, 200);
+    }
+
     public function editSupplierId($id)
     {
         $data = Category::checkSupplierRow($id);

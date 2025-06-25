@@ -126,7 +126,7 @@ class Category extends Authenticatable
   }
 
 
-  
+
   public static function consularSupplier()
   {
     $result = DB::table('supplier')->where('status', 1)->where('service', 4)->orderBy('sulipper_id', 'asc')->get();
@@ -140,7 +140,7 @@ class Category extends Authenticatable
     return $result;
   }
 
-   public static function checkSupplier($id)
+  public static function checkSupplier($id)
   {
     $result =  DB::table('supplier')->where('sulipper_id', $id)->first();
     return $result;
@@ -281,17 +281,24 @@ class Category extends Authenticatable
   }
 
 
- public static function AllCustomersConsular()
+  public static function AllCustomersConsular()
   {
     $result =  DB::table('customer')->where('type', 3)->where('status', 1)->get();
     return $result;
   }
-  
+
   public static function AllCustomersOthers()
   {
     $result =  DB::table('customer')->where('type', 4)->where('status', 1)->get();
     return $result;
   }
+
+  public static function conditionWiseSupplier($company_id)
+  {
+    $result =  DB::table('supplier')->where('service', $company_id)->where('status', 1)->get();
+    return $result;
+  }
+
   public static function checkHashTagRow($id)
   {
     $result =  DB::table('has_tag')->where('has_tag_id', $id)->first();

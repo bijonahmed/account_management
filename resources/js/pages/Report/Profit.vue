@@ -9,11 +9,13 @@
                     </div>
                 </div>
                 <!-- Filter Area -->
+
                 <form @submit.prevent="filterReport()" id="formrest" class="forms-sample" enctype="multipart/form-data">
                     <div class="row">
                         <div class="col-md-3">
                             <div class="input-group mb-3">
-                                <select class="form-select company_id">
+                                <select class="form-select company_id" v-model="selectedCompany"
+                                    @change="fetchSuppliers">
                                     <option value="">All Company...</option>
                                     <option v-for="(data, index) in companyList" :key="index" :value="data.id">
                                         {{ data.company_name }}
@@ -21,29 +23,33 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-md-3">
+
+                        <div class="col-md-3" v-if="supplierList.length > 0">
+                            <div class="input-group mb-3">
+                                <select class="form-select sulipper_id" v-model="suplier_id">
+                                    <option value="">All Supplier...</option>
+                                    <option v-for="(data, index) in supplierList" :key="index"
+                                        :value="data.sulipper_id">
+                                        {{ data.name }}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
                             <div class="input-group mb-3">
                                 <input type="date" class="form-control frm_date" id="money_frm_date"
                                     placeholder="From Date" v-model="frm_date">
                             </div>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <div class="input-group mb-3">
 
                                 <input type="date" class="form-control to_date" id="money_to_date" placeholder="To Date"
                                     v-model="to_date">
                             </div>
                         </div>
-                        <div class="col-md-3 d-none">
-                            <div class="input-group mb-3">
-                                <select class='form-control form-select customer_id' v-model="customer_id">
-                                    <option value=''>Select Customer</option>
-                                    <option v-for='data in customers' :value='data.customer_id' :key="data.customer_id">
-                                        {{ data.name }}</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
+
+                        <div class="col-md-2">
                             <button type="submit" class="btn btn-primary w-100">Submit</button>
                         </div>
                     </div>
@@ -64,9 +70,9 @@
                 <!-- For Travel -->
 
                 <div class="for_travel">
-                    <span style="font-size: 20px; color:green; font-weight: bold;"><u>Travel Report: Hamadan
-                            International Limited </u></span>
-
+                    <span style="font-size: 20px; color:green; font-weight: bold;"><u>Travel Report: {{ firstCompanyName
+                            }} </u></span>
+                    <!-- Travel-Hamadan International Limited -->
                     <div class="table-responsive">
                         <table class="report-table" style="border-collapse: collapse; width: 100%;">
                             <thead>
@@ -118,8 +124,9 @@
                 <!-- Money Transfer -->
 
                 <div class="for_moneytransfer">
-                    <span style="font-size: 20px; color:green; font-weight: bold;"><u>Money Transfer Report: Hamadan
-                            Express Limited </u></span>
+                    <span style="font-size: 20px; color:green; font-weight: bold;"><u>Money Transfer Report: {{
+                        secondCompanyName }} </u></span>
+                    <!-- Hamadan Express Limited -->
                     <!-- <center>
                         <div style="display: inline-flex; gap: 10px;">
                             <button @click="downloadExcel" class="btn btn-success">
@@ -348,9 +355,9 @@
 
                 <!-- Consular Report -->
                 <div class="for_consular">
-                    <span style="font-size: 20px; color:green; font-weight: bold;"><u>Consular Report: Hamadan Consular
-                            Services </u></span>
-
+                    <span style="font-size: 20px; color:green; font-weight: bold;"><u>Consular Report: {{
+                        thirdCompanyName }}</u></span>
+                    <!-- Hamadan Consular Services  -->
                     <div class="table-responsive">
                         <table class="report-table" style="border-collapse: collapse; width: 100%;">
                             <thead>
@@ -368,7 +375,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="data in others_report" :key="data.others_inv_id">
+                                <tr v-for="data in consular_report" :key="data.consular_inv_id">
                                     <!-- <td>{{ data.others_inv_id }}</td> -->
                                     <td>{{ data.create_date }}</td>
                                     <td>{{ data.customer_name }}</td>
@@ -385,6 +392,49 @@
                     </div>
                     <div class="row text-end">
                         <span style="font-weight: bold;color:green;">Total Profit: {{ others_total_profit }}</span>
+                    </div>
+                </div>
+                <!-- END Consular -->
+
+                <!-- Others Report -->
+                <div class="for_others">
+                    <span style="font-size: 20px; color:green; font-weight: bold;"><u>Others Report: {{
+                        fourthCompanyName }}</u></span>
+                    <!-- Hamadan Consular Services  -->
+                    <div class="table-responsive">
+                        <table class="report-table" style="border-collapse: collapse; width: 100%;">
+                            <thead>
+                                <tr>
+                                    <th>Invoice No</th>
+                                    <th>Invoice Date</th>
+                                    <th>Supplier</th>
+                                    <th>Customer</th>
+                                    <th class="text-center">Amount</th>
+                                    <th class="text-center">Total Amount</th>
+                                    <th class="text-center">Amount Paid</th>
+                                    <th class="text-center">Charge/Fee</th>
+                                    <th class="text-center">Amount Remaining</th>
+                                    <!-- <th>Create By</th> -->
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="data in others_report" :key="data.others_inv_id">
+                                    <td>{{ data.invoice_no }}</td>
+                                    <td>{{ data.invoice_date }}</td>
+                                    <td>{{ data.supplier_name }}</td>
+                                    <td>{{ data.customer_name }}</td>
+
+                                    <td class="text-end">{{ data.amount }}</td>
+                                    <td class="text-end">{{ data.total_amount }}</td>
+                                    <td class="text-end">{{ data.amount_paid }}</td>
+                                    <td class="text-end">{{ data.charge_fee }}</td>
+                                    <td class="text-end">{{ data.amount_remaining }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="row text-end">
+                        <span style="font-weight: bold;color:green;">Amount Paid: {{ others_amt_paid }}</span>
                     </div>
                 </div>
                 <!-- END Consular -->
@@ -413,12 +463,19 @@ export default {
     },
     data: function () {
         return {
-            videoList: [],
+            selectedCompany: '',
+            firstCompanyName: '',
+            secondCompanyName: '',
+            thirdCompanyName: '',
+            fourthCompanyName: '',
+            suplier_id: '',
             customers: [],
+            supplierList: [],
             frm_date: null,
             to_date: null,
             total_fees: 0,
             total_profit: 0,
+            others_amt_paid: 0,
             totalTransaction: 0,
             total_due: 0,
             money_total_profit: 0,
@@ -426,7 +483,7 @@ export default {
             customer_id: '',
             report: [],
             money_report: [],
-            others_report: [],
+            consular_report: [],
             companyList: [],
         };
     },
@@ -477,13 +534,15 @@ export default {
     mounted() {
         // Ensure values are formatted as yyyy-mm-dd
         this.getCompanyList();
+        // this.getSuplierList();
         this.filterReport();
+
     },
     methods: {
         filterReport() {
             let company_id = $(".company_id").val();
             // First, hide all sections
-            $(".for_travel, .for_moneytransfer, .for_consular").hide();
+            $(".for_travel, .for_moneytransfer, .for_consular, .for_others").hide();
             if (company_id == 1) {
                 this.SearchTravelData();
                 $(".for_travel").show();
@@ -493,12 +552,16 @@ export default {
             } else if (company_id == 3) {
                 this.SearchDataConsular();
                 $(".for_consular").show();
+            } else if (company_id == 4) {
+                this.searchOthersData();
+                $(".for_others").show();
             } else {
                 // Show all if company_id is empty or unmatched
                 this.SearchTravelData();
                 this.SearchDataMoney();
                 this.SearchDataConsular();
-                $(".for_travel, .for_moneytransfer, .for_consular").show();
+                this.searchOthersData();
+                $(".for_travel, .for_moneytransfer, .for_consular, .for_others").show();
             }
 
         },
@@ -615,6 +678,32 @@ export default {
         getCompanyList() {
             axios.get('/api/company/getcountryList').then(response => {
                 this.companyList = response.data.data;
+                // Access the first index
+                if (this.companyList.length > 0) {
+                    const cname = this.companyList[0].company_name;
+                    this.firstCompanyName = cname;
+                    //console.log("First Company Name:", cname);
+                }
+
+                // Access the second index
+                if (this.companyList.length > 1) {
+                    const cname = this.companyList[1].company_name;
+                    this.secondCompanyName = cname;
+                    // console.log("First Company Name:", cname);
+                }
+                // Access the third index
+                if (this.companyList.length > 2) {
+                    const cname = this.companyList[2].company_name;
+                    this.thirdCompanyName = cname;
+                    // console.log("First Company Name:", cname);
+                }
+                // Access the third index
+                if (this.companyList.length > 3) {
+                    const cname = this.companyList[3].company_name;
+                    this.fourthCompanyName = cname;
+                    // console.log("First Company Name:", cname);
+                }
+
             });
         },
 
@@ -623,6 +712,62 @@ export default {
                 this.customers = response.data.data;
             });
         },
+
+        fetchSuppliers() {
+            if (!this.selectedCompany) {
+                this.supplierList = [];
+                return;
+            }
+
+            axios.get('/api/category/getSuplierConditionWise', {
+                params: {
+                    company_id: this.selectedCompany
+                }
+            })
+                .then(response => {
+                    this.supplierList = response.data.data;
+                })
+                .catch(error => {
+                    console.error('Error fetching suppliers:', error);
+                    this.supplierList = [];
+                });
+        },
+        searchOthersData() {
+            $(".loadingvideo").show();
+            const formData = new FormData();
+            let frm_date = $(".frm_date").val();
+            let to_date = $(".to_date").val();
+            let customer_id = $(".customer_id").val();
+            let company_id = $(".company_id").val();
+            let suppler_id = this.suplier_id;
+            //console.log("Supplier: " + suppler_id);
+            formData.append('suppler_id', suppler_id);
+            formData.append('frm_date', frm_date);
+            formData.append('to_date', to_date);
+            formData.append('customer_id', customer_id);
+            formData.append('company_id', company_id);
+
+            const headers = {
+                'Content-Type': 'multipart/form-data'
+            };
+            axios.post('/api/post/othersProfitReport',
+                formData, {
+                headers
+            }).then((res) => {
+                $(".loadingvideo").hide();
+
+                this.others_report = res.data.data;
+                this.others_amt_paid = res.data.total_sum;
+                console.log(res.data.total_sum);
+                this.frm_date = frm_date;
+                this.to_date = to_date;
+                this.company_id = company_id;
+            }).catch(e => {
+                this.notifmsg = e.response.data
+            });
+        },
+
+
         SearchTravelData() {
             $(".loadingvideo").show();
             const formData = new FormData();
@@ -630,6 +775,9 @@ export default {
             let to_date = $(".to_date").val();
             let customer_id = $(".customer_id").val();
             let company_id = $(".company_id").val();
+            let suppler_id = this.suplier_id;
+            //console.log("Supplier: " + suppler_id);
+            formData.append('suppler_id', suppler_id);
             formData.append('frm_date', frm_date);
             formData.append('to_date', to_date);
             formData.append('customer_id', customer_id);
@@ -662,6 +810,9 @@ export default {
             let to_date = $(".to_date").val();
             let customer_id = $(".customer_id").val();
             let company_id = $(".company_id").val();
+            let suppler_id = this.suplier_id;
+            //console.log("Supplier: " + suppler_id);
+            formData.append('suppler_id', suppler_id);
             formData.append('frm_date', frm_date);
             formData.append('to_date', to_date);
             formData.append('customer_id', customer_id);
@@ -695,7 +846,9 @@ export default {
             let to_date = $(".to_date").val();
             let customer_id = $(".customer_id").val();
             let company_id = $(".company_id").val();
-
+            let suppler_id = this.suplier_id;
+            //console.log("Supplier: " + suppler_id);
+            formData.append('suppler_id', suppler_id);
             formData.append('frm_date', frm_date);
             formData.append('to_date', to_date);
             formData.append('customer_id', customer_id);
@@ -709,7 +862,7 @@ export default {
             }).then((res) => {
                 $(".loadingvideo").hide();
                 //    console.log(res.data.data);
-                this.others_report = res.data.data;
+                this.consular_report = res.data.data;
                 this.others_total_profit = res.data.total_sum.toFixed(2);
                 console.log(res.data.total_sum);
                 this.frm_date = frm_date;
