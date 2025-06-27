@@ -185,7 +185,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/findMultipleThumnail/{id}', [App\Http\Controllers\API\PostController::class, 'findMultipleThumnail']);
     Route::post('/dueReport', [App\Http\Controllers\API\PostController::class, 'dueReport']);
     Route::post('/dueReportMoney', [App\Http\Controllers\API\PostController::class, 'dueReportMoney']);
-    Route::post('/travelProfitReport', [App\Http\Controllers\API\PostController::class, 'profitReport']);
+    Route::post('/travelProfitReport', [App\Http\Controllers\API\PostController::class, 'travelProfitReport']);
     Route::post('/othersProfitReport', [App\Http\Controllers\API\PostController::class, 'othersProfitReport']);
     Route::post('/moneyProfitReport', [App\Http\Controllers\API\PostController::class, 'profitReportMoney']);
     Route::post('/profitReportConsular', [App\Http\Controllers\API\PostController::class, 'profitReportConsular']);

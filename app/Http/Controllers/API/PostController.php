@@ -475,17 +475,26 @@ class PostController extends Controller
         ];
         return response()->json($response, 200);
     }
-    public function profitReport(Request $request)
+    public function travelProfitReport(Request $request)
     {
         $data = Post::profitreport($request->all());
         $sumprofit = $data->sum('profit');
         $dueAmtsum = $data->sum('due_amount');
+
+        $total_amount_of_Sale = $data->sum('customer_amount');
+        $total_net_amount     = $data->sum('net_amount');
+        $total_profit         = $data->sum('profit');
+        $total_due            = $data->sum('due_amount');
         // dd($data);
         $response = [
-            'data' => $data,
-            'total_sum' => $sumprofit,
-            'total_due_amt' => $dueAmtsum,
-            'message' => 'success'
+            'data'                  => $data,
+            'total_sum'             => $sumprofit,
+            'total_due_amt'         => $dueAmtsum,
+            'total_amount_of_Sale'  => number_format($total_amount_of_Sale, 2),
+            'total_net_amount'      =>  number_format($total_net_amount, 2),
+            'total_profit'          =>  number_format($total_profit, 2),
+            'total_due'             =>  number_format($total_due, 2),
+            'message'               => 'success'
         ];
         return response()->json($response, 200);
     }
@@ -496,11 +505,20 @@ class PostController extends Controller
         $data = Post::othersReport($request->all());
         $sumprofit = $data->sum('amount_paid');
         $dueAmtsum = $data->sum('amount_remaining');
+
+
+        $totalAmount = $data->sum('total_amount');
+        $totalDueAmt = $data->sum('amount_remaining');
+        $totalPrfoit = $totalAmount - $totalDueAmt;
+
+
         // dd($data);
         $response = [
             'data' => $data,
-            'total_sum' => $sumprofit,
+            'total_sum'     => $sumprofit,
             'total_due_amt' => $dueAmtsum,
+            'totalAmount'   => $totalAmount,
+            'totalPrfoit'   => $totalPrfoit,
             'message' => 'success'
         ];
         return response()->json($response, 200);
@@ -515,31 +533,29 @@ class PostController extends Controller
 
         $data = Post::profitreportMoney($request->all());
         //dd($data);
-        $sum = 0;
-        foreach ($data as $v) {
-            $sum += $v->profit;
+        $profit_sum  = $data->sum('profit');
+        $fees_sum    = $data->sum('fees');
+        $due_amount  = $data->sum('due_amount');
+        $rates       = $data->sum('rate');
+        $sendingAmt  = $data->sum('receiving_amount');
+        $others_fees = $data->sum('others_fees');
+        //Formula: Net/Supplier Amount: Sending Amount / rate + (charge 50%) = result 
+
+        if (!empty($rates) && $rates != 0) {
+            $net_supplier_amnt = ($sendingAmt / $rates) + ($others_fees / 2);
+            $net_supplier_amnt = number_format($net_supplier_amnt, 2);
+        } else {
+            $net_supplier_amnt = 0;
         }
 
 
-        $fees = 0;
-        foreach ($data as $v) {
-            $fees += $v->fees;
-        }
-
-
-        $tdue = 0;
-        foreach ($data as $v) {
-            $tdue += $v->due_amount;
-        }
-
-        // dd($tdue);
-        // dd($data);
         $response = [
             'data' => $data,
-            'total_fees' => number_format($fees, 2),
-            'total_sum' => number_format($sum, 2),
-            'total_due' => number_format($tdue, 2),
-            'moneytransferDueAmt' => $tdue,
+            'total_fees' => number_format($fees_sum, 2),
+            'total_sum'  => number_format($profit_sum, 2),
+            'total_due'  => number_format($due_amount, 2),
+            'net_supplier_amnt'  => $net_supplier_amnt,
+            'moneytransferDueAmt' => $due_amount,
             'totalTransaction' => count($data),
             'message' => 'success'
         ];
@@ -552,13 +568,16 @@ class PostController extends Controller
     {
         $data = Post::profitReportConsular($request->all());
         // dd($data);
-        $sumprofit = $data->sum('profit');
-        $dueAmtsum = $data->sum('due_amount');
+        $sumprofit   = $data->sum('profit');
+        $dueAmtsum   = $data->sum('due_amount');
+        $totalAmount = $data->sum('customer_amount');
+
         // dd($data);
         $response = [
             'data'          => $data,
             'total_sum'     => $sumprofit,
             'total_due_amt' => $dueAmtsum,
+            'totalAmount'   => $totalAmount,
             'message'       => 'success'
         ];
         return response()->json($response, 200);

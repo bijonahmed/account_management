@@ -71,7 +71,7 @@
 
                 <div class="for_travel">
                     <span><u>Travel Report: {{ firstCompanyName
-                            }} </u></span>
+                    }} </u></span>
                     <!-- Travel-Hamadan International Limited -->
                     <div class="table-responsive">
                         <table class="report-table" style="border-collapse: collapse; width: 100%;">
@@ -116,6 +116,14 @@
                     <div class="row text-end">
                         <span style="font-weight: bold;color:green;">Total Profit: {{ totalProfit }}</span>
                     </div>
+
+                    <div v-if="selectedCompany == 1">
+                        Total Amount of Sale: {{ travel_total_amount_of_Sale }}<br />
+                        Total Net Amount : {{ travel_total_net_amount }}<br />
+                        Total Profit : {{ travel_total_profit }}<br />
+                        Total Due : {{ travel_total_due }}<br />
+                    </div>
+
 
                 </div>
                 <!-- END Travel -->
@@ -192,7 +200,7 @@
                                     <td class="text-end" style="color: green;"><b>{{
                                         totals.receiving_divided_by_rate.toFixed(2) }}</b></td>
                                     <td class="text-end" style="color: deeppink;"><b>{{ totals.fees.toFixed(2)
-                                            }}</b></td>
+                                    }}</b></td>
                                     <td class="text-end" style="color: goldenrod;"><b>{{
                                         totals.others_fees.toFixed(2) }}</b></td>
                                     <td class="text-end" style="color: purple;">
@@ -207,53 +215,10 @@
                                     <td></td>
 
                                     <td class="text-end" style="color: orange;"><b>{{ totals.due_amount.toFixed(2)
-                                            }}</b></td>
+                                    }}</b></td>
                                     <td></td>
                                 </tr>
-                                <tr class="bgtrColor">
-                                    <td class="txttrcolor">
-                                        <center></center>
-                                    </td>
-                                    <td class="txttrcolor">
-                                        <center></center>
-                                    </td>
-                                    <td class="txttrcolor">
-                                        <center></center>
-                                    </td>
-                                    <td class="txttrcolor">
-                                        <center></center>
-                                    </td>
-                                    <td class="txttrcolor">
-                                        <center></center>
-                                    </td>
-                                    <td class="txttrcolor">
-                                        <center></center>
-                                    </td>
-                                    <td class="txttrcolor">
-                                        <center></center>
-                                    </td>
-                                    <td class="txttrcolor">
-                                        <center></center>
-                                    </td>
-                                    <td class="txttrcolor">
-                                        <center></center>
-                                    </td>
-                                    <td class="txttrcolor">
-                                        <center></center>
-                                    </td>
-                                    <td class="txttrcolor">
-                                        <center></center>
-                                    </td>
-                                    <td class="txttrcolor">
-                                        <center></center>
-                                    </td>
-                                    <td class="txttrcolor">
-                                        <center></center>
-                                    </td>
-                                    <td class="txttrcolor">
-                                        <center></center>
-                                    </td>
-                                </tr>
+
                                 <tr class="bgtrColor d-none">
                                     <td colspan="3" class="text-end">Total No of transaction</td>
                                     <td class="text-end"><b>{{ totalTransaction }}</b></td>
@@ -346,6 +311,14 @@
 
                         </div>
 
+                        <div v-if="selectedCompany == 2">
+                            Total Sale: {{ totals.receiving_divided_by_rate.toFixed(2) }}<br>
+                            Net/Supplier Amount: {{ money_net_supplier_amnt }}<br>
+                            Total Due: {{ totals.due_amount.toFixed(2) }}<br>
+                            Total Profit : {{ money_total_profit }}<br>
+
+                        </div>
+
                     </div>
 
                 </div>
@@ -390,6 +363,13 @@
                     <div class="row text-end">
                         <span style="font-weight: bold;color:green;">Total Profit: {{ consular_total_profit }}</span>
                     </div>
+                    <div v-if="selectedCompany == 3">
+                        Total amount: {{ consular_total_amt }} <br />
+                        Total due: {{ consular_total_due_amt }} <br />
+                        Profit :{{ consular_total_profit }}<br />
+
+                    </div>
+
                 </div>
                 <!-- END Consular -->
 
@@ -433,13 +413,20 @@
                     <div class="row text-end">
                         <span style="font-weight: bold;color:green;">Amount Paid: {{ others_amt_paid }}</span>
                     </div>
+                    <div v-if="selectedCompany == 4">
+                        Total Amount : {{ others_totalAmount }}<br />
+                        Total Due: {{ others_total_due_amt }}<br />
+                        Total Profit : {{ others_totalPrfoit }}<br />
+
+                    </div>
+
                 </div>
                 <!-- END Consular -->
                 <!-- row -->
 
                 <div v-if="!selectedCompany">
                     Total Profit: {{ totalProfitSum.toFixed(2) }}<br />
-                    <hr/>
+                    <hr />
                     Total Due: {{ formatAmount(totalDueAmountSumCalculated) }}<br />
                     <hr />
                     Due Brakedown<br />
@@ -491,9 +478,17 @@ export default {
             total_due: 0,
             money_total_profit: 0,
             consular_total_due_amt: 0,
+            consular_total_amt: 0,
             others_total_due_amt: 0,
+            others_totalPrfoit: 0,
+            others_totalAmount: 0,
             consular_total_profit: 0,
+            money_net_supplier_amnt: 0,
             travel_total_due_amt: 0,
+            travel_total_amount_of_Sale: 0,
+            travel_total_net_amount: 0,
+            travel_total_profit: 0,
+            travel_total_due: 0,
             customer_id: '',
             report: [],
             money_report: [],
@@ -531,10 +526,10 @@ export default {
                 const profit = parseFloat(data.profit) || 0;
                 const customerDeposit = parseFloat(data.customer_deposit) || 0;
                 const dueAmount = parseFloat(data.due_amount) || 0;
+                //const sendingAmount = parseFloat(data.due_amount) || 0;
 
                 const sale = receivingAmount / rate;
                 const total = sale + fees + othersFees;
-
                 acc.receiving_amount += receivingAmount;
                 acc.rate += rate;
                 acc.receiving_divided_by_rate += sale;
@@ -570,11 +565,11 @@ export default {
     },
     methods: {
         formatAmount(amount) {
-      return Number(amount).toLocaleString('en-US', {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2
-      });
-    },
+            return Number(amount).toLocaleString('en-US', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
+        },
         filterReport() {
             let company_id = $(".company_id").val();
             // First, hide all sections
@@ -795,6 +790,8 @@ export default {
                 this.others_report = res.data.data;
                 this.others_amt_paid = res.data.total_sum;
                 this.others_total_due_amt = res.data.total_due_amt.toFixed(2);
+                this.others_totalPrfoit = res.data.totalPrfoit.toFixed(2);
+                this.others_totalAmount = res.data.totalAmount.toFixed(2);
                 // console.log(res.data.total_sum);
                 this.frm_date = frm_date;
                 this.to_date = to_date;
@@ -832,7 +829,12 @@ export default {
                 this.report = res.data.data;
                 this.total_profit = res.data.total_sum;
                 this.travel_total_due_amt = res.data.total_due_amt;
-                // console.log(res.data.total_sum);
+
+                this.travel_total_amount_of_Sale = res.data.total_amount_of_Sale
+                this.travel_total_net_amount = res.data.total_net_amount
+                this.travel_total_profit = res.data.total_profit
+                this.travel_total_due = res.data.total_due
+
                 this.frm_date = frm_date;
                 this.to_date = to_date;
                 this.company_id = company_id;
@@ -863,10 +865,11 @@ export default {
                 headers
             }).then((res) => {
                 $(".loadingvideo").hide();
-                //    console.log(res.data.data);
+                console.log("Net Supplier Amount: " + res.data.net_supplier_amnt);
                 this.money_report = res.data.data;
                 this.money_total_profit = res.data.total_sum;
-                 this.moneytransferDueAmt = res.data.moneytransferDueAmt.toFixed(2);
+                this.moneytransferDueAmt = res.data.moneytransferDueAmt.toFixed(2);
+                this.money_net_supplier_amnt = res.data.net_supplier_amnt;
                 this.total_fees = res.data.total_fees;
                 // console.log(res.data.total_sum);
                 this.total_due = res.data.total_due;
@@ -875,7 +878,13 @@ export default {
                 this.to_date = to_date;
                 this.company_id = company_id;
             }).catch(e => {
-                this.notifmsg = e.response.data
+                if (e.response && e.response.data) {
+                    this.notifmsg = e.response.data;
+                } else if (e.request) {
+                    this.notifmsg = 'No response from server. Please check your connection or try again later.';
+                } else {
+                    this.notifmsg = 'An unexpected error occurred: ' + e.message;
+                }
             });
         },
         SearchDataConsular() {
@@ -904,6 +913,7 @@ export default {
                 this.consular_report = res.data.data;
                 this.consular_total_profit = res.data.total_sum.toFixed(2);
                 this.consular_total_due_amt = res.data.total_due_amt.toFixed(2);
+                this.consular_total_amt = res.data.totalAmount.toFixed(2);
                 // console.log(res.data.total_sum);
                 this.frm_date = frm_date;
                 this.to_date = to_date;
