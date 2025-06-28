@@ -25,7 +25,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/allCustomerMoney', [App\Http\Controllers\API\CategoryController::class, 'allCustomerMoney']);
     Route::get('/allCustomerConsular', [App\Http\Controllers\API\CategoryController::class, 'allCustomerConsular']);
     Route::get('/allCustomerOthers', [App\Http\Controllers\API\CategoryController::class, 'allCustomerOthers']);
-        Route::get('/getSuplierConditionWise', [App\Http\Controllers\API\CategoryController::class, 'getSuplierConditionWise']);
+    Route::get('/getSuplierConditionWise', [App\Http\Controllers\API\CategoryController::class, 'getSuplierConditionWise']);
 
     Route::get('/getCustomerData', [App\Http\Controllers\API\CategoryController::class, 'getCustomerData']);
     Route::get('/getSupplierData', [App\Http\Controllers\API\CategoryController::class, 'getSupplierData']);
@@ -185,30 +185,26 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/editPostId/{id}', [App\Http\Controllers\API\PostController::class, 'editPostId']);
     Route::get('/editGallaryId/{id}', [App\Http\Controllers\API\PostController::class, 'editGallaryId']);
     Route::get('/findMultipleThumnail/{id}', [App\Http\Controllers\API\PostController::class, 'findMultipleThumnail']);
-    
-    Route::post('/dueReportMoney', [App\Http\Controllers\API\PostController::class, 'dueReportMoney']);
-    Route::post('/travelProfitReport', [App\Http\Controllers\API\PostController::class, 'travelProfitReport']);
-    Route::post('/othersProfitReport', [App\Http\Controllers\API\PostController::class, 'othersProfitReport']);
-    Route::post('/moneyProfitReport', [App\Http\Controllers\API\PostController::class, 'profitReportMoney']);
-    Route::post('/profitReportConsular', [App\Http\Controllers\API\PostController::class, 'profitReportConsular']);
-    Route::post('/profitReportOthers', [App\Http\Controllers\API\PostController::class, 'profitReportOthers']);
-    Route::post('/deReportConsular', [App\Http\Controllers\API\PostController::class, 'deReportConsular']);
-    Route::post('/deReportOthers', [App\Http\Controllers\API\PostController::class, 'deReportOthers']);
     //Profit report 
-
-    
-
+    Route::post('/travelProfitReport', [App\Http\Controllers\API\PostController::class, 'travelProfitReport']);
+    Route::post('/profitReportOthers', [App\Http\Controllers\API\PostController::class, 'profitReportOthers']);
+    Route::post('/othersProfitReport', [App\Http\Controllers\API\PostController::class, 'othersProfitReport']);
+    Route::post('/profitReportConsular', [App\Http\Controllers\API\PostController::class, 'profitReportConsular']);
+    Route::post('/moneyProfitReport', [App\Http\Controllers\API\PostController::class, 'profitReportMoney']);
     //Due report
     Route::post('/dueReportForTravel', [App\Http\Controllers\API\PostController::class, 'dueReportForTravel']);
-
+    Route::post('/dueReportMoney', [App\Http\Controllers\API\PostController::class, 'dueReportMoney']);
+    Route::post('/deReportConsular', [App\Http\Controllers\API\PostController::class, 'deReportConsular']);
+    Route::post('/deReportOthers', [App\Http\Controllers\API\PostController::class, 'deReportOthers']);
 
     //update payment
     Route::post('/updatePaymentStatusTravel', [App\Http\Controllers\API\PostController::class, 'updatePaymentStatusTravel']);
+    Route::post('/updatePaymentStatusMoneyTransfer', [App\Http\Controllers\API\PostController::class, 'updatePaymentStatusMoneyTransfer']);
+    Route::post('/updatePaymentStatusConsular', [App\Http\Controllers\API\PostController::class, 'updatePaymentStatusConsular']);
+    Route::post('/updatePaymentStatusOthers', [App\Http\Controllers\API\PostController::class, 'updatePaymentStatusOthers']);
 
-
-
+    //others api 
     Route::post('/deleteThumbnail', [App\Http\Controllers\API\PostController::class, 'deleteThumbnail']);
-    
     Route::post('/featchVideoHtag', [App\Http\Controllers\API\PostController::class, 'featchVideoHtag']);
     Route::get('/selectedCategoryList/{id}', [App\Http\Controllers\API\PostController::class, 'selectedCategoryList']);
     Route::get('/selectedHTagList/{id}', [App\Http\Controllers\API\PostController::class, 'selectedHTagList']);

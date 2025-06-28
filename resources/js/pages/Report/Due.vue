@@ -10,7 +10,6 @@
                 </div>
 
 
-
                 <form @submit.prevent="filterReport()" id="formrest" class="forms-sample" enctype="multipart/form-data">
                     <div class="row">
                         <div class="col-md-4">
@@ -115,7 +114,7 @@
                         <span style="font-weight: bold;color:green;">Total Due: {{ total_due_travel }}</span>
                     </div>
                     <div class="continaer">
-                        <center><button type="button" class="btn btn-primary w-100 paytment_btn" @click="travelPayment"
+                        <center><button type="button" class="btn btn-primary w-100 paytment_btn" @click="paymentModal"
                                 style="display: none;">Payment</button></center>
                     </div>
                 </div>
@@ -164,7 +163,7 @@
                         </div>
                         <div class="continaer">
                             <center><button type="submit" class="btn btn-primary w-100 paytment_btn"
-                                    style="display: none;">Payment</button></center>
+                                    style="display: none;" @click="paymentModal">Payment</button></center>
                         </div>
 
                     </div>
@@ -180,6 +179,7 @@
                                     <th>
                                         <input type="checkbox" v-model="selectAll" @change="toggleAllConsular">
                                     </th>
+                                    <th>Invoice ID</th>
                                     <th>Date</th>
                                     <th>Customer Name</th>
                                     <th>Purpose</th>
@@ -199,6 +199,7 @@
                                         <input type="checkbox" v-model="selectedInvoicesConsular"
                                             :value="data.consular_inv_id">
                                     </td>
+                                    <td>{{ data.consular_inv_id }}</td>
                                     <td>{{ data.invoice_date }}</td>
                                     <td>{{ data.customer_name }}</td>
                                     <td>{{ data.purpose }}</td>
@@ -219,7 +220,7 @@
 
                         <div class="continaer">
                             <center><button type="submit" class="btn btn-primary w-100 paytment_btn"
-                                    style="display: none;">Payment</button></center>
+                                    style="display: none;" @click="paymentModal">Payment</button></center>
                         </div>
                     </div>
 
@@ -270,7 +271,7 @@
                         <span style="font-weight: bold;color:green;">Total Due: {{ other_total_due }}</span>
                         <div class="continaer">
                             <center><button type="submit" class="btn btn-primary w-100 paytment_btn"
-                                    style="display: none;">Payment</button></center>
+                                    style="display: none;" @click="paymentModal">Payment</button></center>
                         </div>
                     </div>
                 </div>
@@ -281,12 +282,172 @@
             <!-- Button trigger modal -->
             <Footer />
 
-            <!-- Travel Modal -->
-            <div class="modal fade showtravelModal" tabindex="-1" aria-hidden="true" id="showtravelModal">
+
+            <!-- Others  Modal -->
+            <div class="modal fade showMoneyOthersModal" tabindex="-1" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title">Supplier Payment</h5>
+                            <h5 class="modal-title">Others Supplier Payment</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form>
+                                <div class="mb-3">
+                                    <label for="paymentDate" class="form-label">Payment Date:</label>
+                                    <input type="date" id="paymentDate" class="form-control" v-model="paymentDate">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="supplierSelect" class="form-label">Select Supplier:</label>
+                                    <select class='form-control form-select sulipper_id' v-model="sulipper_id">
+                                        <option value=''>All Supplier</option>
+                                        <option v-for='data in supliers' :value='data.sulipper_id'>{{ data.name }}
+                                        </option>
+                                    </select>
+
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="amount" class="form-label">Amount:</label>
+                                    <input type="text" id="amount" class="form-control" v-model="paymentAmount"
+                                        @input="onAmountInput">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="paymentMethod" class="form-label">Payment Method:</label>
+                                    <select id="paymentMethod" class="form-select" v-model="paymentMethod">
+                                        <option value="">-- Select Payment Method --</option>
+                                        <option value="Cash">Cash</option>
+                                        <option value="Bank Transfer">Bank Transfer</option>
+                                        <option value="Credit Loan">Credit Loan</option>
+                                        <option value="Others">Others</option>
+                                    </select>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary"
+                                @click="updatePaymentStatusOthers">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- Consular  Modal -->
+            <div class="modal fade showMoneyConsularModal" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Consular Supplier Payment</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form>
+                                <div class="mb-3">
+                                    <label for="paymentDate" class="form-label">Payment Date:</label>
+                                    <input type="date" id="paymentDate" class="form-control" v-model="paymentDate">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="supplierSelect" class="form-label">Select Supplier:</label>
+                                    <select class='form-control form-select sulipper_id' v-model="sulipper_id">
+                                        <option value=''>All Supplier</option>
+                                        <option v-for='data in supliers' :value='data.sulipper_id'>{{ data.name }}
+                                        </option>
+                                    </select>
+
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="amount" class="form-label">Amount:</label>
+                                    <input type="text" id="amount" class="form-control" v-model="paymentAmount"
+                                        @input="onAmountInput">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="paymentMethod" class="form-label">Payment Method:</label>
+                                    <select id="paymentMethod" class="form-select" v-model="paymentMethod">
+                                        <option value="">-- Select Payment Method --</option>
+                                        <option value="Cash">Cash</option>
+                                        <option value="Bank Transfer">Bank Transfer</option>
+                                        <option value="Credit Loan">Credit Loan</option>
+                                        <option value="Others">Others</option>
+                                    </select>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary"
+                                @click="updatePaymentStatusConsular">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- Money Transfer Modal -->
+            <div class="modal fade showMoneyTransferModal" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Money Transfer Supplier Payment</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form>
+                                <div class="mb-3">
+                                    <label for="paymentDate" class="form-label">Payment Date:</label>
+                                    <input type="date" id="paymentDate" class="form-control" v-model="paymentDate">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="supplierSelect" class="form-label">Select Supplier:</label>
+                                    <select class='form-control form-select sulipper_id' v-model="sulipper_id">
+                                        <option value=''>All Supplier</option>
+                                        <option v-for='data in supliers' :value='data.sulipper_id'>{{ data.name }}
+                                        </option>
+                                    </select>
+
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="amount" class="form-label">Amount:</label>
+                                    <input type="text" id="amount" class="form-control" v-model="paymentAmount"
+                                        @input="onAmountInput">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="paymentMethod" class="form-label">Payment Method:</label>
+                                    <select id="paymentMethod" class="form-select" v-model="paymentMethod">
+                                        <option value="">-- Select Payment Method --</option>
+                                        <option value="Cash">Cash</option>
+                                        <option value="Bank Transfer">Bank Transfer</option>
+                                        <option value="Credit Loan">Credit Loan</option>
+                                        <option value="Others">Others</option>
+                                    </select>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary"
+                                @click="updatePaymentStatusMoneyTransfer">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- Travel Modal -->
+            <div class="modal fade showtravelModal" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Travel Supplier Payment</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
@@ -452,17 +613,51 @@ export default {
                 this.selectedInvoicesOthers = [];
             }
         },
-        travelPayment() {
+        paymentModal() {
+            const serviceType = this.selected_type;
 
-            if (this.selectedInvoicesTravel.length > 0) {
-                const modal = new bootstrap.Modal(document.querySelector('.showtravelModal'));
-                modal.show();
-            } else {
-                alert('Please select at least one item.');
+            if (serviceType == 1) {
+                if (this.selectedInvoicesTravel.length > 0) {
+                    const modal = new bootstrap.Modal(document.querySelector('.showtravelModal'));
+                    modal.show();
+                } else {
+                    alert('Please select at least one item.');
+                }
             }
 
+            if (serviceType == 2) {
+
+                if (this.selectedInvoicesMoneyTransfer.length > 0) {
+                    const modal = new bootstrap.Modal(document.querySelector('.showMoneyTransferModal'));
+                    modal.show();
+                } else {
+                    alert('Please select at least one item.');
+                }
+            }
+
+            if (serviceType == 3) {
+                if (this.selectedInvoicesConsular.length > 0) {
+                    const modal = new bootstrap.Modal(document.querySelector('.showMoneyConsularModal'));
+                    modal.show();
+                } else {
+                    alert('Please select at least one item.');
+                }
+            }
+
+            if (serviceType == 4) {
+
+                if (this.selectedInvoicesOthers.length > 0) {
+                    const modal = new bootstrap.Modal(document.querySelector('.showMoneyOthersModal'));
+                    modal.show();
+                } else {
+                    alert('Please select at least one item.');
+                }
+
+
+            }
 
         },
+
         updatePaymentStatusTravel() {
             const selectedIds = this.selectedInvoicesTravel;
             if (selectedIds.length === 0) {
@@ -501,9 +696,6 @@ export default {
                             this.paymentMethod = "";
                             this.paymentAmount = "";
                             this.selectedInvoicesTravel = [];
-
-
-
                             this.filterReport();
                             Swal.fire('Success', 'Payment recorded successfully.', 'success');
                         })
@@ -514,6 +706,164 @@ export default {
                 }
             });
         },
+
+        updatePaymentStatusMoneyTransfer() {
+
+            const selectedIds = this.selectedInvoicesMoneyTransfer;
+            if (selectedIds.length === 0) {
+                Swal.fire("Error", "Please select at least one invoice.", "error");
+                return;
+            }
+
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'Do you want to proceed with this supplier payment?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, proceed',
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const formData = new FormData();
+                    formData.append('selectedIds', selectedIds);
+                    formData.append('sulipper_id', this.sulipper_id);
+                    formData.append('paymentAmount', this.paymentAmount);
+                    formData.append('paymentMethod', this.paymentMethod);
+
+                    const headers = {
+                        'Content-Type': 'multipart/form-data'
+                    };
+
+                    axios.post('/api/post/updatePaymentStatusMoneyTransfer', formData, { headers })
+                        .then((res) => {
+                            $(".loadingvideo").hide();
+                            const modalElement = document.querySelector('.showMoneyTransferModal');
+                            const modal = bootstrap.Modal.getInstance(modalElement);
+                            if (modal) {
+                                modal.hide();
+                            }
+                            this.sulipper_id = "";
+                            this.paymentMethod = "";
+                            this.paymentAmount = "";
+                            this.selectedInvoicesMoneyTransfer = [];
+                            this.filterReport();
+                            Swal.fire('Success', 'Payment recorded successfully.', 'success');
+                        })
+                        .catch((e) => {
+                            this.notifmsg = e.response.data;
+                            Swal.fire('Error', 'An error occurred during the payment.', 'error');
+                        });
+                }
+            });
+
+
+        },
+        updatePaymentStatusOthers() {
+
+            const selectedIds = this.selectedInvoicesOthers;
+            if (selectedIds.length === 0) {
+                Swal.fire("Error", "Please select at least one invoice.", "error");
+                return;
+            }
+
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'Do you want to proceed with this supplier payment?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, proceed',
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const formData = new FormData();
+                    formData.append('selectedIds', selectedIds);
+                    formData.append('sulipper_id', this.sulipper_id);
+                    formData.append('paymentAmount', this.paymentAmount);
+                    formData.append('paymentMethod', this.paymentMethod);
+
+                    const headers = {
+                        'Content-Type': 'multipart/form-data'
+                    };
+
+                    axios.post('/api/post/updatePaymentStatusOthers', formData, { headers })
+                        .then((res) => {
+                            $(".loadingvideo").hide();
+                            const modalElement = document.querySelector('.showMoneyOthersModal');
+                            const modal = bootstrap.Modal.getInstance(modalElement);
+                            if (modal) {
+                                modal.hide();
+                            }
+                            this.sulipper_id = "";
+                            this.paymentMethod = "";
+                            this.paymentAmount = "";
+                            this.selectedInvoicesMoneyTransfer = [];
+                            this.filterReport();
+                            Swal.fire('Success', 'Payment recorded successfully.', 'success');
+                        })
+                        .catch((e) => {
+                            this.notifmsg = e.response.data;
+                            Swal.fire('Error', 'An error occurred during the payment.', 'error');
+                        });
+                }
+            });
+
+
+        },
+
+        updatePaymentStatusConsular() {
+
+            const selectedIds = this.selectedInvoicesConsular;
+            if (selectedIds.length === 0) {
+                Swal.fire("Error", "Please select at least one invoice.", "error");
+                return;
+            }
+
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'Do you want to proceed with this supplier payment?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, proceed',
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const formData = new FormData();
+                    formData.append('selectedIds', selectedIds);
+                    formData.append('sulipper_id', this.sulipper_id);
+                    formData.append('paymentAmount', this.paymentAmount);
+                    formData.append('paymentMethod', this.paymentMethod);
+
+                    const headers = {
+                        'Content-Type': 'multipart/form-data'
+                    };
+
+                    axios.post('/api/post/updatePaymentStatusConsular', formData, { headers })
+                        .then((res) => {
+                            $(".loadingvideo").hide();
+                            const modalElement = document.querySelector('.showMoneyConsularModal');
+                            const modal = bootstrap.Modal.getInstance(modalElement);
+                            if (modal) {
+                                modal.hide();
+                            }
+                            this.sulipper_id = "";
+                            this.paymentMethod = "";
+                            this.paymentAmount = "";
+                            this.selectedInvoicesMoneyTransfer = [];
+                            this.filterReport();
+                            Swal.fire('Success', 'Payment recorded successfully.', 'success');
+                        })
+                        .catch((e) => {
+                            this.notifmsg = e.response.data;
+                            Swal.fire('Error', 'An error occurred during the payment.', 'error');
+                        });
+                }
+            });
+
+
+        },
+
+
+
         searchDataTravel() {
             $(".loadingvideo").show();
             $(".paytment_btn").hide();

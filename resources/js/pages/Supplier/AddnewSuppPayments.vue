@@ -49,7 +49,7 @@
                                     </div>
                                 </div>
 
-                                <button type="submit" class="btn btn-primary me-2 w-100 submit_btn">Submit</button>
+                                <button type="submit" class="btn btn-primary me-2 w-100 submit_btn d-none">Submit</button>
                             </form>
                         </div>
                     </div>

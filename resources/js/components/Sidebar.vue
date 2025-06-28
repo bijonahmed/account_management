@@ -133,7 +133,8 @@
                                         <router-link class="nav-link" to="/mycompany-list">Company List</router-link>
                                     </li>
                                     <li class="nav-item">
-                                        <router-link class="nav-link" to="/company-wise-category-list">Company Wise Category</router-link>
+                                        <router-link class="nav-link" to="/company-wise-category-list">Company Wise
+                                            Category</router-link>
                                     </li>
                                     <li class="nav-item">
                                         <router-link class="nav-link" to="/log/log-activity">Log Activity</router-link>
@@ -157,6 +158,12 @@
                             <i class="fa-solid fa-list"></i>&nbsp;Supplier Due Amount
                         </router-link>
                     </li> -->
+
+                        <!-- <li class="nav-item">
+                            <router-link class="nav-link" to="/supplier/supplier-payment-list">
+                                <i class="fa-solid fa-list"></i>&nbsp;Supplier Payment
+                            </router-link>
+                        </li> -->
 
                         <li class="nav-item">
                             <router-link class="nav-link" to="/supplier/supplier-payment-list">

@@ -143,6 +143,7 @@ class Post extends Authenticatable
       ->leftJoin('customer', 'customer.customer_id', '=', 'consular_invoice.customer_id')
       ->leftJoin('supplier', 'supplier.sulipper_id', '=', 'consular_invoice.sulipper_id')
       ->leftJoin('users', 'users.id', '=', 'consular_invoice.entry_by')
+      ->where('consular_invoice.payment_status', 0)
       ->whereBetween('consular_invoice.invoice_date', [$startDate, $endDate]);
 
     if ($customer_id > 0) {
@@ -309,6 +310,7 @@ class Post extends Authenticatable
       ->leftJoin('customer', 'customer.customer_id', '=', 'invoice_money_transfer.customer_id')
       ->leftJoin('supplier', 'supplier.sulipper_id', '=', 'invoice_money_transfer.sulipper_id')
       ->leftJoin('users', 'users.id', '=', 'invoice_money_transfer.entry_by')
+      ->where('invoice_money_transfer.payment_status', 0)
       ->whereBetween('invoice_money_transfer.invoice_date', [$startDate, $endDate]);
 
     if ($customer_id > 0) {
@@ -342,6 +344,7 @@ class Post extends Authenticatable
       ->leftJoin('customer', 'customer.customer_id', '=', 'others_invoice.customer_id')
       ->leftJoin('supplier', 'supplier.sulipper_id', '=', 'others_invoice.sulipper_id')
       ->leftJoin('users', 'users.id', '=', 'others_invoice.entry_by')
+      ->where('others_invoice.payment_status', 0)
       ->whereBetween('others_invoice.invoice_date', [$startDate, $endDate]);
     // Apply company_id filter only if provided
     if ($customer_id > 0) {

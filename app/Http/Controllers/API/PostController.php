@@ -406,6 +406,132 @@ class PostController extends Controller
         return response()->json($response, 200);
     }
 
+    public function updatePaymentStatusOthers(Request $request)
+    {
+        $request->validate([
+            'selectedIds'   => 'required',
+            'sulipper_id'   => 'required',
+            'paymentMethod' => 'required',
+            'paymentAmount' => 'required'
+        ]);
+
+        // dd($request->all());
+        DB::table('others_invoice')
+            ->whereIn('others_inv_id', explode(',', $request->selectedIds))
+            ->update([
+                'payment_status'        => 1,
+                //'payment_updated_at'    => now()
+            ]);
+
+        $invoiceId = $request->selectedIds;
+        $sulipperId = $request->sulipper_id;
+        // Check if a matching record already exists
+        $exists = DB::table('supplier_payment')
+            ->where('invoice_id', $invoiceId)
+            ->where('sulipper_id', $sulipperId)
+            ->exists();
+        if ($exists) {
+            return response()->json([
+                'status' => 'exists',
+                'message' => 'This supplier payment already exists.'
+            ]);
+        }
+        DB::table('supplier_payment')->insert([
+            'invoice_id'     => $request->selectedIds,
+            'sulipper_id'    => $request->sulipper_id,
+            'payment_method' => $request->paymentMethod,
+            'amount'         => $request->paymentAmount,
+            'service'        => 4,
+            'entry_by'       => Auth::id(),
+            'created_at'     => now(),
+        ]);
+        return response()->json(['message' => 'Supplier payments recorded successfully.']);
+    }
+    public function updatePaymentStatusConsular(Request $request)
+    {
+        $request->validate([
+            'selectedIds'   => 'required',
+            'sulipper_id'   => 'required',
+            'paymentMethod' => 'required',
+            'paymentAmount' => 'required'
+        ]);
+
+        // dd($request->all());
+        DB::table('consular_invoice')
+            ->whereIn('consular_inv_id', explode(',', $request->selectedIds))
+            ->update([
+                'payment_status'        => 1,
+                //'payment_updated_at'    => now()
+            ]);
+
+        $invoiceId = $request->selectedIds;
+        $sulipperId = $request->sulipper_id;
+        // Check if a matching record already exists
+        $exists = DB::table('supplier_payment')
+            ->where('invoice_id', $invoiceId)
+            ->where('sulipper_id', $sulipperId)
+            ->exists();
+        if ($exists) {
+            return response()->json([
+                'status' => 'exists',
+                'message' => 'This supplier payment already exists.'
+            ]);
+        }
+        DB::table('supplier_payment')->insert([
+            'invoice_id'     => $request->selectedIds,
+            'sulipper_id'    => $request->sulipper_id,
+            'payment_method' => $request->paymentMethod,
+            'amount'         => $request->paymentAmount,
+            'service'        => 3,
+            'entry_by'       => Auth::id(),
+            'created_at'     => now(),
+        ]);
+        return response()->json(['message' => 'Supplier payments recorded successfully.']);
+    }
+    public function updatePaymentStatusMoneyTransfer(Request $request)
+    {
+        $request->validate([
+            'selectedIds'   => 'required',
+            'sulipper_id'   => 'required',
+            'paymentMethod' => 'required',
+            'paymentAmount' => 'required'
+        ]);
+
+        // dd($request->all());
+        DB::table('invoice_money_transfer')
+            ->whereIn('mone_transfer_id', explode(',', $request->selectedIds))
+            ->update([
+                'payment_status'        => 1,
+                //'payment_updated_at'    => now()
+            ]);
+
+        $invoiceId = $request->selectedIds;
+        $sulipperId = $request->sulipper_id;
+        // Check if a matching record already exists
+        $exists = DB::table('supplier_payment')
+            ->where('invoice_id', $invoiceId)
+            ->where('sulipper_id', $sulipperId)
+            ->exists();
+        if ($exists) {
+            return response()->json([
+                'status' => 'exists',
+                'message' => 'This supplier payment already exists.'
+            ]);
+        }
+        DB::table('supplier_payment')->insert([
+            'invoice_id'     => $request->selectedIds,
+            'sulipper_id'    => $request->sulipper_id,
+            'payment_method' => $request->paymentMethod,
+            'amount'         => $request->paymentAmount,
+            'service'        => 2,
+            'entry_by'       => Auth::id(),
+            'created_at'     => now(),
+        ]);
+        return response()->json(['message' => 'Supplier payments recorded successfully.']);
+    }
+
+
+
     public function updatePaymentStatusTravel(Request $request)
     {
 
@@ -462,6 +588,7 @@ class PostController extends Controller
             'sulipper_id'    => $request->sulipper_id,
             'payment_method' => $request->paymentMethod,
             'amount'         => $request->paymentAmount,
+            'service'        => 1,
             'entry_by'       => Auth::id(),
             'created_at'     => now(),
         ]);
