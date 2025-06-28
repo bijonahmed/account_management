@@ -17,6 +17,8 @@ Route::group(['prefix' => 'public'], function () {
 });
 Route::middleware('auth:sanctum')->group(function () {
   Route::group(['prefix' => 'category'], function () {
+
+    Route::get('/serviceWiseAllCustomers', [App\Http\Controllers\API\CategoryController::class, 'serviceWiseAllCustomers']);
     Route::get('/allCustomers', [App\Http\Controllers\API\CategoryController::class, 'allCustomers']);
 
     Route::get('/allCustomerslist', [App\Http\Controllers\API\CategoryController::class, 'allCustomerslist']);
@@ -183,17 +185,30 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/editPostId/{id}', [App\Http\Controllers\API\PostController::class, 'editPostId']);
     Route::get('/editGallaryId/{id}', [App\Http\Controllers\API\PostController::class, 'editGallaryId']);
     Route::get('/findMultipleThumnail/{id}', [App\Http\Controllers\API\PostController::class, 'findMultipleThumnail']);
-    Route::post('/dueReport', [App\Http\Controllers\API\PostController::class, 'dueReport']);
+    
     Route::post('/dueReportMoney', [App\Http\Controllers\API\PostController::class, 'dueReportMoney']);
     Route::post('/travelProfitReport', [App\Http\Controllers\API\PostController::class, 'travelProfitReport']);
     Route::post('/othersProfitReport', [App\Http\Controllers\API\PostController::class, 'othersProfitReport']);
     Route::post('/moneyProfitReport', [App\Http\Controllers\API\PostController::class, 'profitReportMoney']);
     Route::post('/profitReportConsular', [App\Http\Controllers\API\PostController::class, 'profitReportConsular']);
     Route::post('/profitReportOthers', [App\Http\Controllers\API\PostController::class, 'profitReportOthers']);
+    Route::post('/deReportConsular', [App\Http\Controllers\API\PostController::class, 'deReportConsular']);
     Route::post('/deReportOthers', [App\Http\Controllers\API\PostController::class, 'deReportOthers']);
+    //Profit report 
+
+    
+
+    //Due report
+    Route::post('/dueReportForTravel', [App\Http\Controllers\API\PostController::class, 'dueReportForTravel']);
+
+
+    //update payment
+    Route::post('/updatePaymentStatusTravel', [App\Http\Controllers\API\PostController::class, 'updatePaymentStatusTravel']);
+
 
 
     Route::post('/deleteThumbnail', [App\Http\Controllers\API\PostController::class, 'deleteThumbnail']);
+    
     Route::post('/featchVideoHtag', [App\Http\Controllers\API\PostController::class, 'featchVideoHtag']);
     Route::get('/selectedCategoryList/{id}', [App\Http\Controllers\API\PostController::class, 'selectedCategoryList']);
     Route::get('/selectedHTagList/{id}', [App\Http\Controllers\API\PostController::class, 'selectedHTagList']);

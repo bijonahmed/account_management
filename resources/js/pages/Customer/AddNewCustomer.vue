@@ -32,7 +32,8 @@
                                         <label for="exampleInputUsername2"
                                             class="col-sm-3 col-form-label">Company</label>
                                         <div class="col-sm-9">
-                                            <select v-model="cdata.company_id" class="form-select" @change="getCategoryList(cdata.company_id)">
+                                            <select v-model="cdata.company_id" class="form-select"
+                                                @change="getCategoryList(cdata.company_id)">
                                                 <option value="">Select a Company...</option>
                                                 <option v-for="(data, index) in companyList" :key="index"
                                                     :value="data.id">
@@ -50,15 +51,14 @@
                                         <div class="col-sm-9">
                                             <select v-model="cdata.category_id" class="form-select">
                                                 <option value="">Select a Category...</option>
-                                                <option v-for="(data, index) in catLists" :key="index"
-                                                    :value="data.id">
+                                                <option v-for="(data, index) in catLists" :key="index" :value="data.id">
                                                     {{ data.category_name }}
                                                 </option>
                                             </select>
                                         </div>
                                     </div>
 
- 
+
 
                                     <div class="row mb-3">
                                         <label for="exampleInputUsername2" class="col-sm-3 col-form-label">Customer
@@ -93,7 +93,8 @@
                                             <select name="status" v-model="cdata.type" class="form-select">
                                                 <option value="1" selected>Travel</option>
                                                 <option value="2">Money Transfer</option>
-                                                <option value="3">Others</option>
+                                                <option value="3">Consular</option>
+                                                <option value="4">Others</option>
                                             </select>
                                         </div>
                                     </div>
@@ -164,7 +165,7 @@ export default {
 
     },
     methods: {
-        getCategoryList(company_id){
+        getCategoryList(company_id) {
 
             axios.get('/api/company/findCompanyWiseCategory', {
                 params: {
@@ -173,7 +174,7 @@ export default {
             })
                 .then(response => {
                     this.catLists = response.data.data;
-                    
+
                 })
                 .catch(error => {
                     console.error('Error fetching company row:', error);

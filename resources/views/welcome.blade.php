@@ -28,16 +28,16 @@
     <script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js" defer></script>
     <script src="https://cdn.datatables.net/1.13.1/js/dataTables.bootstrap5.min.js" defer></script>
     <script src="
-    https://cdn.jsdelivr.net/npm/jquery-datetime-picker@2.5.11/build/jquery.datetimepicker.full.min.js
-    "></script>
+        https://cdn.jsdelivr.net/npm/jquery-datetime-picker@2.5.11/build/jquery.datetimepicker.full.min.js
+        "></script>
     <link href="
 https://cdn.jsdelivr.net/npm/jquery-datetime-picker@2.5.11/jquery.datetimepicker.min.css
 "
         rel="stylesheet">
-       {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script> --}}
-       <script src="https://cdn.jsdelivr.net/npm/exceljs/dist/exceljs.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
-       
+    {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script> --}}
+    <script src="https://cdn.jsdelivr.net/npm/exceljs/dist/exceljs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+
     <style>
         .sidebar .sidebar-body .nav {
             display: flex;
@@ -57,10 +57,10 @@ https://cdn.jsdelivr.net/npm/jquery-datetime-picker@2.5.11/jquery.datetimepicker
 @endif
 @vite(['resources/css/app.css', 'resources/js/app.js'])
 <div id="app"></div>
- 
 
 
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="{{ asset('/backend/assets/vendors/core/core.js') }}" defer></script>
 <script src="{{ asset('/backend/assets/vendors/flatpickr/flatpickr.min.js') }}" defer></script>
 <script src="{{ asset('/backend/assets/vendors/apexcharts/apexcharts.min.js') }}" defer></script>

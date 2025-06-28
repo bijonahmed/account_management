@@ -77,40 +77,40 @@ class Post extends Authenticatable
     $result = DB::table('invoice')->where('status', 1)->sum('due_amount');
     return $result;
   }
-  public static function duereport($data)
-  {
-    $startDate =  date('Y-m-d', strtotime($data['frm_date']));
-    $endDate =  date('Y-m-d', strtotime($data['to_date']));
-    $result = DB::table('invoice')
-      ->select('invoice.inv_id', 'invoice.invoice_date', 'invoice.due_amount', 'customer.name as customer_name', 'users.name', 'phone')
-      ->leftJoin('customer', 'customer.customer_id', '=', 'invoice.customer_id')
-      ->leftJoin('users', 'users.id', '=', 'invoice.entry_by')
-      ->whereBetween('invoice.invoice_date', [$startDate, $endDate])
-      ->get();
-    return $result;
-  }
-  public static function duereportMoney($data)
+
+
+  public static function duereportTravel($data)
   {
     //dd($data);
-    $startDate =  date('Y-m-d', strtotime($data['frm_date']));
-    $endDate   =  date('Y-m-d', strtotime($data['to_date']));
-    $customer_id = isset($data['customer_id']) ? (int)$data['customer_id'] : 0;
+    $startDate     =  date('Y-m-d', strtotime($data['frm_date']));
+    $endDate       =  date('Y-m-d', strtotime($data['to_date']));
+    $customer_id   =  !empty($data['customer_id']) ? $data['customer_id'] : "";
+    $sulipper_id   =  !empty($data['sulipper_id']) ? $data['sulipper_id'] : "";
 
-    $query = DB::table('invoice_money_transfer')
+
+    $query = DB::table('invoice')
       ->select(
-        'invoice_money_transfer.mone_transfer_id',
-        'invoice_money_transfer.invoice_date',
-        'invoice_money_transfer.due_amount',
+        'invoice.invoice_id',
+        'invoice.inv_id',
+        'invoice.invoice_date',
+        'invoice.due_amount',
         'customer.name as customer_name',
+        'supplier.name as suplier_name',
         'users.name',
         'phone'
       )
-      ->leftJoin('customer', 'customer.customer_id', '=', 'invoice_money_transfer.customer_id')
-      ->leftJoin('users', 'users.id', '=', 'invoice_money_transfer.entry_by')
-      ->whereBetween('invoice_money_transfer.invoice_date', [$startDate, $endDate]);
+      ->leftJoin('customer', 'customer.customer_id', '=', 'invoice.customer_id')
+      ->leftJoin('supplier', 'supplier.sulipper_id', '=', 'invoice.sulipper_id')
+      ->leftJoin('users', 'users.id', '=', 'invoice.entry_by')
+      ->where('invoice.payment_status', 0)
+      ->whereBetween('invoice.invoice_date', [$startDate, $endDate]);
 
-    if ($customer_id > 0) {
-      $query->where('invoice_money_transfer.customer_id', $customer_id);
+    if (!empty($customer_id)) {
+      $query->where('invoice.customer_id', $customer_id);
+    }
+
+    if (!empty($sulipper_id)) {
+      $query->where('invoice.sulipper_id', $sulipper_id);
     }
 
     $result = $query->get();
@@ -118,11 +118,46 @@ class Post extends Authenticatable
     return $result;
   }
 
+  public static function duereportConsular($data)
+  {
+    //dd($data);
+    $startDate =  date('Y-m-d', strtotime($data['frm_date']));
+    $endDate   =  date('Y-m-d', strtotime($data['to_date']));
+    $customer_id = isset($data['customer_id']) ? (int)$data['customer_id'] : 0;
+    $sulipper_id   =  !empty($data['sulipper_id']) ? $data['sulipper_id'] : "";
 
+    $query = DB::table('consular_invoice')
+      ->select(
+        'consular_invoice.consular_inv_id',
+        'consular_invoice.invoice_date',
+        'consular_invoice.due_amount',
+        'consular_invoice.purpose',
+        'consular_invoice.net_amount',
+        'consular_invoice.customer_amount',
+        'consular_invoice.amount_paid',
+        'customer.name as customer_name',
+        'supplier.name as suplier_name',
+        'users.name',
+        'phone'
+      )
+      ->leftJoin('customer', 'customer.customer_id', '=', 'consular_invoice.customer_id')
+      ->leftJoin('supplier', 'supplier.sulipper_id', '=', 'consular_invoice.sulipper_id')
+      ->leftJoin('users', 'users.id', '=', 'consular_invoice.entry_by')
+      ->whereBetween('consular_invoice.invoice_date', [$startDate, $endDate]);
+
+    if ($customer_id > 0) {
+      $query->where('consular_invoice.customer_id', $customer_id);
+    }
+
+    if (!empty($sulipper_id)) {
+      $query->where('consular_invoice.sulipper_id', $sulipper_id);
+    }
+    $result = $query->get();
+    return $result;
+  }
 
   public static function othersReport($data)
   {
-
     $startDate  =  date('Y-m-d', strtotime($data['frm_date']));
     $endDate    =  date('Y-m-d', strtotime($data['to_date']));
     $company_id =  $data['company_id'];
@@ -144,7 +179,7 @@ class Post extends Authenticatable
     // if (!empty($company_id)) {
     //   $query->where('customer.company_id', $company_id);
     // }
- if (!empty($suppler_id)) {
+    if (!empty($suppler_id)) {
       $query->where('others_invoice.sulipper_id', $suppler_id);
     }
     // Execute the query and get the results
@@ -153,8 +188,6 @@ class Post extends Authenticatable
     // Return the results
     return $results;
   }
-
-
 
 
 
@@ -254,6 +287,77 @@ class Post extends Authenticatable
   }
 
 
+
+  public static function duereportMoney($data)
+  {
+    //dd($data);
+    $startDate =  date('Y-m-d', strtotime($data['frm_date']));
+    $endDate   =  date('Y-m-d', strtotime($data['to_date']));
+    $customer_id = isset($data['customer_id']) ? (int)$data['customer_id'] : 0;
+    $sulipper_id   =  !empty($data['sulipper_id']) ? $data['sulipper_id'] : "";
+
+    $query = DB::table('invoice_money_transfer')
+      ->select(
+        'invoice_money_transfer.mone_transfer_id',
+        'invoice_money_transfer.invoice_date',
+        'invoice_money_transfer.due_amount',
+        'customer.name as customer_name',
+        'supplier.name as suplier_name',
+        'users.name',
+        'phone'
+      )
+      ->leftJoin('customer', 'customer.customer_id', '=', 'invoice_money_transfer.customer_id')
+      ->leftJoin('supplier', 'supplier.sulipper_id', '=', 'invoice_money_transfer.sulipper_id')
+      ->leftJoin('users', 'users.id', '=', 'invoice_money_transfer.entry_by')
+      ->whereBetween('invoice_money_transfer.invoice_date', [$startDate, $endDate]);
+
+    if ($customer_id > 0) {
+      $query->where('invoice_money_transfer.customer_id', $customer_id);
+    }
+
+    if (!empty($sulipper_id)) {
+      $query->where('invoice_money_transfer.sulipper_id', $sulipper_id);
+    }
+    $result = $query->get();
+    return $result;
+  }
+
+
+  public static function dueReportOther($data)
+  {
+    // dd($data);
+    $startDate =  date('Y-m-d', strtotime($data['frm_date']));
+    $endDate =  date('Y-m-d', strtotime($data['to_date']));
+    $customer_id = isset($data['customer_id']) ? (int)$data['customer_id'] : 0;
+    $sulipper_id   =  !empty($data['sulipper_id']) ? $data['sulipper_id'] : "";
+
+
+    $query = DB::table('others_invoice')
+      ->select(
+        'others_invoice.*',
+        'customer.name as customer_name',
+        'supplier.name as suplier_name',
+        'users.name',
+      )
+      ->leftJoin('customer', 'customer.customer_id', '=', 'others_invoice.customer_id')
+      ->leftJoin('supplier', 'supplier.sulipper_id', '=', 'others_invoice.sulipper_id')
+      ->leftJoin('users', 'users.id', '=', 'others_invoice.entry_by')
+      ->whereBetween('others_invoice.invoice_date', [$startDate, $endDate]);
+    // Apply company_id filter only if provided
+    if ($customer_id > 0) {
+      $query->where('others_invoice.customer_id', $customer_id);
+    }
+
+    if (!empty($sulipper_id)) {
+      $query->where('others_invoice.sulipper_id', $sulipper_id);
+    }
+    $results = $query->get();
+    return $results;
+  }
+
+
+
+
   public static function profitReportOther($data)
   {
     $startDate =  date('Y-m-d', strtotime($data['frm_date']));
@@ -273,6 +377,9 @@ class Post extends Authenticatable
     $results = $query->get();
     return $results;
   }
+
+
+
   public static function filterLivePostList($data = array())
   {
     //dd($data);

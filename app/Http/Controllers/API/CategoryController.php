@@ -159,6 +159,22 @@ class CategoryController extends Controller
         ];
         return response()->json($response, 200);
     }
+
+
+    public function serviceWiseAllCustomers(Request $request)
+    {
+        $selected_type   = !empty($request->selected_type) ? $request->selected_type : "";
+        $customerData    = Category::ServiceAllCustomers($selected_type);
+        $suplierData     = Category::ServiceAllSupplier($selected_type);
+
+        $response = [
+            'customerData' => $customerData,
+            'suplierData' => $suplierData,
+            'message' => 'success'
+        ];
+        return response()->json($response, 200);
+    }
+
     public function allCustomerslist()
     {
         $data = Category::getCustomerlist();
@@ -903,7 +919,7 @@ class CategoryController extends Controller
             return response()->json($response, 400);
         }
         $data = array(
-            'invoice_date'              => $request->invoice_date,//!empty($request->invoice_date) ? date("d-m-Y", strtotime($request->invoice_date)) : "",
+            'invoice_date'              => $request->invoice_date, //!empty($request->invoice_date) ? date("d-m-Y", strtotime($request->invoice_date)) : "",
             'customer_id'               => !empty($request->customer_id) ? (int) $request->customer_id : "",
             'sulipper_id'               => !empty($request->sulipper_id) ? (int) $request->sulipper_id : "",
             'net_amount'                => !empty($request->net_amount) ? $request->net_amount : "",

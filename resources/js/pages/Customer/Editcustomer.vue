@@ -88,10 +88,11 @@
                                     <div class="row mb-3">
                                         <label for="exampleInputUsername2" class="col-sm-3 col-form-label">Type</label>
                                         <div class="col-sm-9">
-                                            <select name="status" v-model="cdata.type" class="form-select">
+                                           <select name="status" v-model="cdata.type" class="form-select">
                                                 <option value="1" selected>Travel</option>
                                                 <option value="2">Money Transfer</option>
-                                                <option value="3">Others</option>
+                                                <option value="3">Consular</option>
+                                                <option value="4">Others</option>
                                             </select>
                                         </div>
                                     </div>

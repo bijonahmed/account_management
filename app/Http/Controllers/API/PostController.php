@@ -405,6 +405,72 @@ class PostController extends Controller
         ];
         return response()->json($response, 200);
     }
+
+    public function updatePaymentStatusTravel(Request $request)
+    {
+
+        $request->validate([
+            'selectedIds'   => 'required',
+            'sulipper_id'   => 'required',
+            'paymentMethod' => 'required',
+            'paymentAmount' => 'required'
+        ]);
+
+        // dd($request->all());
+        DB::table('invoice')
+            ->whereIn('invoice_id', explode(',', $request->selectedIds))
+            ->update([
+                'payment_status'        => 1,
+                'payment_sulipper_id'   => $request->sulipper_id,
+                'payment_method'        => $request->paymentMethod,
+                'payment_updated_at'    => now()
+            ]);
+
+        /*
+        $selectedIds = explode(',', $request->selectedIds);
+        $payments = [];
+
+        foreach ($selectedIds as $invoiceId) {
+            $payments[] = [
+                'invoice_id'      => $invoiceId,
+                'sulipper_id'     => $request->sulipper_id,
+                'payment_method'  => $request->paymentMethod,
+                'amount'          => $request->paymentAmount,
+                'created_at'      => now(),
+            ];
+        }
+             DB::table('supplier_payment')->insert($payments);
+     */
+
+        $invoiceId = $request->selectedIds;
+        $sulipperId = $request->sulipper_id;
+        // Check if a matching record already exists
+        $exists = DB::table('supplier_payment')
+            ->where('invoice_id', $invoiceId)
+            ->where('sulipper_id', $sulipperId)
+            ->exists();
+        if ($exists) {
+            return response()->json([
+                'status' => 'exists',
+                'message' => 'This supplier payment already exists.'
+            ]);
+        }
+
+
+        DB::table('supplier_payment')->insert([
+            'invoice_id'     => $request->selectedIds,
+            'sulipper_id'    => $request->sulipper_id,
+            'payment_method' => $request->paymentMethod,
+            'amount'         => $request->paymentAmount,
+            'entry_by'       => Auth::id(),
+            'created_at'     => now(),
+        ]);
+
+
+        return response()->json(['message' => 'Supplier payments recorded successfully.']);
+    }
+
+
     public function editGallaryId($id)
     {
         $row                    = Gallary::checkGallaryRow($id);
@@ -445,9 +511,9 @@ class PostController extends Controller
         ];
         return response()->json($response, 200);
     }
-    public function dueReport(Request $request)
+    public function dueReportForTravel(Request $request)
     {
-        $data = Post::duereport($request->all());
+        $data = Post::duereportTravel($request->all());
         $sum = 0;
         foreach ($data as $v) {
             $sum += $v->due_amount;
@@ -491,6 +557,7 @@ class PostController extends Controller
             'total_sum'             => $sumprofit,
             'total_due_amt'         => $dueAmtsum,
             'total_amount_of_Sale'  => number_format($total_amount_of_Sale, 2),
+            'customer_amount'       => $total_amount_of_Sale,
             'total_net_amount'      =>  number_format($total_net_amount, 2),
             'total_profit'          =>  number_format($total_profit, 2),
             'total_due'             =>  number_format($total_due, 2),
@@ -538,7 +605,14 @@ class PostController extends Controller
         $due_amount  = $data->sum('due_amount');
         $rates       = $data->sum('rate');
         $sendingAmt  = $data->sum('receiving_amount');
+        $receiving_amount  = $data->sum('receiving_amount');
         $others_fees = $data->sum('others_fees');
+
+        if ($rates != 0) {
+            $totalsales = $receiving_amount / $rates;
+        } else {
+            $totalsales = 0; // or handle it as needed
+        }
         //Formula: Net/Supplier Amount: Sending Amount / rate + (charge 50%) = result 
 
         if (!empty($rates) && $rates != 0) {
@@ -555,6 +629,7 @@ class PostController extends Controller
             'total_sum'  => number_format($profit_sum, 2),
             'total_due'  => number_format($due_amount, 2),
             'net_supplier_amnt'  => $net_supplier_amnt,
+            'totalsales'  => $totalsales,
             'moneytransferDueAmt' => $due_amount,
             'totalTransaction' => count($data),
             'message' => 'success'
@@ -601,7 +676,25 @@ class PostController extends Controller
     }
     public function deReportOthers(Request $request)
     {
-        $data = Post::profitReportOther($request->all());
+        $data = Post::dueReportOther($request->all());
+        // dd($data);
+        $sum = 0;
+        foreach ($data as $v) {
+            $sum += $v->amount_remaining;
+        }
+        // dd($data);
+        $response = [
+            'data' => $data,
+            'total_sum' => $sum,
+            'message' => 'success'
+        ];
+        return response()->json($response, 200);
+    }
+
+
+    public function deReportConsular(Request $request)
+    {
+        $data = Post::duereportConsular($request->all());
         // dd($data);
         $sum = 0;
         foreach ($data as $v) {
@@ -615,6 +708,9 @@ class PostController extends Controller
         ];
         return response()->json($response, 200);
     }
+
+
+
     public function tradehistory()
     {
         $data = Post::tradehistyorylist();

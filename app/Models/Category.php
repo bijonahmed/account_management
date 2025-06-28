@@ -269,6 +269,20 @@ class Category extends Authenticatable
     $result =  DB::table('customer')->where('status', 1)->get();
     return $result;
   }
+
+
+  public static function ServiceAllCustomers($selected_type)
+  {
+    $result =  DB::table('customer')->where('type', $selected_type)->where('status', 1)->get();
+    return $result;
+  }
+
+ public static function ServiceAllSupplier($selected_type)
+  {
+    $result =  DB::table('supplier')->where('service', $selected_type)->where('status', 1)->get();
+    return $result;
+  }
+  
   public static function getCustomerlist()
   {
     $result =  DB::table('customer')->where('type', 1)->where('status', 1)->get();

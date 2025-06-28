@@ -426,14 +426,20 @@
 
                 <div v-if="!selectedCompany">
                     Total Profit: {{ totalProfitSum.toFixed(2) }}<br />
-                    <hr />
                     Total Due: {{ formatAmount(totalDueAmountSumCalculated) }}<br />
+                    Total Amount : {{ totalAmuntOfAllcompany.toFixed(2) }}<br/>
+
+                   
                     <hr />
                     Due Brakedown<br />
                     Travel Total Due Amt : {{ travel_total_due_amt }}
                     Money Transfer Total Due Amt: {{ total_due }}
                     Consular Total Due Amt: : {{ consular_total_due_amt }}
                     Others Total Due Amt: {{ others_total_due_amt }}
+                    <hr/>
+                    Total Amount Breakdown: <br />
+                    Customer Amount (travel) : {{ travel_customer_amount }} + Total sale(money transfer): {{ totals.receiving_divided_by_rate }} + Customer amount (consular): {{ consular_customer_amt }} +
+                    Total amount (others) : {{ others_totalAmount }} <br />
                 </div>
 
             </div>
@@ -471,6 +477,7 @@ export default {
             frm_date: null,
             to_date: null,
             total_fees: 0,
+            travel_customer_amount: 0,
             total_profit: 0,
             others_amt_paid: 0,
             totalTransaction: 0,
@@ -478,9 +485,11 @@ export default {
             total_due: 0,
             money_total_profit: 0,
             consular_total_due_amt: 0,
+            consular_customer_amt: 0,
             consular_total_amt: 0,
             others_total_due_amt: 0,
             others_totalPrfoit: 0,
+            otherstotalAmount: 0,
             others_totalAmount: 0,
             consular_total_profit: 0,
             money_net_supplier_amnt: 0,
@@ -489,6 +498,7 @@ export default {
             travel_total_net_amount: 0,
             travel_total_profit: 0,
             travel_total_due: 0,
+            money_total_sales: 0,
             customer_id: '',
             report: [],
             money_report: [],
@@ -497,6 +507,14 @@ export default {
         };
     },
     computed: {
+        totalAmuntOfAllcompany() {
+            return (
+                (this.travel_customer_amount || 0) +
+                (this.totals?.receiving_divided_by_rate || 0) +
+                (this.consular_customer_amt || 0) +
+                (this.otherstotalAmount || 0)
+            );
+        },
         totalProfitSum() {
             return (
                 parseFloat(this.totalProfit || 0) +
@@ -792,6 +810,7 @@ export default {
                 this.others_total_due_amt = res.data.total_due_amt.toFixed(2);
                 this.others_totalPrfoit = res.data.totalPrfoit.toFixed(2);
                 this.others_totalAmount = res.data.totalAmount.toFixed(2);
+                this.otherstotalAmount = res.data.totalAmount;
                 // console.log(res.data.total_sum);
                 this.frm_date = frm_date;
                 this.to_date = to_date;
@@ -829,7 +848,7 @@ export default {
                 this.report = res.data.data;
                 this.total_profit = res.data.total_sum;
                 this.travel_total_due_amt = res.data.total_due_amt;
-
+                this.travel_customer_amount = res.data.customer_amount
                 this.travel_total_amount_of_Sale = res.data.total_amount_of_Sale
                 this.travel_total_net_amount = res.data.total_net_amount
                 this.travel_total_profit = res.data.total_profit
@@ -871,6 +890,7 @@ export default {
                 this.moneytransferDueAmt = res.data.moneytransferDueAmt.toFixed(2);
                 this.money_net_supplier_amnt = res.data.net_supplier_amnt;
                 this.total_fees = res.data.total_fees;
+                this.money_total_sales = res.data.totalsales
                 // console.log(res.data.total_sum);
                 this.total_due = res.data.total_due;
                 this.totalTransaction = res.data.totalTransaction;
@@ -914,6 +934,7 @@ export default {
                 this.consular_total_profit = res.data.total_sum.toFixed(2);
                 this.consular_total_due_amt = res.data.total_due_amt.toFixed(2);
                 this.consular_total_amt = res.data.totalAmount.toFixed(2);
+                this.consular_customer_amt = res.data.totalAmount;
                 // console.log(res.data.total_sum);
                 this.frm_date = frm_date;
                 this.to_date = to_date;
