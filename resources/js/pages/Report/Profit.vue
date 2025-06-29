@@ -185,7 +185,9 @@
                                         <span v-else-if="data.status === 3">Cash</span>
                                         <span v-else>Unknown</span>
                                     </td>
-                                    <td class="text-end">{{ parseFloat(data.due_amount).toFixed(2) }}</td>
+                                    <td class="text-end">
+                                        {{ (data.receiving_amount / data.rate - data.customer_deposit).toFixed(2) }}
+                                        <!-- {{ parseFloat(data.due_amount) }} --></td>
                                     <td><small>{{ data.supplier_name }}</small></td>
                                 </tr>
                                 <tr>
@@ -373,11 +375,11 @@
                 </div>
                 <!-- END Consular -->
 
-                <!-- Others Report -->
+                <!-- Corporate Report -->
                 <div class="for_others">
                     <span><u>Others Report: {{
                         fourthCompanyName }}</u></span>
-                    <!-- Hamadan Consular Services  -->
+                    <!-- Hamadan Corporate Services  -->
                     <div class="table-responsive">
                         <table class="report-table" style="border-collapse: collapse; width: 100%;">
                             <thead>
@@ -411,7 +413,7 @@
                         </table>
                     </div>
                     <div class="row text-end">
-                        <span style="font-weight: bold;color:green;">Amount Paid: {{ others_amt_paid }}</span>
+                        <span style="font-weight: bold;color:green;">Total Profit: {{ others_totalPrfoit }}</span>
                     </div>
                     <div v-if="selectedCompany == 4">
                         Total Amount : {{ others_totalAmount }}<br />

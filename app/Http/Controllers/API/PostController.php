@@ -702,8 +702,8 @@ class PostController extends Controller
 
 
         $totalAmount = $data->sum('total_amount');
-        $totalDueAmt = $data->sum('amount_remaining');
-        $totalPrfoit = $totalAmount - $totalDueAmt;
+        $totalDueAmt = $data->sum('amount');
+        $totalPrfoit = $totalDueAmt - $totalAmount;
 
 
         // dd($data);

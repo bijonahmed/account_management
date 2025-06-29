@@ -12,7 +12,7 @@
 
                 <form @submit.prevent="filterReport()" id="formrest" class="forms-sample" enctype="multipart/form-data">
                     <div class="row">
-                        <div class="col-md-4">
+                        <div class="col-md-6">
                             <div class="input-group mb-3">
                                 <select name="status" v-model="selected_type" class="form-select"
                                     @change="serviceWiseCustomerSupplier">
@@ -25,7 +25,7 @@
                             </div>
                         </div>
 
-                        <div class="col-md-4">
+                        <div class="col-md-6">
                             <div class="input-group mb-3">
                                 <select class='form-control form-select customer_id' v-model="customer_id">
                                     <option value=''>All Customer</option>
@@ -35,7 +35,7 @@
                         </div>
 
 
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <div class="input-group mb-3">
                                 <select class='form-control form-select sulipper_id' v-model="sulipper_id">
                                     <option value=''>All Supplier</option>
@@ -44,13 +44,13 @@
                             </div>
                         </div>
 
-                        <div class="col-md-4">
+                        <div class="col-md-2">
                             <div class="input-group mb-3">
                                 <input type="date" class="form-control frm_date" id="frm_date" v-model="frm_date"
                                     placeholder="From Date">
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-2">
                             <div class="input-group mb-3">
                                 <!-- <Datepicker class="form-control to_date" placeholder="To Date"></Datepicker>   -->
                                 <input type="date" class="form-control to_date" id="datepicker" placeholder="To Date"
@@ -150,16 +150,26 @@
                                     <td>{{ data.phone }}</td>
                                     <td>{{ data.suplier_name }}</td>
                                     <td>{{ data.name }}</td>
-                                    <td class="text-end">{{ data.due_amount }}</td>
+                                    <td class="text-end">
+                                   {{ (data.receiving_amount / data.rate - data.customer_deposit).toFixed(2) }}
+                                        
+                                        {{ data.due_amount }}</td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
                     <div class="row">
                         <div class="text-end">
-                            <span style="font-weight: bold;color:green;">Total Due: {{
+                            <span style="font-weight: bold;color:green;">Total Due: 
+                                {{
                                 isNaN(parseFloat(money_total_due)) ? '0.00' :
-                                    parseFloat(money_total_due).toFixed(2) }}</span>
+                                    parseFloat(money_total_due).toFixed(2) }}
+                                    
+                                
+                                
+                                
+                                
+                                </span>
                         </div>
                         <div class="continaer">
                             <center><button type="submit" class="btn btn-primary w-100 paytment_btn"

@@ -299,6 +299,9 @@ class Post extends Authenticatable
 
     $query = DB::table('invoice_money_transfer')
       ->select(
+         'invoice_money_transfer.receiving_amount',
+          'invoice_money_transfer.rate',
+           'invoice_money_transfer.customer_deposit',
         'invoice_money_transfer.mone_transfer_id',
         'invoice_money_transfer.invoice_date',
         'invoice_money_transfer.due_amount',
