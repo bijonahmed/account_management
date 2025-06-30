@@ -656,14 +656,31 @@ class PostController extends Controller
     public function dueReportMoney(Request $request)
     {
         $data = Post::duereportMoney($request->all());
-        $sum = 0;
-        foreach ($data as $v) {
-            $sum += $v->due_amount;
+
+        $receiving_amount = $data->sum('receiving_amount');
+        $rate = $data->sum('rate');
+        $customer_deposit = $data->sum('customer_deposit');
+
+        // Convert to float with fallback
+        $recevAmount = floatval($receiving_amount ?? 0);
+        $rates = floatval($rate ?? 0);
+        $rates = ($rates != 0) ? $rates : 1; // avoid divide-by-zero
+        $custDeposit = floatval($customer_deposit ?? 0);
+
+        // Calculate due
+        $forduecal = ($recevAmount / $rates) - $custDeposit;
+
+        // Only add if result is positive
+        if ($forduecal >= 0) {
+            $due_amount = $forduecal;
+        } else {
+            $due_amount = 0;
         }
+
         // dd($data);
         $response = [
             'data' => $data,
-            'total_sum' => $sum,
+            'total_sum' => $due_amount,
             'message' => 'success'
         ];
         return response()->json($response, 200);

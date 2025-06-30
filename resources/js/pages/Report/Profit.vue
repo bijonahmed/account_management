@@ -71,7 +71,7 @@
 
                 <div class="for_travel">
                     <span><u>Travel Report: {{ firstCompanyName
-                    }} </u></span>
+                            }} </u></span>
                     <!-- Travel-Hamadan International Limited -->
                     <div class="table-responsive">
                         <table class="report-table" style="border-collapse: collapse; width: 100%;">
@@ -187,7 +187,8 @@
                                     </td>
                                     <td class="text-end">
                                         {{ (data.receiving_amount / data.rate - data.customer_deposit).toFixed(2) }}
-                                        <!-- {{ parseFloat(data.due_amount) }} --></td>
+                                        <!-- {{ parseFloat(data.due_amount) }} -->
+                                    </td>
                                     <td><small>{{ data.supplier_name }}</small></td>
                                 </tr>
                                 <tr>
@@ -202,7 +203,7 @@
                                     <td class="text-end" style="color: green;"><b>{{
                                         totals.receiving_divided_by_rate.toFixed(2) }}</b></td>
                                     <td class="text-end" style="color: deeppink;"><b>{{ totals.fees.toFixed(2)
-                                    }}</b></td>
+                                            }}</b></td>
                                     <td class="text-end" style="color: goldenrod;"><b>{{
                                         totals.others_fees.toFixed(2) }}</b></td>
                                     <td class="text-end" style="color: purple;">
@@ -216,8 +217,10 @@
 
                                     <td></td>
 
-                                    <td class="text-end" style="color: orange;"><b>{{ totals.due_amount.toFixed(2)
-                                    }}</b></td>
+                                    <td class="text-end" style="color: orange;">
+                                        <b>{{ totals.due_amount.toFixed(2) }}</b>
+                          
+                                    </td>
                                     <td></td>
                                 </tr>
 
@@ -429,18 +432,19 @@
                 <div v-if="!selectedCompany">
                     Total Profit: {{ totalProfitSum.toFixed(2) }}<br />
                     Total Due: {{ formatAmount(totalDueAmountSumCalculated) }}<br />
-                    Total Amount : {{ totalAmuntOfAllcompany.toFixed(2) }}<br/>
+                    Total Amount : {{ totalAmuntOfAllcompany.toFixed(2) }}<br />
 
-                   
+
                     <hr />
                     Due Brakedown<br />
                     Travel Total Due Amt : {{ travel_total_due_amt }}
                     Money Transfer Total Due Amt: {{ total_due }}
                     Consular Total Due Amt: : {{ consular_total_due_amt }}
                     Others Total Due Amt: {{ others_total_due_amt }}
-                    <hr/>
+                    <hr />
                     Total Amount Breakdown: <br />
-                    Customer Amount (travel) : {{ travel_customer_amount }} + Total sale(money transfer): {{ totals.receiving_divided_by_rate }} + Customer amount (consular): {{ consular_customer_amt }} +
+                    Customer Amount (travel) : {{ travel_customer_amount }} + Total sale(money transfer): {{
+                        totals.receiving_divided_by_rate }} + Customer amount (consular): {{ consular_customer_amt }} +
                     Total amount (others) : {{ others_totalAmount }} <br />
                 </div>
 
@@ -544,10 +548,7 @@ export default {
                 const fees = parseFloat(data.fees) || 0;
                 const othersFees = parseFloat(data.others_fees) || 0;
                 const profit = parseFloat(data.profit) || 0;
-                const customerDeposit = parseFloat(data.customer_deposit) || 0;
-                const dueAmount = parseFloat(data.due_amount) || 0;
-                //const sendingAmount = parseFloat(data.due_amount) || 0;
-
+               
                 const sale = receivingAmount / rate;
                 const total = sale + fees + othersFees;
                 acc.receiving_amount += receivingAmount;
@@ -557,8 +558,16 @@ export default {
                 acc.others_fees += othersFees;
                 acc.total_calculated += total;
                 acc.profit += profit;
-                acc.customer_deposit += customerDeposit;
-                acc.due_amount += dueAmount;
+
+                const recevAmount = parseFloat(data.receiving_amount) || 0;
+                const rates = parseFloat(data.rate) || 1; // avoid divide-by-zero
+                const custDeposit = parseFloat(data.customer_deposit) || 0;
+                const forduecal = recevAmount / rates - custDeposit;
+
+                if (!isNaN(forduecal) && forduecal >= 0) {
+                    acc.due_amount += forduecal;
+                }
+                //acc.due_amount += dueAmount;
 
                 return acc;
             }, {

@@ -151,25 +151,27 @@
                                     <td>{{ data.suplier_name }}</td>
                                     <td>{{ data.name }}</td>
                                     <td class="text-end">
-                                   {{ (data.receiving_amount / data.rate - data.customer_deposit).toFixed(2) }}
-                                        
-                                        {{ data.due_amount }}</td>
+                                        {{ (data.receiving_amount / data.rate - data.customer_deposit).toFixed(2) }}
+                                        <!-- {{ data.due_amount }} -->
+                                    
+                                    
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
                     <div class="row">
                         <div class="text-end">
-                            <span style="font-weight: bold;color:green;">Total Due: 
+                            <span style="font-weight: bold;color:green;">Total Due:
                                 {{
-                                isNaN(parseFloat(money_total_due)) ? '0.00' :
-                                    parseFloat(money_total_due).toFixed(2) }}
-                                    
-                                
-                                
-                                
-                                
-                                </span>
+                                    isNaN(parseFloat(money_total_due)) ? '0.00' :
+                                        parseFloat(money_total_due).toFixed(2) }}
+
+
+
+
+
+                            </span>
                         </div>
                         <div class="continaer">
                             <center><button type="submit" class="btn btn-primary w-100 paytment_btn"
@@ -925,8 +927,29 @@ export default {
                 $(".loadingvideo").hide();
                 $(".paytment_btn").show();
                 //    console.log(res.data.data);
+
+
+
                 this.money_report = res.data.data;
-                this.money_total_due = res.data.total_sum;
+
+
+               let acc = { due_amount: 0 };
+
+this.money_report.forEach(data => {
+  const recevAmount = parseFloat(data.receiving_amount) || 0;
+  const rates = parseFloat(data.rate) || 1; // avoid divide-by-zero
+  const custDeposit = parseFloat(data.customer_deposit) || 0;
+
+  const forduecal = recevAmount / rates - custDeposit;
+
+  if (!isNaN(forduecal) && forduecal >= 0) {
+    acc.due_amount += forduecal;
+  }
+});
+
+this.money_total_due = acc.due_amount.toFixed(2);
+
+
                 //  console.log(res.data.total_sum);
                 this.frm_date = frm_date;
                 this.to_date = to_date;
