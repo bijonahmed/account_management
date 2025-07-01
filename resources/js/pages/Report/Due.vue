@@ -135,6 +135,8 @@
                                     <th>Customer Phone</th>
                                     <th>Suplier</th>
                                     <th>Create By</th>
+                                    <th>Total Sales</th>
+                                    <th>Customer Paid</th>
                                     <th class="text-end">Due Amount</th>
                                 </tr>
                             </thead>
@@ -150,12 +152,9 @@
                                     <td>{{ data.phone }}</td>
                                     <td>{{ data.suplier_name }}</td>
                                     <td>{{ data.name }}</td>
-                                    <td class="text-end">
-                                        {{ (data.receiving_amount / data.rate - data.customer_deposit).toFixed(2) }}
-                                        <!-- {{ data.due_amount }} -->
-                                    
-                                    
-                                    </td>
+                                    <td>{{ formattedTotal(data) }}</td>
+                                    <td class="text-end">{{ parseFloat(data.customer_deposit).toFixed(2) }}</td>
+                                    <td class="text-end">{{ (formattedTotal(data) - data.customer_deposit).toFixed(2) }}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -163,9 +162,7 @@
                     <div class="row">
                         <div class="text-end">
                             <span style="font-weight: bold;color:green;">Total Due:
-                                {{
-                                    isNaN(parseFloat(money_total_due)) ? '0.00' :
-                                        parseFloat(money_total_due).toFixed(2) }}
+                                {{ totalMoneyDueAmount}}
 
 
 
@@ -559,7 +556,52 @@ export default {
         //   $('.frm_date,.to_date').datepicker();
     },
 
+
+ computed: {
+        totalMoneyDueAmount() {
+            let totalInCents = 0;
+            this.money_report.forEach(data => {
+                const receivingAmount = parseFloat(data.receiving_amount) || 0;
+                const rate = parseFloat(data.rate) || 1;
+                const fees = parseFloat(data.fees) || 0;
+                const othersFees = parseFloat(data.others_fees) || 0;
+                const customerDeposit = parseFloat(data.customer_deposit) || 0;
+
+                const sale = receivingAmount / rate;
+                const total = sale + fees + othersFees;
+                const due = total - customerDeposit;
+
+                // Convert to cents to prevent floating point issues
+                const dueInCents = Math.round((due > 0 ? due : 0) * 100);
+                totalInCents += dueInCents;
+            });
+
+            // Convert back to decimal with two digits
+            return (totalInCents / 100).toFixed(2);
+        },
+     
+
+    },
+
+
+
+
+
+
+
+
     methods: {
+        formattedTotal(data) {
+            const receivingAmount = parseFloat(data.receiving_amount) || 0;
+            const rate = parseFloat(data.rate) || 1; // Avoid divide by zero
+            const fees = parseFloat(data.fees) || 0;
+            const othersFees = parseFloat(data.others_fees) || 0;
+
+            const sale = receivingAmount / rate;
+            const total = sale + fees + othersFees;
+            //console.log("Total =", total);
+            return total.toFixed(2);
+        },
         serviceWiseCustomerSupplier() {
             //  console.log("selected_type" + this.selected_type);
             axios.get('/api/category/serviceWiseAllCustomers', {
@@ -928,26 +970,23 @@ export default {
                 $(".paytment_btn").show();
                 //    console.log(res.data.data);
 
-
-
                 this.money_report = res.data.data;
 
+                let acc = { due_amount: 0 };
 
-               let acc = { due_amount: 0 };
+                this.money_report.forEach(data => {
+                    const recevAmount = parseFloat(data.receiving_amount) || 0;
+                    const rates = parseFloat(data.rate) || 1; // avoid divide-by-zero
+                    const custDeposit = parseFloat(data.customer_deposit) || 0;
 
-this.money_report.forEach(data => {
-  const recevAmount = parseFloat(data.receiving_amount) || 0;
-  const rates = parseFloat(data.rate) || 1; // avoid divide-by-zero
-  const custDeposit = parseFloat(data.customer_deposit) || 0;
+                    const forduecal = recevAmount / rates - custDeposit;
 
-  const forduecal = recevAmount / rates - custDeposit;
+                    if (!isNaN(forduecal) && forduecal >= 0) {
+                        acc.due_amount += forduecal;
+                    }
+                });
 
-  if (!isNaN(forduecal) && forduecal >= 0) {
-    acc.due_amount += forduecal;
-  }
-});
-
-this.money_total_due = acc.due_amount.toFixed(2);
+                this.money_total_due = acc.due_amount.toFixed(2);
 
 
                 //  console.log(res.data.total_sum);

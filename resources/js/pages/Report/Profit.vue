@@ -71,7 +71,7 @@
 
                 <div class="for_travel">
                     <span><u>Travel Report: {{ firstCompanyName
-                            }} </u></span>
+                    }} </u></span>
                     <!-- Travel-Hamadan International Limited -->
                     <div class="table-responsive">
                         <table class="report-table" style="border-collapse: collapse; width: 100%;">
@@ -186,7 +186,8 @@
                                         <span v-else>Unknown</span>
                                     </td>
                                     <td class="text-end">
-                                        {{ (data.receiving_amount / data.rate - data.customer_deposit).toFixed(2) }}
+                                        {{ (formattedTotal(data) - data.customer_deposit).toFixed(2) }}
+                                        <!-- --- {{ (data.receiving_amount / data.rate - data.customer_deposit).toFixed(2) }} -->
                                         <!-- {{ parseFloat(data.due_amount) }} -->
                                     </td>
                                     <td><small>{{ data.supplier_name }}</small></td>
@@ -203,7 +204,7 @@
                                     <td class="text-end" style="color: green;"><b>{{
                                         totals.receiving_divided_by_rate.toFixed(2) }}</b></td>
                                     <td class="text-end" style="color: deeppink;"><b>{{ totals.fees.toFixed(2)
-                                            }}</b></td>
+                                    }}</b></td>
                                     <td class="text-end" style="color: goldenrod;"><b>{{
                                         totals.others_fees.toFixed(2) }}</b></td>
                                     <td class="text-end" style="color: purple;">
@@ -218,8 +219,9 @@
                                     <td></td>
 
                                     <td class="text-end" style="color: orange;">
-                                        <b>{{ totals.due_amount.toFixed(2) }}</b>
-                          
+                                        {{ totalMoneyDueAmount }}
+                                        <!-- <b>{{ totals.due_amount.toFixed(2) }}</b> -->
+
                                     </td>
                                     <td></td>
                                 </tr>
@@ -541,6 +543,27 @@ export default {
             const sum = this.report.reduce((acc, item) => acc + Number(item.profit || 0), 0)
             return sum.toFixed(2)
         },
+        totalMoneyDueAmount() {
+            let totalInCents = 0;
+            this.money_report.forEach(data => {
+                const receivingAmount = parseFloat(data.receiving_amount) || 0;
+                const rate = parseFloat(data.rate) || 1;
+                const fees = parseFloat(data.fees) || 0;
+                const othersFees = parseFloat(data.others_fees) || 0;
+                const customerDeposit = parseFloat(data.customer_deposit) || 0;
+
+                const sale = receivingAmount / rate;
+                const total = sale + fees + othersFees;
+                const due = total - customerDeposit;
+
+                // Convert to cents to prevent floating point issues
+                const dueInCents = Math.round((due > 0 ? due : 0) * 100);
+                totalInCents += dueInCents;
+            });
+
+            // Convert back to decimal with two digits
+            return (totalInCents / 100).toFixed(2);
+        },
         totals() {
             return this.money_report.reduce((acc, data) => {
                 const receivingAmount = parseFloat(data.receiving_amount) || 0;
@@ -548,7 +571,8 @@ export default {
                 const fees = parseFloat(data.fees) || 0;
                 const othersFees = parseFloat(data.others_fees) || 0;
                 const profit = parseFloat(data.profit) || 0;
-               
+                const customer_deposit = parseFloat(data.customer_deposit) || 0;
+
                 const sale = receivingAmount / rate;
                 const total = sale + fees + othersFees;
                 acc.receiving_amount += receivingAmount;
@@ -558,17 +582,7 @@ export default {
                 acc.others_fees += othersFees;
                 acc.total_calculated += total;
                 acc.profit += profit;
-
-                const recevAmount = parseFloat(data.receiving_amount) || 0;
-                const rates = parseFloat(data.rate) || 1; // avoid divide-by-zero
-                const custDeposit = parseFloat(data.customer_deposit) || 0;
-                const forduecal = recevAmount / rates - custDeposit;
-
-                if (!isNaN(forduecal) && forduecal >= 0) {
-                    acc.due_amount += forduecal;
-                }
-                //acc.due_amount += dueAmount;
-
+                acc.customer_deposit += customer_deposit;
                 return acc;
             }, {
                 receiving_amount: 0,
@@ -625,6 +639,7 @@ export default {
             }
 
         },
+
         formattedTotal(data) {
             const receivingAmount = parseFloat(data.receiving_amount) || 0;
             const rate = parseFloat(data.rate) || 1; // Avoid divide by zero
