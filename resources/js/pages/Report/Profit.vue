@@ -71,7 +71,7 @@
 
                 <div class="for_travel">
                     <span><u>Travel Report: {{ firstCompanyName
-                    }} </u></span>
+                            }} </u></span>
                     <!-- Travel-Hamadan International Limited -->
                     <div class="table-responsive">
                         <table class="report-table" style="border-collapse: collapse; width: 100%;">
@@ -204,7 +204,7 @@
                                     <td class="text-end" style="color: green;"><b>{{
                                         totals.receiving_divided_by_rate.toFixed(2) }}</b></td>
                                     <td class="text-end" style="color: deeppink;"><b>{{ totals.fees.toFixed(2)
-                                    }}</b></td>
+                                            }}</b></td>
                                     <td class="text-end" style="color: goldenrod;"><b>{{
                                         totals.others_fees.toFixed(2) }}</b></td>
                                     <td class="text-end" style="color: purple;">
@@ -439,10 +439,11 @@
 
                     <hr />
                     Due Brakedown<br />
-                    Travel Total Due Amt : {{ travel_total_due_amt }}
-                    Money Transfer Total Due Amt: {{ total_due }}
-                    Consular Total Due Amt: : {{ consular_total_due_amt }}
-                    Others Total Due Amt: {{ others_total_due_amt }}
+                    <p class="text-primary">Travel Total Due Amt: {{ travel_total_due_amt }}</p>
+                    <p class="text-success">Money Transfer Total Due Amt: {{ totalMoneyDueAmount }}</p>
+                    <p class="text-danger">Consular Total Due Amt: {{ consular_total_due_amt }}</p>
+                    <p class="text-warning">Others Total Due Amt: {{ others_total_due_amt }}</p>
+
                     <hr />
                     Total Amount Breakdown: <br />
                     Customer Amount (travel) : {{ travel_customer_amount }} + Total sale(money transfer): {{
