@@ -535,7 +535,7 @@ export default {
         totalDueAmountSumCalculated() {
             return (
                 parseFloat(this.travel_total_due_amt || 0) +
-                parseFloat(this.moneytransferDueAmt || 0) +
+                parseFloat(this.totalMoneyDueAmount || 0) +
                 parseFloat(this.consular_total_due_amt || 0) +
                 parseFloat(this.others_total_due_amt || 0)
             );
