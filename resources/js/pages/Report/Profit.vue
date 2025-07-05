@@ -313,8 +313,7 @@
                         <div class="row text-end">
                             <br>
 
-                            <span style="font-weight: bold;color:green;">Total
-                                Profit:&nbsp;{{ money_total_profit }}</span>
+                            <span style="font-weight: bold;color:green;">Total Profit:&nbsp;{{ money_total_profit }}</span>
 
                         </div>
 
@@ -447,7 +446,7 @@
                     <hr />
                     Total Amount Breakdown: <br />
                     Customer Amount (travel) : {{ travel_customer_amount }} + Total sale(money transfer): {{
-                        totals.receiving_divided_by_rate }} + Customer amount (consular): {{ consular_customer_amt }} +
+                        totals.receiving_divided_by_rate.toFixed(2) }} + Customer amount (consular): {{ consular_customer_amt }} +
                     Total amount (others) : {{ others_totalAmount }} <br />
                 </div>
 
@@ -529,7 +528,7 @@ export default {
                 parseFloat(this.totalProfit || 0) +
                 parseFloat(this.money_total_profit || 0) +
                 parseFloat(this.consular_total_profit || 0) +
-                parseFloat(this.others_amt_paid || 0)
+                parseFloat(this.others_totalPrfoit || 0)
             );
         },
         totalDueAmountSumCalculated() {
