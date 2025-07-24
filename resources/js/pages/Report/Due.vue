@@ -154,7 +154,7 @@
                                     <td>{{ data.name }}</td>
                                     <td>{{ formattedTotal(data) }}</td>
                                     <td class="text-end">{{ parseFloat(data.customer_deposit).toFixed(2) }}</td>
-                                    <td class="text-end">{{ (formattedTotal(data) - data.customer_deposit).toFixed(2) }}</td>
+                                    <td class="text-end">{{ data.net_amount }}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -163,11 +163,6 @@
                         <div class="text-end">
                             <span style="font-weight: bold;color:green;">Total Due:
                                 {{ totalMoneyDueAmount}}
-
-
-
-
-
                             </span>
                         </div>
                         <div class="continaer">
@@ -562,6 +557,7 @@ export default {
             let totalInCents = 0;
             this.money_report.forEach(data => {
                 const receivingAmount = parseFloat(data.receiving_amount) || 0;
+                const net_amount = parseFloat(data.net_amount) || 0;
                 const rate = parseFloat(data.rate) || 1;
                 const fees = parseFloat(data.fees) || 0;
                 const othersFees = parseFloat(data.others_fees) || 0;
@@ -573,11 +569,13 @@ export default {
 
                 // Convert to cents to prevent floating point issues
                 const dueInCents = Math.round((due > 0 ? due : 0) * 100);
-                totalInCents += dueInCents;
+                //totalInCents += dueInCents;
+                totalInCents += net_amount;
             });
 
             // Convert back to decimal with two digits
-            return (totalInCents / 100).toFixed(2);
+            //return (totalInCents / 100).toFixed(2);
+            return totalInCents;
         },
      
 
