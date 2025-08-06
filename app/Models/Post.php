@@ -93,6 +93,7 @@ class Post extends Authenticatable
         'invoice.invoice_id',
         'invoice.inv_id',
         'invoice.invoice_date',
+        'invoice.net_amount',
         'invoice.due_amount',
         'customer.name as customer_name',
         'supplier.name as suplier_name',

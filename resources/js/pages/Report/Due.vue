@@ -105,7 +105,7 @@
                                     <td>{{ data.phone }}</td>
                                     <td>{{ data.suplier_name }}</td>
                                     <td>{{ data.name }}</td>
-                                    <td class="text-end">{{ data.due_amount }}</td>
+                                    <td class="text-end">{{ data.net_amount || 0 }}</td>
                                 </tr>
                             </tbody>
                         </table>

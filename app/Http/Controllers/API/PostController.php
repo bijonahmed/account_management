@@ -643,12 +643,12 @@ class PostController extends Controller
         $data = Post::duereportTravel($request->all());
         $sum = 0;
         foreach ($data as $v) {
-            $sum += $v->due_amount;
+            $sum += $v->net_amount;
         }
         // dd($data);
         $response = [
             'data' => $data,
-            'total_sum' => $sum,
+            'total_sum' => $sum = number_format($sum, 2), // e.g., "1234.56",
             'message' => 'success'
         ];
         return response()->json($response, 200);
